@@ -88,8 +88,17 @@
 
 В общем, можно взять threshold, тогда число кластеров = число с.ч. < threshold
 
+[21:54]
+* В статье сказано много аргументов в пользу L_{rw}
+
+* Оооо, есть ссылки на использовние spectral clustering для
+    semi-supervised g (e.g., Chapelle, Sch¨olkopf, and Zien, 2006 for an overview) 
+    и для manifold reconstruction (e.g., Belkin and Niyogi, 2003)
+
 ========================
 Вопросы?
 * Вот мы поделили на кластеры, а как нужно учить наш BERT?
     # кормить по кластеру
     # брать кусками из каждого кластера
+* Какой вид будут иметь кластеры?
+* transductive classification problem - что это?
