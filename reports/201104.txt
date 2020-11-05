@@ -33,7 +33,7 @@
 
             CLS (Continuous Lexical Sophistication)
             VSM (Verb Sophistication Measure)
-            VSM Sq. 
+            VSM Sq.
         Число различных слов
         Type Token Ratio
         MTLD (The Measure of Textual Lexical Diversity)
