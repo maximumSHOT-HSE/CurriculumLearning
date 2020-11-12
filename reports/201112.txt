@@ -1,0 +1,32 @@
+[15:39]
+
+Ище статьи про curriculum learning для nlp
+
+[ ] https://arxiv.org/pdf/1611.06204.pdf
+[+] https://www.aclweb.org/anthology/P16-1043.pdf
+[ ] https://arxiv.org/abs/1605.03852
+[ ] https://arxiv.org/abs/1703.03091
+[ ] http://www.cs.cmu.edu/~lujiang/camera_ready_papers/AAAI_SPCL_2015.pdf
+[ ] https://www.aclweb.org/anthology/N19-1119.pdf
+[ ] https://www.aclweb.org/anthology/2020.acl-main.542.pdf
+
+[17:34] Обзор статьи https://www.aclweb.org/anthology/P16-1043.pdf ()
+    * Решают задачу QA, говорят, что CL (curriculum learning) и SPL (self paced learning) улучшают скорость обучения и итоговое качество
+    * Общая идея - давайте учить модель так:
+        Берем первый батч, учим, дальше берем следующий батч так, чтобы минимизировать не просто итоговоый лосс,
+        а обновленный лосс (который меняется во время обучения), в этом лоссе мы будем учитывать, насколько следующий батч
+        подходоит под обучение (приводят несколько эвристик)
+
+        Т.е. хотим минимизировать какой-то меняющийся лосс, а не разбивать ихсодный датасет на части, оценивая его сложность
+        Т.е. учим не только модель, но и саму схему обучения (веса для вопросов)
+
+        Используют размеченные данные, но разметка не для сложности, а для исходной задачи
+
+    * Датасеты:
+        # MCTest-500 dataset (Richardson et al., 2013)
+        # 855 third, fourth, fifth grade science questions derived from regional and state science exams (http://aristo-public-data.s3.amazonaws.com/AI2-Elementary-NDMC-Feb2016.zip)
+        # Publicly available science textbooks (ck12.org)
+        # Simple English Wikipedia
+        # For QANTA (Iyyer et al., 2014), we use questions from quiz bowl tournaments for training as in Iyyer et al. (2014).
+        # synthetic QA tasks defined in Weston et al. (2015) (version 1.1 of the dataset)
+
