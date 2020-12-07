@@ -9,11 +9,13 @@ def calculate_entropy(distribution: Union[list, np.ndarray]) -> float:
     return (-p * np.log(p + EPS) - (1 - p) * np.log(1 - p + EPS)).sum()
 
 
+def H_single(i, x_i, F_pos: nltk.FreqDist, F_single: nltk.FreqDist):
+    p = F_single[(i, x_i)] / F_pos[i]
+    return calculate_entropy([p, 1 - p])
+
+
 def get_H_single(F_pos: nltk.FreqDist, F_single: nltk.FreqDist):
-    def H_single(i, x_i):
-        p = F_single[(i, x_i)] / F_pos[i]
-        return calculate_entropy([p, 1 - p])
-    return H_single
+    return lambda i, x_i: H_single(i, x_i, F_pos, F_single)
 
 
 def get_H_pair(F_pos: nltk.FreqDist, F_single: nltk.FreqDist, F_pair: nltk.FreqDist, F_last: nltk.FreqDist):
@@ -25,7 +27,7 @@ def get_H_pair(F_pos: nltk.FreqDist, F_single: nltk.FreqDist, F_pair: nltk.FreqD
         c00 = T - c11 - c01 - c10
         assert c00 >= 0
         return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - \
-               calculate_entropy(np.array([c10 + c11, c00 + c01]) / T)
+               H_single(i - 1, x_prv, F_pos, F_single)
     return H_pair
 
 
