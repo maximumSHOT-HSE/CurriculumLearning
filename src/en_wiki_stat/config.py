@@ -1,1 +1,0 @@
-WIKIPEDIA_NAME='wikipedia/20200301.ab'
