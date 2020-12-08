@@ -1,7 +1,6 @@
 import unittest
 import sentencepiece as spm
 import pickle
-# import src.metrics as metrics
 import metrics
 from tqdm import tqdm
 import nltk
