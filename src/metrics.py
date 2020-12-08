@@ -77,5 +77,57 @@ def excess_entropy_fast(text: str, H_single, H_pair):
     return EE
 
 
+def calculate_subset_mean_H_slow(text: str, H_single, H_pair) -> np.ndarray:
+    """
+    Calculates subset mean entropy for each 1 <= k <= n of given string in O*(2^n) time complexity
+
+    :param text: an input tokenized string
+    :param H_single: a function that calculates H(i, x_i)
+    :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
+    :return: (n,) np.ndarray with calculated subset mean entropy for each 1 <= k <= n (result[k - 1] = mean for k)
+    """
+    n = len(text)
+    return np.zeros(n)
+
+
+def TSE_slow(text: str, H_single, H_pair):
+    """
+    Calculates TSE of given string in O*(2^n) time complexity
+
+    :param text: an input tokenized string
+    :param H_single: a function that calculates H(i, x_i)
+    :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
+    :return: a float value which is equal to TSE of given input string
+    """
+
+    return 0
+
+
+def calculate_subset_mean_H_fast(text: str, H_single, H_pair) -> np.ndarray:
+    """
+    Calculates subset mean entropy for each 1 <= k <= n of given string in O(n^2) time complexity
+
+    :param text: an input tokenized string
+    :param H_single: a function that calculates H(i, x_i)
+    :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
+    :return: (n,) np.ndarray with calculated subset mean entropy for each 1 <= k <= n (result[k - 1] = mean for k)
+    """
+    n = len(text)
+    return np.zeros(n)
+
+
+def TSE_fast(text: str, H_single, H_pair):
+    """
+    Calculates TSE of given string in O(n^2) time complexity
+
+    :param text: an input tokenized string
+    :param H_single: a function that calculates H(i, x_i)
+    :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
+    :return: a float value which is equal to TSE of given input string
+    """
+
+    return 0
+
+
 if __name__ == '__main__':
     print('Hello, world')
