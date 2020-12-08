@@ -1,6 +1,7 @@
-import numpy as np
-import nltk
 from typing import Union
+
+import nltk
+import numpy as np
 
 
 def calculate_entropy(distribution: Union[list, np.ndarray]) -> float:
@@ -117,7 +118,16 @@ def calculate_subset_mean_H_fast(text: str, H_single, H_pair) -> np.ndarray:
     :return: (n,) np.ndarray with calculated subset mean entropy for each 1 <= k <= n (result[k - 1] = mean for k)
     """
     n = len(text)
-    return np.zeros(n)
+    if n == 1:
+        return np.array([H_single(0, text[0])])
+    sum_h_pair = 0
+    sum_h_single = 0
+    for i in range(1, n):
+        sum_h_pair += H_pair(i, text[i - 1], text[i])
+        sum_h_single += H_single(i, text[i])
+    H0 = H_single(0, text[0])
+    ks = np.arange(n) + 1
+    return ks * (ks - 1) * sum_h_pair / n / (n - 1) + ks * (n - ks) * sum_h_single / n / (n - 1) + H0 * ks / n
 
 
 def TSE_slow(text: str, H_single, H_pair):
@@ -129,6 +139,8 @@ def TSE_slow(text: str, H_single, H_pair):
     :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
     :return: a float value which is equal to TSE of given input string
     """
+    if len(text) == 0:
+        return 0
     subset_mean_H = calculate_subset_mean_H_slow(text, H_single, H_pair)
     TSE = 0
     n = len(text)
@@ -147,9 +159,7 @@ def TSE_fast(text: str, H_single, H_pair):
     :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
     :return: a float value which is equal to TSE of given input string
     """
-    subset_mean_H = calculate_subset_mean_H_slow(text, H_single, H_pair)
+    if len(text) == 0:
+        return 0
+    subset_mean_H = calculate_subset_mean_H_fast(text, H_single, H_pair)
     return subset_mean_H[:-1].sum() - subset_mean_H[-1] * (len(text) - 1) / 2
-
-
-if __name__ == '__main__':
-    print('Hello, world')
