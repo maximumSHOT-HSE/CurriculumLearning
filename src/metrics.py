@@ -125,9 +125,10 @@ def calculate_subset_mean_H_fast(text: str, H_single, H_pair) -> np.ndarray:
     for i in range(1, n):
         sum_h_pair += H_pair(i, text[i - 1], text[i])
         sum_h_single += H_single(i, text[i])
-    H0 = H_single(0, text[0])
     ks = np.arange(n) + 1
-    return ks * (ks - 1) * sum_h_pair / n / (n - 1) + ks * (n - ks) * sum_h_single / n / (n - 1) + H0 * ks / n
+    return ks * (ks - 1) * sum_h_pair / n / (n - 1) + \
+           ks * (n - ks) * sum_h_single / n / (n - 1) + \
+           H_single(0, text[0]) * ks / n
 
 
 def TSE_slow(text: str, H_single, H_pair):
