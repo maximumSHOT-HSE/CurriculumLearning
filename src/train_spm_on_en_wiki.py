@@ -13,6 +13,7 @@ def parse_args():
     parser.add_argument('--save', type=str, help='Path to the file where spm model will be saved')
     parser.add_argument('--download', type=bool, default=False)
     parser.add_argument('--model-type', type=str, default='bpe')
+    parser.add_argument('--dump', type=str, help='Path to the dump directory, where tfds is stored')
     return parser.parse_args()
 
 
@@ -25,11 +26,9 @@ if __name__ == '__main__':
     # for i in range(sp.vocab_size()):
     #     print(i, sp.id_to_piece(i))
 
-    DATA_DIR = 'dump'
-
     dataset, dataset_info = tfds.load(
         name=args.dataset,
-        data_dir=DATA_DIR,
+        data_dir=args.dump,
         with_info=True,
         split=tfds.Split.TRAIN,
         shuffle_files=False,
