@@ -70,7 +70,6 @@ def excess_entropy_fast(text: str, H_single, H_pair):
     :param H_pair: a function that calculates H(x_i | x_{i-1}) = H(i, x_{i-1}, x_i)
     :return: a float value which is equal to excess entropy of given input string
     """
-
     n = len(text)
     EE = 0
     for i in range(n - 1):
