@@ -1,10 +1,9 @@
-import sentencepiece as spm
-import numpy as np
-import nltk
-from tqdm import tqdm
-import hashlib
-import pickle
 import argparse
+import pickle
+
+import nltk
+import sentencepiece as spm
+from tqdm import tqdm
 
 
 def parse_args():
@@ -13,6 +12,13 @@ def parse_args():
     parser.add_argument('--corpus', type=str, help='Path to the corpus file which should be processes')
     parser.add_argument('--save-prefix', type=str, help='Prefix of file to be saved after corpus processing')
     return parser.parse_args()
+
+
+def get_from_file_generator(path: str):
+    with open(path, 'r') as file:
+        for line in file:
+            line = line.strip()
+            yield line
 
 
 if __name__ == '__main__':
@@ -26,23 +32,22 @@ if __name__ == '__main__':
     F_pair = nltk.FreqDist()
     F_last = nltk.FreqDist()
 
-    with open(args.corpus, 'r') as file:
-        for line in tqdm(file):
-            line = line.strip()
-            x = sp.encode_as_ids(line)
-            n = len(x)
-            if n == 0:
-                continue
-            bgs = nltk.bigrams(x)
+    for line in tqdm(get_from_file_generator(args.corpus)):
+        line = line.strip()
+        x = sp.encode_as_ids(line)
+        n = len(x)
+        if n == 0:
+            continue
+        bgs = nltk.bigrams(x)
 
-            add_pos = nltk.FreqDist(range(n))  # i
-            add_single = nltk.FreqDist(zip(range(n), x))  # (i, x[i])
-            add_pair = nltk.FreqDist(zip(range(1, n), bgs))  # (i, (x_prv, x_cur))
+        add_pos = nltk.FreqDist(range(n))  # i
+        add_single = nltk.FreqDist(zip(range(n), x))  # (i, x[i])
+        add_pair = nltk.FreqDist(zip(range(1, n), bgs))  # (i, (x_prv, x_cur))
 
-            F_pos += add_pos
-            F_single += add_single
-            F_pair += add_pair
-            F_last[(n - 1, x[n - 1])] += 1
+        F_pos += add_pos
+        F_single += add_single
+        F_pair += add_pair
+        F_last[(n - 1, x[n - 1])] += 1
 
     with \
         open(f'{args.save_prefix}_pos', 'wb') as out_pos, \
