@@ -14,4 +14,5 @@ set nu
 set wrap
 set linebreak
 set noswapfile
+set expandtab
 
