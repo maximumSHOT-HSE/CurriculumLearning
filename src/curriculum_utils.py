@@ -1,7 +1,4 @@
-from transformers import Trainer, TrainingArguments
-from transformers import DataCollatorForLanguageModeling
-from transformers import LineByLineTextDataset
-from transformers import BertTokenizer, BertConfig, BertForMaskedLM
+from transformers import Trainer
 from transformers.trainer_callback import TrainerState
 import datasets
 import os
@@ -82,25 +79,3 @@ class CurriculumTrainer(Trainer):
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
             )
-
-
-class MyDataset(Dataset):
-    def __init__(self, n):
-        self.n = n
-        self.x = np.arange(n)
-
-    def __len__(self):
-        return self.n
-
-    def __getitem__(self, i):
-        return self.x[i]
-
-dataset = MyDataset(3000000)
-# sampler = RandomSampler(dataset)
-sampler = CurriculumSampler(dataset, TrainerState(num_train_epochs=5 * (10 + 4), epoch=5), 10, 3, 5)
-
-for x in sampler:
-    print(x)
-
-
-print('len = ', len(sampler))
