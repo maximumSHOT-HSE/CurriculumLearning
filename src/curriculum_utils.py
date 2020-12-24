@@ -127,7 +127,37 @@ class CurriculumTrainer(Trainer):
             return get_tpu_sampler(self.train_dataset)
         else:
             return (
-                CurriculumSampler()
+                CurriculumSampler(
+                    data_source=self.train_dataset,
+                    state=self.state,
+                    n_bins=,
+                    window_width=,
+                    n_see=,
+                )
+                if self.args.local_rank == -1
+                else DistributedSampler(self.train_dataset)
+            )
+
+
+class CurriculumTrainerHyperbole(Trainer):
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+            self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        elif is_torch_tpu_available():
+            return get_tpu_sampler(self.train_dataset)
+        else:
+            return (
+                CurriculumSamplerHyperbole(
+                    data_source=self.train_dataset,
+                    state=self.state,
+                    n_bins=,
+                    window_width=,
+                    n_see=,
+                    ro=,
+                )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
             )
