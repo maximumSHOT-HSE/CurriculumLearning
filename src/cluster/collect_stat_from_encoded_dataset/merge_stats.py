@@ -18,6 +18,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--prefix', type=str, help='Prefix of directories names from which partial statistics will be retrieved for merging', required=True)
     parser.add_argument('--save', type=str, help='Path to the EMPTY directory, where statistics will be saved', required=True)
+    parser.add_argument('--check-same-part', type=int, default=1, help='Whether to check similarity of dataset parts or not')
     return parser.parse_args()
 
 
@@ -42,7 +43,7 @@ if __name__ == '__main__':
 
     config = None
 
-    for root in tqdm(roots):
+    for root in roots:
         with open(root / 'config.json', 'r') as f:
             c = json.load(f)
             if config is None:
@@ -50,7 +51,8 @@ if __name__ == '__main__':
             else:
                 assert config['tokenizer'] == c['tokenizer']
                 assert config['dataset'] == c['dataset']
-                assert config['part'] == c['part']
+                if args.check_same_part:
+                    assert config['part'] == c['part']
 
         assert config is not None
 
@@ -76,8 +78,10 @@ if __name__ == '__main__':
     all_config = {
         'tokenizer': config['tokenizer'],
         'dataset': config['dataset'],
-        'part': config['part']
     }
+
+    if args.check_same_part:
+        all_config['part'] = config['part']
 
     print(all_config)
 
