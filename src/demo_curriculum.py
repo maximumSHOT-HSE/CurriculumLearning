@@ -9,6 +9,7 @@ import numpy as np
 import math
 from curriculum_utils import CurriculumSampler, CurriculumSamplerHyperbole
 import matplotlib.pyplot as plt
+from collections import Counter
 
 
 class MyDataset(Dataset):
@@ -27,7 +28,7 @@ def show_hist(dataset_size: int, n_bins: int, window_width: int, n_see: int):
     num_train_epochs=n_see * (n_bins + 2 * window_width - 2)
     total_samples = []
 
-    for epoch in range(0, num_train_epochs, n_see):
+    for epoch in range(0, num_train_epochs):
         state = TrainerState(num_train_epochs=num_train_epochs, epoch=epoch)
         dataset = MyDataset(dataset_size)
         sampler = CurriculumSampler(dataset, state, n_bins, window_width, n_see)
@@ -35,6 +36,9 @@ def show_hist(dataset_size: int, n_bins: int, window_width: int, n_see: int):
         samples = list(sampler)
         total_samples += samples
         
+        print(len(samples))
+        continue
+
         plt.cla()
         plt.clf()
         plt.title(f'Number of views. epoch #{epoch}')
@@ -42,24 +46,31 @@ def show_hist(dataset_size: int, n_bins: int, window_width: int, n_see: int):
         plt.xlabel(f'samples (indices in sorted dataset). n_bins={n_bins}, window_width={window_width}')
         plt.ylabel('number')
         plt.hist(samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
-        # plt.show()
-        plt.savefig(f'movie/hist_{epoch:03d}.png')
+        plt.show()
+        # plt.savefig(f'movie/hist_{epoch:03d}.png')
 
-    # plt.hist(samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
-    # plt.show()    
+    print()
+    print(len(total_samples))
+
+    values = Counter(total_samples).values()
+    print(sum(values) / len(values))
+
+    plt.hist(total_samples, bins=1000)
+    plt.show()    
 
 
 def show_hist_hyperbole(dataset_size: int, n_bins: int, window_width: int, n_see: int, ro, id=-1):
     num_train_epochs=n_see * (n_bins + 2 * window_width - 2)
     total_samples = []
 
-    for epoch in range(0, num_train_epochs, n_see):
+    for epoch in range(0, num_train_epochs, 1):
         state = TrainerState(num_train_epochs=num_train_epochs, epoch=epoch)
         dataset = MyDataset(dataset_size)
         sampler = CurriculumSamplerHyperbole(dataset, state, n_bins, window_width, n_see, ro)
 
         samples = list(sampler)
         total_samples += samples
+        continue
         
         plt.cla()
         plt.clf()
@@ -73,11 +84,18 @@ def show_hist_hyperbole(dataset_size: int, n_bins: int, window_width: int, n_see
         # plt.show()
         plt.savefig(f'movie/hist_{epoch:03d}.png')
         
-    # plt.cla()
-    # plt.clf()
-    # plt.title(f'Final number of views. ro = {ro}')
+    plt.cla()
+    plt.clf()
+    plt.title(f'Final number of views. ro = {ro}')
     # plt.hist(total_samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
+    plt.hist(total_samples, bins=10000)
+    plt.show()
     # plt.savefig(f'movie/hist_{id:03d}.png')
+
+    counter = Counter(total_samples)
+    values = counter.values()
+
+    print(min(values), max(values), sum(values) / len(values))
 
 
 if __name__ == '__main__':
@@ -91,7 +109,7 @@ if __name__ == '__main__':
         dataset_size=100000,
         n_bins=50,
         window_width=8,
-        n_see=5,
+        n_see=40,
         ro=0.5
     )
 

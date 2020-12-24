@@ -19,7 +19,7 @@ class CurriculumSampler(Sampler):
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
             right and to the left of the center. Center will move to the right every n_see epochs.
-        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have equal
+        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
             expected number (n_see) of times when index from i-th bin will be sampled
     """
 
@@ -74,7 +74,7 @@ class CurriculumSamplerHyperbole(Sampler):
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
             right and to the left of the center. Center will move to the right every n_see epochs.
-        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have equal
+        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
             expected number (n_see) of times when index from i-th bin will be sampled
     """
 
