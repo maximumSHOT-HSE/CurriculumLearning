@@ -49,6 +49,7 @@ if __name__ == '__main__':
             if config is None:
                 config = c
             else:
+                assert config['hash-base'] == c['hash-base']
                 assert config['tokenizer'] == c['tokenizer']
                 assert config['dataset'] == c['dataset']
                 if args.check_same_part:
@@ -76,6 +77,7 @@ if __name__ == '__main__':
                 all_counter += tmp_counter
 
     all_config = {
+        'hash-base': config['hash-base'],
         'tokenizer': config['tokenizer'],
         'dataset': config['dataset'],
     }
