@@ -7,6 +7,7 @@ from transformers import EvaluationStrategy
 from transformers import set_seed
 import os
 
+
 SEED = 42
 
 
@@ -24,6 +25,9 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer):
         output_dir=f'./Logs/BertLogs{get_experiment_num()}',
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=20000,
+        save_steps=10000,
+        num_train_epochs=1,
+        logging_steps=10000,
         seed=SEED,
         do_eval=True,
         do_train=True
