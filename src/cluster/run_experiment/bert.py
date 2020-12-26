@@ -36,9 +36,6 @@ def get_experiment_num():
 
 
 def train(model, data_collator, dataset_train, dataset_eval, tokenizer, dataset_type):
-    print(f'dataset_type: {dataset_type}')
-    print(f'num_epochs: {NUM_EPOCHS[dataset_type]}')
-
     training_args = TrainingArguments(
         output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/{get_experiment_name(dataset_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
