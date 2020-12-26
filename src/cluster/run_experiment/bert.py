@@ -19,6 +19,12 @@ PATHS_TO_DATASET = {
     'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/calculate_tse/wiki40b_en_encoded_cased_with_tse'
 }
 
+NUM_EPOCHS = {
+    'base': 3,
+    'ee': 1,
+    'tse': 1
+}
+
 
 def get_experiment_num():
     folder = 'Logs'
@@ -34,9 +40,9 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer, dataset_
         output_dir=f'./Logs/{get_experiment_name(dataset_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=20000,
-        save_steps=10000,
-        num_train_epochs=1,
-        logging_steps=10000,
+        save_steps=5000,
+        num_train_epochs=NUM_EPOCHS[dataset_type],
+        logging_steps=5000,
         seed=SEED,
         do_eval=True,
         do_train=True
