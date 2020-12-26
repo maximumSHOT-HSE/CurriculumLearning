@@ -16,13 +16,15 @@ SEED = 42
 PATHS_TO_DATASET = {
     'base': '/home/aomelchenko/datasets/wiki40b_en_encoded_cased',
     'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_ee',
-    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_tse'
+    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_tse',
+    'len': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_with_map/wiki40b_encoded_cased_sorted_by_len'
 }
 
 NUM_EPOCHS = {
     'base': 3,
     'ee': 1,
-    'tse': 1
+    'tse': 1,
+    'len': 1
 }
 
 
