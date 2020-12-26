@@ -1,14 +1,23 @@
-from transformers import Trainer, TrainingArguments
+from transformers import TrainingArguments, Trainer
 from transformers import DataCollatorForLanguageModeling
-from transformers import LineByLineTextDataset
 from transformers import BertTokenizer, BertConfig, BertForMaskedLM
 import datasets
 from transformers import EvaluationStrategy
 from transformers import set_seed
 import os
+from src.curriculum_utils import CurriculumTrainerHyperbole
+from argparse import ArgumentParser
+import sys
 
 
 SEED = 42
+
+
+PATHS_TO_DATASET = {
+    'base': '/home/aomelchenko/datasets/wiki40b_en_encoded_cased',
+    'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/calculate_excess_entropy/wiki40b_en_encoded_cased_with_ee',
+    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/calculate_tse/wiki40b_en_encoded_cased_with_tse'
+}
 
 
 def get_experiment_num():
@@ -20,9 +29,9 @@ def get_experiment_num():
     return max([int(file.split('BertLogs')[1]) for file in files]) + 1
 
 
-def train(model, data_collator, dataset_train, dataset_eval, tokenizer):
+def train(model, data_collator, dataset_train, dataset_eval, tokenizer, dataset_type):
     training_args = TrainingArguments(
-        output_dir=f'./Logs/BertLogs{get_experiment_num()}',
+        output_dir=f'./Logs/{get_experiment_name(dataset_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=20000,
         save_steps=10000,
@@ -33,7 +42,11 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer):
         do_train=True
     )
 
-    trainer = Trainer(
+    current_trainer_class = Trainer
+    if dataset_type != 'base':
+        current_trainer_class = CurriculumTrainerHyperbole
+
+    trainer = current_trainer_class(
         model=model,
         tokenizer=tokenizer,
         args=training_args,
@@ -45,7 +58,6 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer):
     trainer.train()
 
 
-# TODO dismember data collator
 def create_data_collator(tokenizer):
     return DataCollatorForLanguageModeling(
         tokenizer=tokenizer,
@@ -54,19 +66,29 @@ def create_data_collator(tokenizer):
     )
 
 
-# TODO change to something more clever
-def create_dataset(path_to_dump='/home/aomelchenko/datasets/wiki40b_en_encoded_cased'):
-    return datasets.load_from_disk(path_to_dump)
+def create_dataset(dataset_type):
+    return datasets.load_from_disk(PATHS_TO_DATASET[dataset_type])
 
 
-# TODO maybe some experiments with tokenizer
 def load_tokenizer():
     return BertTokenizer.from_pretrained("/home/aomelchenko/tokenizer_cased")
 
 
-# TODO maybe some hyper parameters tuning
 def create_model():
-    return BertForMaskedLM(config=BertConfig.from_pretrained('../BertLargeConfig'))
+    return BertForMaskedLM(config=BertConfig.from_pretrained('/home/aomelchenko/BertLargeConfig'))
+
+
+def parse_argument(args):
+    parser = ArgumentParser()
+    parser.add_argument("dataset", type=str, help="base, ee or tse")
+
+    parser.parse_args(args)
+
+    return parser.dataset
+
+
+def get_experiment_name(dataset_type):
+    return dataset_type + '_bert'
 
 
 def run():
@@ -75,7 +97,9 @@ def run():
     model = create_model()
     tokenizer = load_tokenizer()
 
-    dataset = create_dataset()
+    dataset_type = parse_argument(sys.argv[1:])
+    dataset = create_dataset(dataset_type)
+
     dataset_train = dataset['train']
     dataset_eval = dataset['validation']
 
@@ -84,7 +108,8 @@ def run():
 
     data_collator = create_data_collator(tokenizer)
     train(model=model, data_collator=data_collator, dataset_eval=dataset_eval,
-          dataset_train=dataset_train, tokenizer=tokenizer)
+          dataset_train=dataset_train, tokenizer=tokenizer,
+          dataset_type=dataset_type)
 
 
 if __name__ == '__main__':
