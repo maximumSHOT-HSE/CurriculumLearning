@@ -12,7 +12,7 @@ import pickle
 import argparse
 import json
 from pathlib import Path
-from src.metrics import excess_entropy_fast, calculate_entropy
+from metrics import excess_entropy_fast, calculate_entropy
 
 
 def parse_args():
