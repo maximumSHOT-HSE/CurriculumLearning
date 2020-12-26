@@ -88,9 +88,9 @@ def parse_argument(args):
     parser = ArgumentParser()
     parser.add_argument("dataset", type=str, help="base, ee or tse")
 
-    parser.parse_args(args)
+    parsed_args = parser.parse_args(args)
 
-    return parser.dataset
+    return parsed_args.dataset
 
 
 def get_experiment_name(dataset_type):
