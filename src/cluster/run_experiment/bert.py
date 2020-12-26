@@ -84,11 +84,11 @@ def create_model():
     return BertForMaskedLM(config=BertConfig.from_pretrained('/home/aomelchenko/BertLargeConfig'))
 
 
-def parse_argument(args):
+def parse_argument():
     parser = ArgumentParser()
     parser.add_argument("--dataset", type=str, help="base, ee or tse")
 
-    parsed_args = parser.parse_args(args)
+    parsed_args = parser.parse_args()
 
     return parsed_args.dataset
 
@@ -103,7 +103,7 @@ def run():
     model = create_model()
     tokenizer = load_tokenizer()
 
-    dataset_type = parse_argument(sys.argv)
+    dataset_type = parse_argument()
     dataset = create_dataset(dataset_type)
 
     dataset_train = dataset['train']
