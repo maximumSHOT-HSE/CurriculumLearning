@@ -8,7 +8,7 @@ def without_two_greatest(checkpoints):
 
 
 if __name__ == '__main__':
-    main_folder = '/home/aomelchenko/scripts/Logs'
+    main_folder = '/home/aomelchenko/Bachelor-s-Degree/Logs'
     while True:
         for folder in os.listdir(main_folder):
             current_folder = main_folder + os.path.sep + folder

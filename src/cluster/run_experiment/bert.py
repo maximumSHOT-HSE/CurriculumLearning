@@ -37,7 +37,7 @@ def get_experiment_num():
 
 def train(model, data_collator, dataset_train, dataset_eval, tokenizer, dataset_type):
     training_args = TrainingArguments(
-        output_dir=f'./Logs/{get_experiment_name(dataset_type)}',
+        output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/{get_experiment_name(dataset_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=20000,
         save_steps=5000,
