@@ -48,8 +48,6 @@ class CurriculumSamplerHyperbole(Sampler):
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
 
-        assert state.num_train_epochs == 1, f'num_train_epochs = {state.num_train_epochs}'
-
         self.indices = self.build_indices()
 
     def build_indices(self):
