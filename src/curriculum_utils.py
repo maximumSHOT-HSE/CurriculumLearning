@@ -12,13 +12,15 @@ import math
 class CurriculumSampler(Sampler):
     r"""Samples elements in the following way:
         1. All dataset is splitted into n_bins bins (last bin may have smaller size than others)
-        2. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+        2. Sampler assumes that will be n_see * (n_bins + 2 * window_width - 2) epochs, whee n_see = the number of times we want to give samples into model
+        3. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
             let t = (q - window_width + 1) be the center of the current window, then
             weight of the (t - window_width + i)-th and (t + window_width - i) bins will be equal to i / (window_width ** 2)
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
-            right and to the left of the center. Center will move to the right (on cycle).
-        3. Notice that end bins will have almost equal expected number of times when index from i-th bin will be sampled
+            right and to the left of the center. Center will move to the right every n_see epochs.
+        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
+            expected number (n_see) of times when index from i-th bin will be sampled
     """
 
     def __init__(
@@ -27,6 +29,7 @@ class CurriculumSampler(Sampler):
         state: TrainerState,
         n_bins: int,
         window_width: int,
+        n_see: int,
     ):
         super().__init__(data_source)
         self.data_source = data_source
@@ -34,24 +37,27 @@ class CurriculumSampler(Sampler):
         self.n_bins = n_bins
         self.size = len(self.data_source)
         self.window_width = window_width
+        self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
+
+        assert state.num_train_epochs == 1
 
         self.indices = self.build_indices()
 
     def build_indices(self):
         indices = []
-        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
-            p = np.zeros(self.n_bins + 1)
-            # t = math.floor(self.state.epoch) % self.n_bins  - self.window_width + 1
-            for i in range(0, self.window_width + 1):
-                for id in [t - self.window_width + i, t + self.window_width - i]:
-                    if 0 <= id < self.n_bins:
-                        p[id] = i
-            p /= p.sum()
-            p[self.n_bins] = 1 - p.sum()
-            ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-            ids = ids[ids < self.size]
-            indices.append(ids)
+        for _ in range(self.n_see):
+            for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+                p = np.zeros(self.n_bins + 1)
+                for i in range(0, self.window_width + 1):
+                    for id in [t - self.window_width + i, t + self.window_width - i]:
+                        if 0 <= id < self.n_bins:
+                            p[id] = i
+                p /= p.sum()
+                p[self.n_bins] = 1 - p.sum()
+                ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                ids = ids[ids < self.size]
+                indices.append(ids)
         return np.concatenate(indices)
 
     def __iter__(self):
@@ -64,13 +70,15 @@ class CurriculumSampler(Sampler):
 class CurriculumSamplerHyperbole(Sampler):
     r"""Samples elements in the following way:
         1. All dataset is splitted into n_bins bins (last bin may have smaller size than others)
-        2. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+        2. Sampler assumes that will be n_see * (n_bins + 2 * window_width - 2) epochs, whee n_see = the number of times we want to give samples into model
+        3. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
             let t = (q - window_width + 1) be the center of the current window, then
             weight of the i-th bins will be 1 / (|i - t| + 1)^ro
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
-            right and to the left of the center. Center will move to the right.
-        3. Notice that at the end bins will have almost equal expected number of times when index from i-th bin will be sampled
+            right and to the left of the center. Center will move to the right every n_see epochs.
+        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
+            expected number (n_see) of times when index from i-th bin will be sampled
     """
 
     def __init__(
@@ -79,6 +87,7 @@ class CurriculumSamplerHyperbole(Sampler):
         state: TrainerState,
         n_bins: int,
         window_width: int,
+        n_see: int,
         ro: float
     ):
         super().__init__(data_source)
@@ -87,21 +96,24 @@ class CurriculumSamplerHyperbole(Sampler):
         self.n_bins = n_bins
         self.size = len(self.data_source)
         self.window_width = window_width
+        self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
+
+        assert state.num_train_epochs == 1
 
         self.indices = self.build_indices()
 
     def build_indices(self):
         indices = []
-        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
-            # t = math.floor(self.state.epoch) % self.n_bins - self.window_width + 1
-            p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
-            p /= p.sum()
-            ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-            ids = ids[ids < self.size]
-            indices.append(ids)
-        return indices
+        for _ in range(self.n_see):
+            for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+                p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
+                p /= p.sum()
+                ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                ids = ids[ids < self.size]
+                indices.append(ids)
+        return np.concatenate(indices)
 
     def __iter__(self):
         yield from self.indices
@@ -111,17 +123,6 @@ class CurriculumSamplerHyperbole(Sampler):
 
 
 class CurriculumTrainer(Trainer):
-
-    def __init__(
-        self,
-        n_bins: int,
-        window_width: int,
-        *args,
-        **kwargs,
-    ):
-        super().__init__(*args, **kwargs)
-        self.n_bins = n_bins
-        self.window_width = window_width
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
@@ -135,8 +136,9 @@ class CurriculumTrainer(Trainer):
                 CurriculumSampler(
                     data_source=self.train_dataset,
                     state=self.state,
-                    n_bins=self.n_bins,
-                    window_width=self.window_width,
+                    n_bins=,
+                    window_width=,
+                    n_see=,
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
@@ -144,19 +146,6 @@ class CurriculumTrainer(Trainer):
 
 
 class CurriculumTrainerHyperbole(Trainer):
-
-    def __init__(
-        self,
-        n_bins: int,
-        window_width: int,
-        ro: float,
-        *args,
-        **kwargs,
-    ):
-        super().__init__(*args, **kwargs)
-        self.n_bins = n_bins
-        self.window_width = window_width
-        self.ro = ro
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
@@ -170,9 +159,10 @@ class CurriculumTrainerHyperbole(Trainer):
                 CurriculumSamplerHyperbole(
                     data_source=self.train_dataset,
                     state=self.state,
-                    n_bins=self.n_bins,
-                    window_width=self.window_width,
-                    ro=self.ro,
+                    n_bins=,
+                    window_width=,
+                    n_see=,
+                    ro=,
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
