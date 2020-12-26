@@ -86,7 +86,7 @@ def create_model():
 
 def parse_argument(args):
     parser = ArgumentParser()
-    parser.add_argument("dataset", type=str, help="base, ee or tse")
+    parser.add_argument("--dataset", type=str, help="base, ee or tse")
 
     parsed_args = parser.parse_args(args)
 
