@@ -15,8 +15,8 @@ SEED = 42
 
 PATHS_TO_DATASET = {
     'base': '/home/aomelchenko/datasets/wiki40b_en_encoded_cased',
-    'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/calculate_excess_entropy/wiki40b_en_encoded_cased_with_ee',
-    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/calculate_tse/wiki40b_en_encoded_cased_with_tse'
+    'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_ee',
+    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_tse'
 }
 
 NUM_EPOCHS = {
