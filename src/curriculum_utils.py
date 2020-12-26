@@ -29,7 +29,6 @@ class CurriculumSampler(Sampler):
         state: TrainerState,
         n_bins: int,
         window_width: int,
-        n_see: int,
     ):
         super().__init__(data_source)
         self.data_source = data_source
@@ -37,7 +36,6 @@ class CurriculumSampler(Sampler):
         self.n_bins = n_bins
         self.size = len(self.data_source)
         self.window_width = window_width
-        self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
 
         assert state.num_train_epochs == n_see * (n_bins + 2 * window_width - 2), "Should be consistent nmber of train epochs"
@@ -46,7 +44,7 @@ class CurriculumSampler(Sampler):
 
     def build_indices(self):
         p = np.zeros(self.n_bins + 1)
-        t = math.floor(self.state.epoch) // self.n_see - self.window_width + 1
+        t = math.floor(self.state.epoch) % self.n_bins  - self.window_width + 1
         for i in range(0, self.window_width + 1):
             for id in [t - self.window_width + i, t + self.window_width - i]:
                 if 0 <= id < self.n_bins:
@@ -84,7 +82,6 @@ class CurriculumSamplerHyperbole(Sampler):
         state: TrainerState,
         n_bins: int,
         window_width: int,
-        n_see: int,
         ro: float
     ):
         super().__init__(data_source)
@@ -93,7 +90,6 @@ class CurriculumSamplerHyperbole(Sampler):
         self.n_bins = n_bins
         self.size = len(self.data_source)
         self.window_width = window_width
-        self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
 
@@ -102,7 +98,7 @@ class CurriculumSamplerHyperbole(Sampler):
         self.indices = self.build_indices()
 
     def build_indices(self):
-        t = math.floor(self.state.epoch) // self.n_see - self.window_width + 1
+        t = math.floor(self.state.epoch) % self.n_bins - self.window_width + 1
         p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
         p /= p.sum()
         ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
@@ -118,6 +114,17 @@ class CurriculumSamplerHyperbole(Sampler):
 
 class CurriculumTrainer(Trainer):
 
+    def __init__(
+        self,
+        n_bins: int,
+        window_width: int,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.n_bins = n_bins
+        self.window_width = window_width
+
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
             self.train_dataset, collections.abc.Sized
@@ -130,9 +137,8 @@ class CurriculumTrainer(Trainer):
                 CurriculumSampler(
                     data_source=self.train_dataset,
                     state=self.state,
-                    n_bins=,
-                    window_width=,
-                    n_see=,
+                    n_bins=self.n_bins,
+                    window_width=self.window_width,
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
@@ -140,6 +146,19 @@ class CurriculumTrainer(Trainer):
 
 
 class CurriculumTrainerHyperbole(Trainer):
+
+    def __init__(
+        self,
+        n_bins: int,
+        window_width: int,
+        ro: float,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.n_bins = n_bins
+        self.window_width = window_width
+        self.ro = ro
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
@@ -153,10 +172,9 @@ class CurriculumTrainerHyperbole(Trainer):
                 CurriculumSamplerHyperbole(
                     data_source=self.train_dataset,
                     state=self.state,
-                    n_bins=,
-                    window_width=,
-                    n_see=,
-                    ro=,
+                    n_bins=self.n_bins,
+                    window_width=self.window_width,
+                    ro=self.ro,
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
