@@ -59,7 +59,7 @@ class CurriculumSamplerHyperbole(Sampler):
                 ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
                 ids = ids[ids < self.size]
                 indices.append(ids)
-        return np.concatenate(indices)
+        return np.concatenate(indices).reshape(-1, 1)
 
     def __iter__(self):
         yield from self.indices
