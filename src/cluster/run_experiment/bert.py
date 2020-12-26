@@ -103,7 +103,7 @@ def run():
     model = create_model()
     tokenizer = load_tokenizer()
 
-    dataset_type = parse_argument(sys.argv[1:])
+    dataset_type = parse_argument(sys.argv)
     dataset = create_dataset(dataset_type)
 
     dataset_train = dataset['train']
