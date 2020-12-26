@@ -5,7 +5,7 @@ import datasets
 from transformers import EvaluationStrategy
 from transformers import set_seed
 import os
-from src.curriculum_utils import CurriculumTrainerHyperbole
+from curriculum_utils import CurriculumTrainerHyperbole
 from argparse import ArgumentParser
 import sys
 
