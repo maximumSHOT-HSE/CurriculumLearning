@@ -12,14 +12,15 @@ import math
 class CurriculumSampler(Sampler):
     r"""Samples elements in the following way:
         1. All dataset is splitted into n_bins bins (last bin may have smaller size than others)
-        2. Sampler assumes that will be n_see * (n_bins + 2 * window_width - 2) epochs, whee n_see = the number of times we want to give samples into model
-        3. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+        2. Sampler assumes that will be 1 epoch. 
+        3. Sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+            let q be the current main bin
             let t = (q - window_width + 1) be the center of the current window, then
             weight of the (t - window_width + i)-th and (t + window_width - i) bins will be equal to i / (window_width ** 2)
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
-            right and to the left of the center. Center will move to the right every n_see epochs.
-        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
+            right and to the left of the center. Center will lsightly move to the right
+        4. Notice that at the end bins will have almost equal
             expected number (n_see) of times when index from i-th bin will be sampled
     """
 
@@ -40,22 +41,25 @@ class CurriculumSampler(Sampler):
         self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
 
-        assert state.num_train_epochs == n_see * (n_bins + 2 * window_width - 2), "Should be consistent nmber of train epochs"
+        assert state.num_train_epochs == 1
 
         self.indices = self.build_indices()
 
     def build_indices(self):
-        p = np.zeros(self.n_bins + 1)
-        t = math.floor(self.state.epoch) // self.n_see - self.window_width + 1
-        for i in range(0, self.window_width + 1):
-            for id in [t - self.window_width + i, t + self.window_width - i]:
-                if 0 <= id < self.n_bins:
-                    p[id] = i
-        p /= p.sum()
-        p[self.n_bins] = 1 - p.sum()
-        ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-        ids = ids[ids < self.size]
-        return ids
+        indices = []
+        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+            for _ in range(self.n_see):
+                p = np.zeros(self.n_bins + 1)
+                for i in range(0, self.window_width + 1):
+                    for id in [t - self.window_width + i, t + self.window_width - i]:
+                        if 0 <= id < self.n_bins:
+                            p[id] = i
+                p /= p.sum()
+                p[self.n_bins] = 1 - p.sum()
+                ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                ids = ids[ids < self.size]
+                indices.append(ids)
+        return np.concatenate(indices)
 
     def __iter__(self):
         yield from self.indices
@@ -67,14 +71,15 @@ class CurriculumSampler(Sampler):
 class CurriculumSamplerHyperbole(Sampler):
     r"""Samples elements in the following way:
         1. All dataset is splitted into n_bins bins (last bin may have smaller size than others)
-        2. Sampler assumes that will be n_see * (n_bins + 2 * window_width - 2) epochs, whee n_see = the number of times we want to give samples into model
-        3. At the (q * (n_bins + 2 * window_width - 2) + mod)-th epoch sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+        2. Sampler assumes that will be 1 epoch. 
+        3. Sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
+            let q be the current main bin
             let t = (q - window_width + 1) be the center of the current window, then
-            weight of the i-th bins will be 1 / (|i - t| + 1)^ro
+            weight of the i-th bin will be equal to 1 / (|i - t| + 1)^ro
             then sampler will sample indices from given bins with that weights.
             In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
-            right and to the left of the center. Center will move to the right every n_see epochs.
-        4. Notice that after n_see * (n_bins + 2 * window_width - 2) eachs bins will have almost equal
+            right and to the left of the center. Center will lsightly move to the right
+        4. Notice that at the end bins will have almost equal
             expected number (n_see) of times when index from i-th bin will be sampled
     """
 
@@ -97,17 +102,20 @@ class CurriculumSamplerHyperbole(Sampler):
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
 
-        assert state.num_train_epochs == n_see * (n_bins + 2 * window_width - 2), "Should be consistent nmber of train epochs"
+        assert state.num_train_epochs == 1
 
         self.indices = self.build_indices()
 
     def build_indices(self):
-        t = math.floor(self.state.epoch) // self.n_see - self.window_width + 1
-        p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
-        p /= p.sum()
-        ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-        ids = ids[ids < self.size]
-        return ids
+        indices = []
+        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+            for _ in range(self.n_see):
+                p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
+                p /= p.sum()
+                ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                ids = ids[ids < self.size]
+                indices.append(ids)
+        return np.concatenate(indices)
 
     def __iter__(self):
         yield from self.indices
