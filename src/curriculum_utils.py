@@ -39,17 +39,20 @@ class CurriculumSampler(Sampler):
         self.indices = self.build_indices()
 
     def build_indices(self):
-        p = np.zeros(self.n_bins + 1)
-        t = math.floor(self.state.epoch) % self.n_bins  - self.window_width + 1
-        for i in range(0, self.window_width + 1):
-            for id in [t - self.window_width + i, t + self.window_width - i]:
-                if 0 <= id < self.n_bins:
-                    p[id] = i
-        p /= p.sum()
-        p[self.n_bins] = 1 - p.sum()
-        ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-        ids = ids[ids < self.size]
-        return ids
+        indices = []
+        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+            p = np.zeros(self.n_bins + 1)
+            # t = math.floor(self.state.epoch) % self.n_bins  - self.window_width + 1
+            for i in range(0, self.window_width + 1):
+                for id in [t - self.window_width + i, t + self.window_width - i]:
+                    if 0 <= id < self.n_bins:
+                        p[id] = i
+            p /= p.sum()
+            p[self.n_bins] = 1 - p.sum()
+            ids = np.random.choice(self.n_bins + 1, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+            ids = ids[ids < self.size]
+            indices.append(ids)
+        return np.concatenate(indices)
 
     def __iter__(self):
         yield from self.indices
@@ -90,12 +93,15 @@ class CurriculumSamplerHyperbole(Sampler):
         self.indices = self.build_indices()
 
     def build_indices(self):
-        t = math.floor(self.state.epoch) % self.n_bins - self.window_width + 1
-        p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
-        p /= p.sum()
-        ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
-        ids = ids[ids < self.size]
-        return ids
+        indices = []
+        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
+            # t = math.floor(self.state.epoch) % self.n_bins - self.window_width + 1
+            p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
+            p /= p.sum()
+            ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+            ids = ids[ids < self.size]
+            indices.append(ids)
+        return indices
 
     def __iter__(self):
         yield from self.indices
