@@ -60,7 +60,7 @@ class CurriculumSamplerHyperbole(Sampler):
                 ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
                 ids = ids[ids < self.size]
                 indices.append(ids)
-        return np.concatenate(indices)
+        return np.concatenate(indices).tolist()
 
     def __iter__(self):
         yield from self.indices
@@ -136,7 +136,7 @@ class CurriculumSamplerDifficultyBiased(Sampler):
                 ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
                 ids = ids[ids < self.size]
                 indices.append(ids)
-        return np.concatenate(indices)
+        return np.concatenate(indices).tolist()
 
     def __iter__(self):
         yield from self.indices
