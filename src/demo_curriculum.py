@@ -7,7 +7,7 @@ from torch.utils.data import RandomSampler, Sampler, Dataset, DataLoader
 from typing import Iterator, Optional, Sequence, List, TypeVar, Generic, Sized
 import numpy as np
 import math
-from curriculum_utils import CurriculumSamplerHyperbole
+from curriculum_utils import CurriculumSamplerHyperbole, CurriculumSamplerDifficultyBiased
 import matplotlib.pyplot as plt
 from collections import Counter
 
@@ -30,7 +30,49 @@ def show_hist_hyperbole(dataset_size: int, num_train_epochs: int, n_see: int, n_
 
     state = TrainerState(num_train_epochs=num_train_epochs, epoch=0)
     dataset = MyDataset(dataset_size)
-    sampler = CurriculumSamplerHyperbole(dataset, state, n_bins, window_width, n_see, ro, start_bin=0)
+    sampler = CurriculumSamplerHyperbole(dataset, state, n_bins, window_width, n_see, ro)
+
+    samples = list(sampler)
+    k = len(dataset) // n_bins
+
+    step = 0
+
+    for i in range(0, len(samples), k):
+        plt.cla()
+        plt.clf()
+        plt.title(f'Number of views. step #{i}')
+        # plt.title(f'ro = {ro}')
+        # plt.ylim([0, math.ceil(dataset_size / n_bins)])
+        # plt.ylim([0, 500])
+        plt.xlabel(f'samples (indices in sorted dataset). n_bins={n_bins}, window_width={window_width}, ro={ro}')
+        plt.ylabel('number')
+        plt.hist(samples[i: i + k], list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
+        # plt.show()
+        plt.savefig(f'movie/hist_{step:03d}.png')
+
+        step += 1
+
+    plt.cla()
+    plt.clf()
+    plt.title(f'Final number of views. ro = {ro}')
+    # plt.hist(total_samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
+    plt.hist(samples, bins=100)
+    plt.show()
+    # plt.savefig(f'movie/hist_{id:03d}.png')
+
+    counter = Counter(samples)
+    values = counter.values()
+
+    print(min(values), max(values), sum(values) / dataset_size)
+
+
+def show_hist_difficulty_biased(dataset_size: int, num_train_epochs: int, n_see: int, n_bins: int):
+    total_samples = []
+
+
+    state = TrainerState(num_train_epochs=num_train_epochs, epoch=0)
+    dataset = MyDataset(dataset_size)
+    sampler = CurriculumSamplerDifficultyBiased(dataset, state, n_bins, n_see)
 
     samples = list(sampler)
     k = len(dataset) // n_bins
@@ -44,7 +86,7 @@ def show_hist_hyperbole(dataset_size: int, num_train_epochs: int, n_see: int, n_
     #     # plt.title(f'ro = {ro}')
     #     # plt.ylim([0, math.ceil(dataset_size / n_bins)])
     #     # plt.ylim([0, 500])
-    #     plt.xlabel(f'samples (indices in sorted dataset). n_bins={n_bins}, window_width={window_width}, ro={ro}')
+    #     plt.xlabel(f'samples (indices in sorted dataset). n_bins={n_bins}')
     #     plt.ylabel('number')
     #     plt.hist(samples[i: i + k], list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
     #     # plt.show()
@@ -54,7 +96,7 @@ def show_hist_hyperbole(dataset_size: int, num_train_epochs: int, n_see: int, n_
 
     plt.cla()
     plt.clf()
-    plt.title(f'Final number of views. ro = {ro}')
+    plt.title(f'Final number of views')
     # plt.hist(total_samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
     plt.hist(samples, bins=100)
     plt.show()
@@ -63,7 +105,7 @@ def show_hist_hyperbole(dataset_size: int, num_train_epochs: int, n_see: int, n_
     counter = Counter(samples)
     values = counter.values()
 
-    print(min(values), max(values), sum(values) / len(values))
+    print(min(values), max(values), sum(values) / dataset_size)
 
 
 if __name__ == '__main__':
@@ -73,13 +115,20 @@ if __name__ == '__main__':
     #     window_width=8,
     #     n_see=5
     # )
-    show_hist_hyperbole(
+    # show_hist_hyperbole(
+    #     dataset_size=100000,
+    #     n_see=3,
+    #     num_train_epochs=1,
+    #     n_bins=10,
+    #     window_width=3,
+    #     ro=0.5
+    # )
+
+    show_hist_difficulty_biased(
         dataset_size=100000,
         n_see=3,
         num_train_epochs=1,
-        n_bins=50,
-        window_width=8,
-        ro=1.5
+        n_bins=10,
     )
 
     # ros = np.linspace(0.05, 5, 50)

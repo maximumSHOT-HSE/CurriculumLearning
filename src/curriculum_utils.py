@@ -36,9 +36,7 @@ class CurriculumSamplerHyperbole(Sampler):
         n_bins: int,
         window_width: int,
         n_see: int,
-        ro: float,
-        start_bin: int = None,
-        end_bin: int = None
+        ro: float
     ):
         super().__init__(data_source)
         self.data_source = data_source
@@ -49,21 +47,12 @@ class CurriculumSamplerHyperbole(Sampler):
         self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
-        self.start_bin = start_bin
-        self.end_bin = end_bin
-
-        if self.start_bin is None:
-            self.start_bin = -self.window_width + 1
-        if self.end_bin is None:
-            self.end_bin = self.n_bins + self.window_width - 1
-
-        assert state.num_train_epochs == 1
 
         self.indices = self.build_indices()
 
     def build_indices(self):
         indices = []
-        for t in range(self.start_bin, self.end_bin):
+        for t in range(-self.window_width + 1, self.n_bins + self.window_width - 1):
             for _ in range(self.n_see):
                 p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
                 p /= p.sum()
@@ -107,3 +96,44 @@ class CurriculumTrainerHyperbole(Trainer):
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
             )
+
+
+class CurriculumSamplerDifficultyBiased(Sampler):
+    r"""
+    """
+
+    def __init__(
+        self,
+        data_source: Optional[Sized],
+        state: TrainerState,
+        n_bins: int,
+        n_see: int
+    ):
+        super().__init__(data_source)
+        self.data_source = data_source
+        self.state = state
+        self.n_bins = n_bins
+        self.n_see = n_see
+        self.size = len(self.data_source)
+        self.bin_size = math.ceil(self.size / n_bins)
+        
+        self.indices = self.build_indices()
+
+    def build_indices(self):
+        indices = []
+        k = math.ceil(self.n_see * self.size * 2 / self.n_bins / (self.n_bins + 1))
+        for t in range(self.n_bins):
+            for _ in range(self.n_bins - t):
+                p = np.zeros(self.n_bins)
+                p[t:] = 1
+                p /= p.sum()
+                ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
+                ids = ids[ids < self.size]
+                indices.append(ids)
+        return np.concatenate(indices)
+
+    def __iter__(self):
+        yield from self.indices
+
+    def __len__(self):
+        return len(self.indices)
