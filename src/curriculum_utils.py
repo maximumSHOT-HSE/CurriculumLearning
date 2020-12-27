@@ -101,7 +101,11 @@ class CurriculumTrainerHyperbole(Trainer):
 
 
 class CurriculumSamplerDifficultyBiased(Sampler):
-    r"""
+    r"""Samples elements in the following way:
+        Samplers goes throught bins. Suppose that we are on the i-th bin.
+        Sampler samples (n - i) times the batch of size k=n_see * size * 2 / (n_bins * (n_bins - 1)).
+        The total number of samples is equalt to n_see * size and the final distribution is the following:
+        i-th bin will have weight w_i = i (the weight increasing from simple bins to difficult bins).
     """
 
     def __init__(
@@ -144,7 +148,7 @@ class CurriculumSamplerDifficultyBiased(Sampler):
 class CurriculumTrainerDifficultyBiased(Trainer):
 
     def __init__(self, n_bins=10, n_see=3, *args, **kwargs):
-        super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
+        super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.n_see = n_see
 
