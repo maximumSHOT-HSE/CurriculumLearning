@@ -41,7 +41,7 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer, dataset_
     training_args = TrainingArguments(
         output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/{get_experiment_name(dataset_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
-        eval_steps=20000,
+        eval_steps=5000,
         save_steps=5000,
         num_train_epochs=NUM_EPOCHS[dataset_type],
         logging_steps=5000,
