@@ -56,7 +56,7 @@ def show_hist_hyperbole(dataset_size: int, num_train_epochs: int, n_see: int, n_
     plt.clf()
     plt.title(f'Final number of views. ro = {ro}')
     # plt.hist(total_samples, list(range(0, dataset_size, math.ceil(dataset_size / n_bins))) + [dataset_size])
-    plt.hist(samples, bins=100)
+    plt.hist(samples, bins=n_bins)
     plt.show()
     # plt.savefig(f'movie/hist_{id:03d}.png')
 
@@ -115,21 +115,21 @@ if __name__ == '__main__':
     #     window_width=8,
     #     n_see=5
     # )
-    # show_hist_hyperbole(
-    #     dataset_size=100000,
-    #     n_see=3,
-    #     num_train_epochs=1,
-    #     n_bins=10,
-    #     window_width=3,
-    #     ro=0.5
-    # )
-
-    show_hist_difficulty_biased(
+    show_hist_hyperbole(
         dataset_size=100000,
         n_see=3,
         num_train_epochs=1,
         n_bins=10,
+        window_width=3,
+        ro=0.5
     )
+
+    # show_hist_difficulty_biased(
+    #     dataset_size=100000,
+    #     n_see=3,
+    #     num_train_epochs=1,
+    #     n_bins=10,
+    # )
 
     # ros = np.linspace(0.05, 5, 50)
     # for i, ro in enumerate(ros):

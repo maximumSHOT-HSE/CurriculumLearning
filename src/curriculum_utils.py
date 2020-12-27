@@ -56,7 +56,8 @@ class CurriculumSamplerHyperbole(Sampler):
             for _ in range(self.n_see):
                 p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
                 p /= p.sum()
-                ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                k = math.ceil(self.size / (self.n_bins + 2 * self.window_width - 2))
+                ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
                 ids = ids[ids < self.size]
                 indices.append(ids)
         return np.concatenate(indices)
@@ -69,6 +70,7 @@ class CurriculumSamplerHyperbole(Sampler):
 
 
 class CurriculumTrainerHyperbole(Trainer):
+
     def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, *args, **kwargs):
         super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
@@ -137,3 +139,30 @@ class CurriculumSamplerDifficultyBiased(Sampler):
 
     def __len__(self):
         return len(self.indices)
+
+
+class CurriculumTrainerDifficultyBiased(Trainer):
+
+    def __init__(self, n_bins=10, n_see=3, *args, **kwargs):
+        super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
+        self.n_bins = n_bins
+        self.n_see = n_see
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+            self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        elif is_torch_tpu_available():
+            return get_tpu_sampler(self.train_dataset)
+        else:
+            return (
+                CurriculumSamplerDifficultyBiased(
+                    data_source=self.train_dataset,
+                    state=self.state,
+                    n_bins=self.n_bins,
+                    n_see=self.n_see
+                )
+                if self.args.local_rank == -1
+                else DistributedSampler(self.train_dataset)
+            )
