@@ -30,13 +30,13 @@ class CurriculumSamplerHyperbole(Sampler):
     """
 
     def __init__(
-        self,
-        data_source: Optional[Sized],
-        state: TrainerState,
-        n_bins: int,
-        window_width: int,
-        n_see: int,
-        ro: float
+            self,
+            data_source: Optional[Sized],
+            state: TrainerState,
+            n_bins: int,
+            window_width: int,
+            n_see: int,
+            ro: float
     ):
         super().__init__(data_source)
         self.data_source = data_source
@@ -56,10 +56,11 @@ class CurriculumSamplerHyperbole(Sampler):
             for _ in range(self.n_see):
                 p = 1 / (abs(np.arange(self.n_bins) - t) + 1) ** self.ro
                 p /= p.sum()
-                ids = np.random.choice(self.n_bins, self.bin_size, p=p) * self.bin_size + np.random.choice(self.bin_size, self.bin_size)
+                k = math.ceil(self.size / (self.n_bins + 2 * self.window_width - 2))
+                ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
                 ids = ids[ids < self.size]
                 indices.append(ids)
-        return np.concatenate(indices).tolist()
+        return np.concatenate(indices)
 
     def __iter__(self):
         yield from self.indices
@@ -69,6 +70,7 @@ class CurriculumSamplerHyperbole(Sampler):
 
 
 class CurriculumTrainerHyperbole(Trainer):
+
     def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, *args, **kwargs):
         super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
@@ -78,7 +80,7 @@ class CurriculumTrainerHyperbole(Trainer):
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
-            self.train_dataset, collections.abc.Sized
+                self.train_dataset, collections.abc.Sized
         ):
             return None
         elif is_torch_tpu_available():
@@ -92,6 +94,78 @@ class CurriculumTrainerHyperbole(Trainer):
                     window_width=self.window_width,
                     n_see=self.n_see,
                     ro=self.ro,
+                )
+                if self.args.local_rank == -1
+                else DistributedSampler(self.train_dataset)
+            )
+
+
+class CurriculumSamplerDifficultyBiased(Sampler):
+    r"""Samples elements in the following way:
+        Samplers goes throught bins. Suppose that we are on the i-th bin.
+        Sampler samples (n - i) times the batch of size k=n_see * size * 2 / (n_bins * (n_bins - 1)).
+        The total number of samples is equalt to n_see * size and the final distribution is the following:
+        i-th bin will have weight w_i = i (the weight increasing from simple bins to difficult bins).
+    """
+
+    def __init__(
+            self,
+            data_source: Optional[Sized],
+            state: TrainerState,
+            n_bins: int,
+            n_see: int
+    ):
+        super().__init__(data_source)
+        self.data_source = data_source
+        self.state = state
+        self.n_bins = n_bins
+        self.n_see = n_see
+        self.size = len(self.data_source)
+        self.bin_size = math.ceil(self.size / n_bins)
+
+        self.indices = self.build_indices()
+
+    def build_indices(self):
+        indices = []
+        k = math.ceil(self.n_see * self.size * 2 / self.n_bins / (self.n_bins + 1))
+        for t in range(self.n_bins):
+            for _ in range(self.n_bins - t):
+                p = np.zeros(self.n_bins)
+                p[t:] = 1
+                p /= p.sum()
+                ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
+                ids = ids[ids < self.size]
+                indices.append(ids)
+        return np.concatenate(indices)
+
+    def __iter__(self):
+        yield from self.indices
+
+    def __len__(self):
+        return len(self.indices)
+
+
+class CurriculumTrainerDifficultyBiased(Trainer):
+
+    def __init__(self, n_bins=10, n_see=3, *args, **kwargs):
+        super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
+        self.n_bins = n_bins
+        self.n_see = n_see
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+                self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        elif is_torch_tpu_available():
+            return get_tpu_sampler(self.train_dataset)
+        else:
+            return (
+                CurriculumSamplerDifficultyBiased(
+                    data_source=self.train_dataset,
+                    state=self.state,
+                    n_bins=self.n_bins,
+                    n_see=self.n_see
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
