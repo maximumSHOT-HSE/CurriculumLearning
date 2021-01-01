@@ -45,7 +45,7 @@ def get_loss(log):
         return log['loss']
 
 
-def get_loss_history(history, is_eval=False):
+def get_loss_history(history, is_eval=True):
     losses = []
     epochs = []
 
@@ -82,7 +82,7 @@ def plot():
 
 def show_results():
     Path(LOG_DIRECTORY).mkdir(parents=True, exist_ok=True)
-    #load_all_experiments()
+    load_all_experiments()
     plot()
 
 
