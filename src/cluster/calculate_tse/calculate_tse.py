@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument('--dataset', type=str, help='Path to the directory with encoded dataset', required=True)
     parser.add_argument('--stats', type=str, help='Path to the directory with statistics', required=True)
     parser.add_argument('--save', type=str, help='Path to the where dataset with calculated tse will be saved', required=True)
+    parser.add_argument('--num-proc', type=int, required=True)
     return parser.parse_args()
 
 
@@ -79,6 +80,7 @@ if __name__ == '__main__':
         c10 = F_single[(i - 1) + x_prv * BASE] - c11 - F_last[(i - 1) + x_prv * BASE]
         c00 = T - c11 - c01 - c10
         assert c00 >= 0, f'c00 = {c00}, c11 = {c11}, c01 = {c01}, c10 = {c10}, T = {T}, i = {i}, x_prv = {x_prv}, x_cur = {x_cur}'
-        return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - H_single(i - 1, x_prv)
+        p = (c10 + c11) / T
+        return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - calculate_entropy(np.array([p, 1 - p], dtype=float))
 
-    dataset.map(lambda x: {'tse': TSE_fast(x['input_ids'], H_single, H_pair)}).save_to_disk(args.save)
+    dataset.map(lambda x: {'tse': TSE_fast(x['input_ids'], H_single, H_pair)}, num_proc=args.num_proc).save_to_disk(args.save)
