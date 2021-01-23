@@ -170,3 +170,86 @@ class CurriculumTrainerDifficultyBiased(Trainer):
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
             )
+
+
+class CurriculumSamplerCompetenceBased(Sampler):
+
+    def get_sqrt_competence(self):
+        return lambda t: min(1, math.sqrt(t * (1 - self.c0 ** 2) / self.T + self.c0 ** 2))
+
+    def get_linear_comptence(self):
+        return lambda t: min(1, t * (1 - self.c0) / self.T + self.c0)
+
+    def __init__(
+        self, 
+        data_source: Optional[Sized],
+        state: TrainerState,
+        n_see: int,
+        batch_size: int,
+        c0: float = 0.01,
+        type: str = 'sqrt'
+    ):
+        super().__init__(data_source)
+        self.data_source = data_source
+        self.size = len(data_source)
+        self.state = state
+        self.n_see = n_see
+        self.batch_size = batch_size
+        assert type in ['sqrt', 'linear']
+        self.type = type
+        self.T = math.ceil(self.n_see * self.size / self.batch_size)
+        self.c0 = c0
+        self.competence = {
+            'sqrt': self.get_sqrt_competence(),
+            'linear': self.get_linear_comptence()
+        }[self.type]
+
+        self.ps = []
+        self.indices = self.build_indices()
+
+    def build_indices(self):
+        indices = []
+        for t in range(0, self.T):
+            prefix_size = math.ceil(self.competence(t) * self.size)
+            prefix_size = max(1, min(prefix_size, self.size))
+            ids = np.random.choice(a=prefix_size, size=self.batch_size, replace=True)
+            indices.append(ids)
+            self.ps.append(prefix_size)
+        return np.concatenate(indices).tolist()       
+
+    def __iter__(self):
+        yield from self.indices
+
+    def __len__(self):
+        return len(self.indices) 
+
+
+class CurriculumTrainerCompetenceBased(Trainer):
+
+    def __init__(self, n_see=3, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
+        super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
+        self.n_see = n_see,
+        self.batch_size = batch_size,
+        self.c0 = c0
+        self.type = type
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+            self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        elif is_torch_tpu_available():
+            return get_tpu_sampler(self.train_dataset)
+        else:
+            return (
+                CurriculumSamplerCompetenceBased(
+                    data_source=self.train_dataset,
+                    state=self.state,
+                    n_see=self.n_see,
+                    batch_size=self.batch_size,
+                    c0=self.c0,
+                    type=self.type
+                )
+                if self.args.local_rank == -1
+                else DistributedSampler(self.train_dataset)
+            )
