@@ -5,7 +5,7 @@ import datasets
 from transformers import EvaluationStrategy
 from transformers import set_seed
 import os
-from curriculum_utils import CurriculumTrainerHyperbole, CurriculumTrainerDifficultyBiased
+from curriculum_utils import CurriculumTrainerHyperbole, CurriculumTrainerDifficultyBiased, CurriculumTrainerCompetenceBased
 from argparse import ArgumentParser
 import sys
 
@@ -14,16 +14,16 @@ SEED = 42
 
 
 PATHS_TO_DATASET = {
-    'base': '/home/aomelchenko/datasets/wiki40b_en_encoded_cased',
-    'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_ee',
-    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_tse',
-    'len': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_with_map/wiki40b_encoded_cased_sorted_by_len',
-    'tse_div_len': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_with_map/wiki40b_encoded_cased_sorted_by_tse_div_len',
-    'tse_difficult': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_encoded_cased_sorted_by_tse'
+    'base': '/home/aomelchenko/datasets/wiki40b_en_3M_tokenized',
+    'ee': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_en_3M_sorted_by_ee',
+    'tse': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_en_3M_sorted_by_tse',
+    'len': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_with_map/wiki40b_en_3M_tokenized_sorted_by_len',
+    'tse_div_len': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_with_map/wiki40b_en_3M_sorted_by_tse_div_len',
+    'tse_difficult': '/home/aomelchenko/Bachelor-s-Degree/src/cluster/sort_dataset_by_column/wiki40b_en_3M_sorted_by_tse'
 }
 
 NUM_EPOCHS = {
-    'base': 3,
+    'base': 1,
     'ee': 1,
     'tse': 1,
     'len': 1,
@@ -41,13 +41,16 @@ def get_experiment_num():
     return max([int(file.split('BertLogs')[1]) for file in files]) + 1
 
 
-def get_trainer_class(experiment_type):
-    if experiment_type == 'base':
+def get_trainer_class(experiment_type, curriculum_type):
+    if experiment_type in ['base', 'sent']:
         print('Base trainer chosen')
         return Trainer
     elif experiment_type == 'tse_difficult':
         print('Difficulty based trainer chosen')
-        return CurriculumTrainerDifficultyBiased
+        if curriculum_type == 'hyperbole':
+            return CurriculumTrainerDifficultyBiased
+        else:
+            return CurriculumTrainerCompetenceBased
 
     print('Hyperbole trainer chosen')
     return CurriculumTrainerHyperbole
@@ -55,15 +58,16 @@ def get_trainer_class(experiment_type):
 
 def train(model, data_collator, dataset_train, dataset_eval, tokenizer, experiment_type):
     training_args = TrainingArguments(
-        output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/{get_experiment_name(experiment_type)}',
+        output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/bc_{get_experiment_name(experiment_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
-        eval_steps=5000,
-        save_steps=5000,
+        eval_steps=500,
+        save_steps=500,
         num_train_epochs=NUM_EPOCHS[experiment_type],
-        logging_steps=5000,
+        logging_steps=500,
         seed=SEED,
-        do_eval=True,
-        do_train=True
+        per_device_eval_batch_size=128,
+        per_device_train_batch_size=128,
+        logging_first_step=True
     )
 
     trainer_class = get_trainer_class(experiment_type)
@@ -93,11 +97,11 @@ def create_dataset(experiment_type):
 
 
 def load_tokenizer():
-    return BertTokenizer.from_pretrained("/home/aomelchenko/tokenizer_cased")
+    return BertTokenizer.from_pretrained("/home/aomelchenko/tokenizers/BertTokenizerBase")
 
 
 def create_model():
-    return BertForMaskedLM(config=BertConfig.from_pretrained('/home/aomelchenko/BertLargeConfig'))
+    return BertForMaskedLM(config=BertConfig.from_pretrained('/home/aomelchenko/BertBaseConfigReduced'))
 
 
 def parse_argument():
@@ -118,6 +122,7 @@ def run():
 
     model = create_model()
     tokenizer = load_tokenizer()
+    model.resize_token_embeddings(len(tokenizer))
 
     experiment_type = parse_argument()
     dataset = create_dataset(experiment_type)
