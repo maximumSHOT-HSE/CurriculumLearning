@@ -103,8 +103,8 @@ class CurriculumTrainerHyperbole(Trainer):
                     window_width=self.window_width,
                     n_see=self.n_see,
                     ro=self.ro,
-                    drop=drop,
-                    drop_ratio = drop_ratio
+                    drop=self.drop,
+                    drop_ratio=self.drop_ratio
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
