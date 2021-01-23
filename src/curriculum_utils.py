@@ -36,7 +36,9 @@ class CurriculumSamplerHyperbole(Sampler):
         n_bins: int,
         window_width: int,
         n_see: int,
-        ro: float
+        ro: float,
+        drop: bool = False,
+        drop_ratio: float = 0.1
     ):
         super().__init__(data_source)
         self.data_source = data_source
@@ -47,7 +49,8 @@ class CurriculumSamplerHyperbole(Sampler):
         self.n_see = n_see
         self.bin_size = math.ceil(self.size / n_bins)
         self.ro = ro
-
+        self.drop = drop
+        self.drop_ratio = drop_ratio
         self.indices = self.build_indices()
 
     def build_indices(self):
@@ -60,7 +63,11 @@ class CurriculumSamplerHyperbole(Sampler):
                 ids = np.random.choice(self.n_bins, k, p=p) * self.bin_size + np.random.choice(self.bin_size, k)
                 ids = ids[ids < self.size]
                 indices.append(ids)
-        return np.concatenate(indices).tolist()
+        result = np.concatenate(indices).tolist()
+        if self.drop:
+            drop_size = int(self.drop_ratio * self.size)
+            result = list(filter(lambda i: i > drop_size, result))
+        return result
 
     def __iter__(self):
         yield from self.indices
@@ -71,12 +78,14 @@ class CurriculumSamplerHyperbole(Sampler):
 
 class CurriculumTrainerHyperbole(Trainer):
 
-    def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, *args, **kwargs):
+    def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, drop=False, drop_ratio=0.1, *args, **kwargs):
         super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.window_width = window_width
         self.n_see = n_see
         self.ro = ro
+        self.drop = drop
+        self.drop_ratio = drop_ratio
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
@@ -94,6 +103,8 @@ class CurriculumTrainerHyperbole(Trainer):
                     window_width=self.window_width,
                     n_see=self.n_see,
                     ro=self.ro,
+                    drop=drop,
+                    drop_ratio = drop_ratio
                 )
                 if self.args.local_rank == -1
                 else DistributedSampler(self.train_dataset)
