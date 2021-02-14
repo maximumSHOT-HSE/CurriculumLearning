@@ -6,3 +6,8 @@
 Статьи:
     https://arxiv.org/abs/1904.03513
     https://arxiv.org/abs/1905.01962
+    https://www.aclweb.org/anthology/S19-2184.pdf
+    https://www.aclweb.org/anthology/S19-2175.pdf
+
+
+    https://www.aclweb.org/anthology/S19-2145.pdf - статья про саму таску
