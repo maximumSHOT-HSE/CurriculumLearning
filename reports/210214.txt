@@ -1,0 +1,8 @@
+Пока на предобучении ничего не получается. Будем ставить эксперименты на fine-tuning 
+(как это делаю большинство других авторов).
+
+Будем ставить на https://huggingface.co/datasets/hyperpartisan_news_detection  [Почему?]
+
+Статьи:
+    https://arxiv.org/abs/1904.03513
+    https://arxiv.org/abs/1905.01962
