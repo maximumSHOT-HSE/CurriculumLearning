@@ -1,0 +1,18 @@
+Пока на предобучении ничего не получается. Будем ставить эксперименты на fine-tuning 
+(как это делаю большинство других авторов).
+
+Будем ставить на https://huggingface.co/datasets/hyperpartisan_news_detection  [Почему?]
+
+Статьи:
+    https://arxiv.org/abs/1904.03513
+    https://arxiv.org/abs/1905.01962
+    https://www.aclweb.org/anthology/S19-2184.pdf
+    https://www.aclweb.org/anthology/S19-2175.pdf
+
+
+    https://www.aclweb.org/anthology/S19-2145.pdf - статья про саму таску
+
+    https://pan.webis.de/semeval19/semeval19-web/ - сюда можно отправлять решения
+
+
+    https://colab.research.google.com/drive/1-JIJlao4dI-Ilww_NnTc0rxtp-ymgDgM?usp=sharing#scrollTo=X0S7zTy1xJaA - пример того, как делать fine-tuning
