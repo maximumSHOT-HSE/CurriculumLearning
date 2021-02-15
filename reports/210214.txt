@@ -11,3 +11,8 @@
 
 
     https://www.aclweb.org/anthology/S19-2145.pdf - статья про саму таску
+
+    https://pan.webis.de/semeval19/semeval19-web/ - сюда можно отправлять решения
+
+
+    https://colab.research.google.com/drive/1-JIJlao4dI-Ilww_NnTc0rxtp-ymgDgM?usp=sharing#scrollTo=X0S7zTy1xJaA - пример того, как делать fine-tuning
