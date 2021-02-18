@@ -6,5 +6,5 @@
 #SBATCH --cpus-per-task=4
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 show.py --dataset hyperpartisan_news_detection_splitted --tokenizer ~/tokenizers/BertTokenizerBase/
+singularity exec --nv ~/containers/container.sif python3 show.py --dataset hyperpartisan_news_detection_50_200_words --tokenizer ~/tokenizers/BertTokenizerBaseCased/
 

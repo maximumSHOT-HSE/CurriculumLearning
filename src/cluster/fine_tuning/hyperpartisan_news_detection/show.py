@@ -28,13 +28,14 @@ if __name__ == '__main__':
     for part in ['train', 'test']:
         print('PART', part)
         for i, x in enumerate(dataset[part]):
-            raw = x['text']
-            print(raw)
+            print(sum(1 for c in x['text'] if c == ' '), len(x['text']), x)
+            # print(len(x['text']), len(x['input_ids']), x['label'], x['text'], tokenizer.convert_ids_to_tokens(x['input_ids']))
             # ids = tokenizer(x['text'])
             # print(ids)
             # print(len(ids['input_ids']))
-            print('-----------')
-            print(BeautifulSoup(raw, 'lxml').text)
-            print('NEXTNEXTNEXT')
-            if i >= 5:
+            if i >= 500:
                 break
+
+    print()
+    print(tokenizer.vocab)
+

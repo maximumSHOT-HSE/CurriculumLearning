@@ -8,6 +8,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
+    parser.add_argument('--label-column', type=str, required=True)
     return parser.parse_args()
 
 
@@ -15,14 +16,18 @@ if __name__ == '__main__':
     args = parse_args()
     dataset = datasets \
         .load_from_disk(args.dataset) \
-        .map(lambda x: {'text': BeautifulSoup(x['text'], 'lxml').text})
+        .map(lambda x: {'label': int(x[args.label_column])})
 
-    print(dataset)
+    dataset.remove_columns_([args.label_column])
 
     for i, x in enumerate(dataset['train']):
         print(x)
-        if i >= 5:
-            break
+        break
+    print('=============')
+    for i, x in enumerate(dataset['test']):
+        print(x)
+        break
+    print('=============')
 
     dataset.save_to_disk(args.save)
 
