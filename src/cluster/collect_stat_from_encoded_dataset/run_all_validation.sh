@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TOTAL_SIZE=4140975
-BATCH_SIZE=100000
+TOTAL_SIZE=276335
+BATCH_SIZE=50000
 
 start=0
 
@@ -14,7 +14,7 @@ do
     fi
     echo "[$start, $end)"
 
-    sbatch run_part_train.sh $start $end "save_stat/save_stat_validation_$start_$end" validation
+    sbatch run_part_train.sh $start $end "save_stat_3M_512/save_stat_validation_$start_$end" validation /home/aomelchenko/datasets/wiki40b_en_3M_tokenized512
 
     let "start += BATCH_SIZE"
 done
