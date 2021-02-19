@@ -44,6 +44,7 @@ if __name__ == '__main__':
     config = None
 
     for root in roots:
+        print(root)
         with open(root / 'config.json', 'r') as f:
             c = json.load(f)
             if config is None:

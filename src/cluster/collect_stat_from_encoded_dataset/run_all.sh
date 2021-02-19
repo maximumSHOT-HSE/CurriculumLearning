@@ -1,7 +1,10 @@
 #!/bin/bash
 
-TOTAL_SIZE=4097523
-BATCH_SIZE=100000
+TOTAL_SIZE=$1
+BATCH_SIZE=$2
+SAVE_DIR=$3
+DATASET=$4
+PART=$5
 
 start=0
 
@@ -14,7 +17,8 @@ do
     fi
     echo "[$start, $end)"
 
-    sbatch run_part_train.sh $start $end "save_stat/save_stat_test_$start_$end" test
-
+    sbatch run_part.sh $start $end "${SAVE_DIR}/${PART}_${start}_${end}" $PART $DATASET 
+    
     let "start += BATCH_SIZE"
 done
+
