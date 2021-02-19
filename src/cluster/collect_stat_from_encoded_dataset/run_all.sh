@@ -1,7 +1,10 @@
 #!/bin/bash
 
-TOTAL_SIZE=276335
-BATCH_SIZE=50000
+TOTAL_SIZE=$1
+BATCH_SIZE=$2
+SAVE_DIR=$3
+DATASET=$4
+PART=$5
 
 start=0
 
@@ -14,7 +17,8 @@ do
     fi
     echo "[$start, $end)"
 
-    sbatch run_part_train.sh $start $end "save_stat_3M_512/save_stat_validation_$start_$end" validation /home/aomelchenko/datasets/wiki40b_en_3M_tokenized512
-
+    sbatch run_part.sh $start $end "${SAVE_DIR}/${PART}_${start}_${end}" $PART $DATASET 
+    
     let "start += BATCH_SIZE"
 done
+
