@@ -115,7 +115,7 @@ def plot(experiments):
             col = i % 2 + 1
 
             means = values.mean(axis=0)
-            deviations = values.std(axis=0) + 0.01
+            deviations = values.std(axis=0)
 
             values_lower = (means - deviations).tolist()[::-1]
             values_upper = (means + deviations).tolist()
