@@ -104,7 +104,7 @@ FILL_COLORS = ['rgba(31, 119, 180, 0.2)', 'rgba(255, 127, 14, 0.2)', 'rgba(44, 1
 
 
 def plot(experiments):
-    plot_titles = ['eval_loss', 'loss'] #['eval_accuracy', 'eval_f1', 'eval_precision', 'eval_recall', 'eval_loss', 'loss']
+    plot_titles = ['eval_accuracy', 'eval_f1', 'eval_precision', 'eval_recall', 'eval_loss', 'loss']
 
     fig = make_subplots(rows=3, cols=2, subplot_titles=plot_titles)
 
