@@ -42,7 +42,6 @@ def get_experiment_num():
 
 
 def get_trainer_class(experiment_type, curriculum_type):
-    return CurriculumTrainerHyperbole
     if experiment_type == 'base':
         print('Base trainer chosen')
         return Trainer
