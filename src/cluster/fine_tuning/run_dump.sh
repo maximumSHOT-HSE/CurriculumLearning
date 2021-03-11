@@ -9,5 +9,5 @@ DATASET=$1
 SAVE=$2
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 clean.py --dataset $DATASET --save $SAVE 
+singularity exec --nv ~/containers/container.sif python3 dump.py --dataset $DATASET --save $SAVE 
 

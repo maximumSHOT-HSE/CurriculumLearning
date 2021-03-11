@@ -1,9 +1,8 @@
 #!/bin/bash
 
-START=$1
-END=$2
-SAVE_DIR=$3
-DATASET=$4
+DATASET=$1
+SAVE_DIR=$2
+PART=$3
 
 if [[ -d $SAVE_DIR ]]
 then
@@ -18,4 +17,5 @@ mkdir $SAVE_DIR
 #SBATCH --cpus-per-task=4
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 collect_stat.py --dataset $DATASET --config config.json --save $SAVE_DIR --start $START --end $END
+singularity exec --nv ~/containers/container.sif python3 collect_stat_for_tf_idf.py --dataset $DATASET --save $SAVE_DIR --part $PART
+

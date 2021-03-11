@@ -12,15 +12,14 @@ import pickle
 import argparse
 import json
 from pathlib import Path
-from metrics import TSE_fast, calculate_entropy
+from metrics import excess_entropy_fast, calculate_entropy, TSE_fast
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', type=str, help='Path to the directory with encoded dataset', required=True)
-    parser.add_argument('--stats', type=str, help='Path to the directory with statistics', required=True)
-    parser.add_argument('--save', type=str, help='Path to the where dataset with calculated tse will be saved', required=True)
-    parser.add_argument('--num-proc', type=int, required=True)
+    parser.add_argument('--dataset', type=str, help='Path to the directory with dataset', required=True)
+    parser.add_argument('--stats', type=str, required=True)
+    parser.add_argument('--tokenizer', type=str, required=True)
     return parser.parse_args()
 
 
@@ -28,6 +27,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     dataset = datasets.load_from_disk(args.dataset)
+    tokenizer = BertTokenizer.from_pretrained(args.tokenizer)
 
     print(dataset)
 
@@ -74,17 +74,34 @@ if __name__ == '__main__':
         return calculate_entropy([p, 1 - p])
 
     def H_pair(i, x_prv, x_cur):
-        if i < 0 or i >= len(F_pos):
-            return 0
         T = F_pos[i]
-        if T <= 0:
-            return 0
         c11 = F_pair[(i - 1) + x_prv * BASE + x_cur * BASE_SQR]
         c01 = F_single[i + x_cur * BASE] - c11
         c10 = F_single[(i - 1) + x_prv * BASE] - c11 - F_last[(i - 1) + x_prv * BASE]
         c00 = T - c11 - c01 - c10
-        # assert c00 >= 0, f'c00 = {c00}, c11 = {c11}, c01 = {c01}, c10 = {c10}, T = {T}, i = {i}, x_prv = {x_prv}, x_cur = {x_cur}'
+        # :print('c**', c00, c01, c10, c11)
+        assert c00 >= 0, f'c00 = {c00}, c11 = {c11}, c01 = {c01}, c10 = {c10}, T = {T}, i = {i}, x_prv = {x_prv}, x_cur = {x_cur}'
         p = (c10 + c11) / T
-        return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - calculate_entropy(np.array([p, 1 - p], dtype=float))
+        res = calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - calculate_entropy(np.array([p, 1 - p], dtype=float))
+        # print(res)
+        return res
 
-    dataset.map(lambda x: {'tse': TSE_fast(x['input_ids'], H_single, H_pair)}, num_proc=args.num_proc).save_to_disk(args.save)
+    # print(H_single(8, 29542), H_pair(8, 2024, 29542))
+
+    # print(F_pos[8], F_pos[7])
+    # print(F_single[7 + 2024 * BASE])
+    # print(F_single[8 + 29542 * BASE])
+    # print(F_pair[7 + 2024 * BASE + 29542 * BASE_SQR])
+    # exit(0)
+
+    cnt = 0
+    for i, x in enumerate(dataset['train']):
+        ids = tokenizer(x['text'])
+        tokens = tokenizer.convert_ids_to_tokens(ids['input_ids'])
+        if len(ids['input_ids']) > len(x['text'].split(' ')):
+            print(x['text'], ids['input_ids'], tokens)
+        # if len(x['input_ids']) > 10:
+        #     print(x)
+        #     cnt += 1
+        # if i >= 500:
+        #     break

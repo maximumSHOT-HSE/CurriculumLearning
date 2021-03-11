@@ -8,7 +8,6 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
-    parser.add_argument('--label-column', type=str, required=True)
     return parser.parse_args()
 
 
@@ -16,18 +15,16 @@ if __name__ == '__main__':
     args = parse_args()
     dataset = datasets \
         .load_from_disk(args.dataset) \
-        .map(lambda x: {'labels': int(x[args.label_column])})
+        .map(lambda x: {'labels': int(x['hyperpartisan'])})
 
-    dataset.remove_columns_([args.label_column])
+    dataset.remove_columns_('hyperpartisan')
+
+    print(dataset)
 
     for i, x in enumerate(dataset['train']):
         print(x)
-        break
-    print('=============')
-    for i, x in enumerate(dataset['test']):
-        print(x)
-        break
-    print('=============')
+        if i >= 5:
+            break
 
     dataset.save_to_disk(args.save)
 

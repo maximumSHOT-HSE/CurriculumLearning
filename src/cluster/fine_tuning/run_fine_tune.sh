@@ -8,9 +8,11 @@
 DATASET=$1
 TRAINER=$2
 DIR=$3
+SEED=$4
+FROM_FILE=$5
 
 mkdir $DIR
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 fine_tune.py --dataset $DATASET --tokenizer ~/tokenizers/BertTokenizerBaseCased/ --model ~/models/pretrained_bert_base_cased/ --output-dir "$DIR/out" --logging-dir "$DIR/logs" --trainer $TRAINER
+singularity exec --nv ~/containers/container.sif python3 fine_tune.py --dataset $DATASET --tokenizer ~/tokenizers/BertTokenizerBaseCased/ --model ~/models/pretrained_bert_base_cased/ --output-dir "$DIR/out" --logging-dir "$DIR/logs" --trainer $TRAINER --seed $SEED --from-file $FROM_FILE
 

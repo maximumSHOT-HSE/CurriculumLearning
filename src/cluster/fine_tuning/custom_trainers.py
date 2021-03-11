@@ -1,33 +1,60 @@
 import collections
 
 from transformers import Trainer
+from transformers import PreTrainedModel
 from transformers.trainer_callback import TrainerState
 import datasets
 import os
 import torch
-from torch.utils.data import RandomSampler, Sampler, Dataset, DataLoader
+from torch.utils.data import RandomSampler, Sampler, Dataset, DataLoader, SequentialSampler
 from typing import Iterator, Optional, Sequence, List, TypeVar, Generic, Sized
 import numpy as np
 import math
 from transformers.file_utils import is_torch_tpu_available
 from transformers.trainer_pt_utils import get_tpu_sampler
-from torch.utils.data.distributed import DistributedSampler
+
+
+class SequentialTrainer(Trainer):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+            self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        return SequentialSampler(self.train_dataset)
+
+
+class ReverseSequentialSampler(Sampler):
+
+    def __init__(self, data_source):
+        super().__init__(data_source)
+        self.data_source = data_source
+
+    def __iter__(self):
+        return iter(range(len(self.data_source) - 1, -1, -1))
+
+    def __len__(self) -> int:
+        return len(self.data_source)
+
+
+class ReverseSequentialTrainer(Trainer):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
+            self.train_dataset, collections.abc.Sized
+        ):
+            return None
+        return ReverseSequentialSampler(self.train_dataset)
+
 
 
 class CurriculumSamplerHyperbole(Sampler):
-    r"""Samples elements in the following way:
-        1. All dataset is splitted into n_bins bins (last bin may have smaller size than others)
-        2. Sampler assumes that will be 1 epoch. 
-        3. Sampler gives the probabilities for each bin: for each 0 <= i <= window_width,
-            let q be the current main bin
-            let t = (q - window_width + 1) be the center of the current window, then
-            weight of the i-th bin will be equal to 1 / (|i - t| + 1)^ro
-            then sampler will sample indices from given bins with that weights.
-            In othe words, we will consider distribution with some center, where located the biggest mass and mass linearly decreases both to the
-            right and to the left of the center. Center will lsightly move to the right
-        4. Notice that at the end bins will have almost equal
-            expected number (n_see) of times when index from i-th bin will be sampled
-    """
 
     def __init__(
         self,
@@ -78,8 +105,8 @@ class CurriculumSamplerHyperbole(Sampler):
 
 class CurriculumTrainerHyperbole(Trainer):
 
-    def __init__(self, n_bins=10, window_width=3, n_see=1, ro=0.5, drop=False, drop_ratio=0.1, *args, **kwargs):
-        super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
+    def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, drop=False, drop_ratio=0.1, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.window_width = window_width
         self.n_see = n_see
@@ -88,36 +115,19 @@ class CurriculumTrainerHyperbole(Trainer):
         self.drop_ratio = drop_ratio
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
-        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
-            self.train_dataset, collections.abc.Sized
-        ):
-            return None
-        elif is_torch_tpu_available():
-            return get_tpu_sampler(self.train_dataset)
-        else:
-            return (
-                CurriculumSamplerHyperbole(
-                    data_source=self.train_dataset,
-                    state=self.state,
-                    n_bins=self.n_bins,
-                    window_width=self.window_width,
-                    n_see=self.n_see,
-                    ro=self.ro,
-                    drop=self.drop,
-                    drop_ratio=self.drop_ratio
-                )
-                if self.args.local_rank == -1
-                else DistributedSampler(self.train_dataset)
-            )
+        return CurriculumSamplerHyperbole(
+            data_source=self.train_dataset,
+            state=self.state,
+            n_bins=self.n_bins,
+            window_width=self.window_width,
+            n_see=self.n_see,
+            ro=self.ro,
+            drop=self.drop,
+            drop_ratio=self.drop_ratio
+        )
 
 
 class CurriculumSamplerDifficultyBiased(Sampler):
-    r"""Samples elements in the following way:
-        Samplers goes throught bins. Suppose that we are on the i-th bin.
-        Sampler samples (n - i) times the batch of size k=n_see * size * 2 / (n_bins * (n_bins - 1)).
-        The total number of samples is equalt to n_see * size and the final distribution is the following:
-        i-th bin will have weight w_i = i (the weight increasing from simple bins to difficult bins).
-    """
 
     def __init__(
         self,
@@ -133,7 +143,6 @@ class CurriculumSamplerDifficultyBiased(Sampler):
         self.n_see = n_see
         self.size = len(self.data_source)
         self.bin_size = math.ceil(self.size / n_bins)
-        
         self.indices = self.build_indices()
 
     def build_indices(self):
@@ -158,29 +167,18 @@ class CurriculumSamplerDifficultyBiased(Sampler):
 
 class CurriculumTrainerDifficultyBiased(Trainer):
 
-    def __init__(self, n_bins=10, n_see=1, *args, **kwargs):
-        super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
+    def __init__(self, n_bins=10, n_see=3, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.n_see = n_see
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
-        if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
-            self.train_dataset, collections.abc.Sized
-        ):
-            return None
-        elif is_torch_tpu_available():
-            return get_tpu_sampler(self.train_dataset)
-        else:
-            return (
-                CurriculumSamplerDifficultyBiased(
-                    data_source=self.train_dataset,
-                    state=self.state,
-                    n_bins=self.n_bins,
-                    n_see=self.n_see
-                )
-                if self.args.local_rank == -1
-                else DistributedSampler(self.train_dataset)
-            )
+        return CurriculumSamplerDifficultyBiased(
+            data_source=self.train_dataset,
+            state=self.state,
+            n_bins=self.n_bins,
+            n_see=self.n_see
+        )
 
 
 class CurriculumSamplerCompetenceBased(Sampler):
@@ -192,7 +190,7 @@ class CurriculumSamplerCompetenceBased(Sampler):
         return lambda t: min(1, t * (1 - self.c0) / self.T + self.c0)
 
     def __init__(
-        self, 
+        self,
         data_source: Optional[Sized],
         state: TrainerState,
         n_see: int,
@@ -226,41 +224,62 @@ class CurriculumSamplerCompetenceBased(Sampler):
             ids = np.random.choice(a=prefix_size, size=self.batch_size, replace=True)
             indices.append(ids)
             self.ps.append(prefix_size)
-        return np.concatenate(indices).tolist()       
+        return np.concatenate(indices).tolist()
 
     def __iter__(self):
         yield from self.indices
 
     def __len__(self):
-        return len(self.indices) 
+        return len(self.indices)
 
 
 class CurriculumTrainerCompetenceBased(Trainer):
 
-    def __init__(self, n_see=1, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
-        super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
-        self.n_see = n_see,
-        self.batch_size = batch_size,
+    def __init__(self, n_see=3, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.n_see = n_see
+        self.batch_size = batch_size
         self.c0 = c0
         self.type = type
+
+    def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
+        return CurriculumSamplerCompetenceBased(
+            data_source=self.train_dataset,
+            state=self.state,
+            n_see=self.n_see,
+            batch_size=self.batch_size,
+            c0=self.c0,
+            type=self.type
+        )
+
+
+class FromFileSampler(Sampler):
+
+    def __init__(self, data_source, file: str = None):
+        super().__init__(data_source)
+        self.data_source = data_source
+        self.file = file
+
+    def __iter__(self):
+        with open(self.file, 'r') as fin:
+            for line in fin:
+                x = line.strip().strip('\x00')
+                yield int(x)
+
+    def __len__(self) -> int:
+        return len(self.data_source)
+
+
+class FromFileTrainer(Trainer):
+
+    def __init__(self, file: str = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file = file
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset) or not isinstance(
             self.train_dataset, collections.abc.Sized
         ):
             return None
-        elif is_torch_tpu_available():
-            return get_tpu_sampler(self.train_dataset)
-        else:
-            return (
-                CurriculumSamplerCompetenceBased(
-                    data_source=self.train_dataset,
-                    state=self.state,
-                    n_see=self.n_see,
-                    batch_size=self.batch_size,
-                    c0=self.c0,
-                    type=self.type
-                )
-                if self.args.local_rank == -1
-                else DistributedSampler(self.train_dataset)
-            )
+        return FromFileSampler(self.train_dataset, self.file)
+

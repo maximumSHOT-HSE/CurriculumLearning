@@ -14,8 +14,8 @@ if __name__ == '__main__':
     args = parse_args()
     dataset = datasets\
         .load_from_disk(args.input)\
-        .map(lambda item: {'tse_div_len': item['tse'] / (1 + sum(1 for c in item['input_ids'] if int(c) > int(0)))}, num_proc=args.num_proc)\
-        .sort(column='tse_div_len')
-    dataset.remove_columns_('tse_div_len')
+        .map(lambda item: {'n_pos': sum(1 for c in item['input_ids'] if int(c) > int(0))}, num_proc=args.num_proc)\
+        .sort(column='n_pos')
+    dataset.remove_columns_('n_pos')
     dataset.save_to_disk(args.output)
 

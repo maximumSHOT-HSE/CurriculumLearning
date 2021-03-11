@@ -10,5 +10,5 @@ STATS=$2
 SAVE=$3
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 calculate_tse.py --dataset $DATASET --stats $STATS --save $SAVE --num-proc 4
+singularity exec --nv ~/containers/container.sif python3 debug_tse.py --dataset $DATASET --stats $STATS --save $SAVE --num-proc 4
 

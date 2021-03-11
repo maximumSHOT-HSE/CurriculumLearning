@@ -5,6 +5,11 @@
 #SBATCH --gpus=0
 #SBATCH --cpus-per-task=4
 
+DATASET=$1
+SAVE=$2
+MIN_LENGTH=$3
+MAX_LENGTH=$4
+
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 split_texts.py --dataset hyperpartisan_news_detection_cleaned --save hyperpartisan_news_detection_50_200_words --max-length 200 --min-length 50
+singularity exec --nv ~/containers/container.sif python3 split_texts.py --dataset $DATASET --save $SAVE --max-length $MAX_LENGTH --min-length $MIN_LENGTH 
 
