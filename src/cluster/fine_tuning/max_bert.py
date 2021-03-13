@@ -1,9 +1,8 @@
 import argparse
 import datasets
-from transformers import BertTokenizer
+from transformers import BertTokenizer, DataCollatorForLanguageModeling
 from transformers import EvaluationStrategy
-from transformers import BertForSequenceClassification, BertTokenizerFast, Trainer, TrainingArguments
-from bs4 import BeautifulSoup
+from transformers import BertForSequenceClassification, BertForMaskedLM, Trainer, TrainingArguments, BertConfig
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from custom_trainers import (
     SequentialTrainer,
@@ -11,7 +10,6 @@ from custom_trainers import (
     CurriculumTrainerDifficultyBiased,
     CurriculumTrainerCompetenceBased,
     ReverseSequentialTrainer,
-    FromFileTrainer
 )
 
 
@@ -34,8 +32,7 @@ TRAINERS = {
     'hyperbole': CurriculumTrainerHyperbole,
     'difficulty-based': CurriculumTrainerDifficultyBiased,
     'competence-based': CurriculumTrainerCompetenceBased,
-    'reverse-sequential': ReverseSequentialTrainer,
-    'from-file': FromFileTrainer
+    'reverse-sequential': ReverseSequentialTrainer
 }
 
 
@@ -48,7 +45,6 @@ def parse_args():
     parser.add_argument('--logging-dir', type=str, required=True)
     parser.add_argument('--seed', type=int, default=100)
     parser.add_argument('--trainer', type=str, default='default', choices=list(TRAINERS.keys()))
-    parser.add_argument('--from-file', type=str, default=None)
     return parser.parse_args()
 
 
@@ -57,15 +53,18 @@ if __name__ == '__main__':
     dataset = datasets.load_from_disk(args.dataset)
 
     tokenizer = BertTokenizer.from_pretrained(args.tokenizer)
-    model = BertForSequenceClassification.from_pretrained(args.model)
-    dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'labels'])
+    model = BertForMaskedLM(config=BertConfig.from_pretrained('/home/aomelchenko/BertBaseConfigReduced'))
+    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=True, mlm_probability=0.15)
+    dataset.set_format('torch', columns=['input_ids', 'attention_mask'])
+
+    model.resize_token_embeddings(len(tokenizer))
 
     print(dataset)
     print()
 
     training_args = TrainingArguments(
         output_dir=args.output_dir,
-        num_train_epochs=5,
+        num_train_epochs=1,
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
         warmup_steps=50,
@@ -85,14 +84,10 @@ if __name__ == '__main__':
         tokenizer=tokenizer,
         model=model,
         args=training_args,
-        compute_metrics=compute_metrics,
+        data_collator=data_collator,
         train_dataset=dataset['train'],
-        eval_dataset=dataset['test'],
+        eval_dataset=dataset['test']
     )
 
-    if args.trainer == 'from-file':
-        trainer.file = args.from_file
-
     trainer.train()
-    print(trainer.evaluate())
-
+    #print(trainer.evaluate())

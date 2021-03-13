@@ -5,5 +5,9 @@
 #SBATCH --gpus=0
 #SBATCH --cpus-per-task=4
 
+DATASET=$1
+STATS=$2
+SAVE=$3
+
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 calculate_excess_entropy.py --dataset ~/datasets/wiki40b_en_reduced_tokenized --stats ../collect_stat_from_encoded_dataset/save_stat_reduced/save_all_all/ --save wiki40b_en_reduced_with_ee --num-proc 4
+singularity exec --nv ~/containers/container.sif python3 calculate_excess_entropy.py --dataset $DATASET --stats $STATS --save $SAVE --num-proc 4

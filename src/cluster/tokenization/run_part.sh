@@ -4,7 +4,6 @@ START=$1
 END=$2
 SAVE_DIR=$3
 DATASET=$4
-PART=$5
 
 if [[ -d $SAVE_DIR ]]
 then
@@ -19,4 +18,4 @@ mkdir $SAVE_DIR
 #SBATCH --cpus-per-task=4
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 collect_stat.py --dataset $DATASET --config config.json --save $SAVE_DIR --start $START --end $END --part $PART
+singularity exec --nv ~/containers/container.sif python3 collect_stat.py --dataset $DATASET --config config.json --save $SAVE_DIR --start $START --end $END

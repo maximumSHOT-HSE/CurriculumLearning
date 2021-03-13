@@ -4,7 +4,6 @@ TOTAL_SIZE=$1
 BATCH_SIZE=$2
 SAVE_DIR=$3
 DATASET=$4
-PART=$5
 
 start=0
 
@@ -17,7 +16,7 @@ do
     fi
     echo "[$start, $end)"
 
-    sbatch run_part.sh $start $end "${SAVE_DIR}/${PART}_${start}_${end}" $DATASET $PART
+    sbatch run_part.sh $start $end "${SAVE_DIR}/${PART}_${start}_${end}" $DATASET 
     
     let "start += BATCH_SIZE"
 done

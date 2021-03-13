@@ -7,7 +7,8 @@
 
 DATASET=$1
 SAVE=$2
+SEED=$3
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 clean.py --dataset $DATASET --save $SAVE 
+singularity exec --nv ~/containers/container.sif python3 shuffle.py --dataset $DATASET --save $SAVE --seed $SEED
 

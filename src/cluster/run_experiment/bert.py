@@ -42,7 +42,7 @@ def get_experiment_num():
 
 
 def get_trainer_class(experiment_type, curriculum_type):
-    if experiment_type in ['base', 'sent']:
+    if experiment_type == 'base':
         print('Base trainer chosen')
         return Trainer
     elif experiment_type == 'tse_difficult':
@@ -56,9 +56,9 @@ def get_trainer_class(experiment_type, curriculum_type):
     return CurriculumTrainerHyperbole
 
 
-def train(model, data_collator, dataset_train, dataset_eval, tokenizer, experiment_type):
+def train(model, data_collator, dataset_train, dataset_eval, tokenizer, experiment_type, curriculum_type):
     training_args = TrainingArguments(
-        output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/bc_{get_experiment_name(experiment_type)}',
+        output_dir=f'/home/aomelchenko/Bachelor-s-Degree/Logs/{curriculum_type}_{get_experiment_name(experiment_type)}',
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=500,
         save_steps=500,
@@ -70,7 +70,8 @@ def train(model, data_collator, dataset_train, dataset_eval, tokenizer, experime
         logging_first_step=True
     )
 
-    trainer_class = get_trainer_class(experiment_type)
+    print("train")
+    trainer_class = get_trainer_class(experiment_type, curriculum_type)
 
     trainer = trainer_class(
         model=model,
@@ -107,10 +108,11 @@ def create_model():
 def parse_argument():
     parser = ArgumentParser()
     parser.add_argument("--dataset", type=str, help="base, ee or tse")
+    parser.add_argument("--curriculum", type=str, help="base, ee or tse")
 
     parsed_args = parser.parse_args()
 
-    return parsed_args.dataset
+    return parsed_args.dataset, parsed_args.curriculum
 
 
 def get_experiment_name(experiment_type):
@@ -124,19 +126,19 @@ def run():
     tokenizer = load_tokenizer()
     model.resize_token_embeddings(len(tokenizer))
 
-    experiment_type = parse_argument()
+    experiment_type, curriculum_type = parse_argument()
     dataset = create_dataset(experiment_type)
 
     dataset_train = dataset['train']
     dataset_eval = dataset['validation']
 
-    dataset_train.set_format('torch')
-    dataset_eval.set_format('torch')
+    dataset_train.set_format('torch', columns=['input_ids', 'attention_mask'])
+    dataset_eval.set_format('torch', columns=['input_ids', 'attention_mask'])
 
     data_collator = create_data_collator(tokenizer)
     train(model=model, data_collator=data_collator, dataset_eval=dataset_eval,
           dataset_train=dataset_train, tokenizer=tokenizer,
-          experiment_type=experiment_type)
+          experiment_type=experiment_type, curriculum_type=curriculum_type)
 
 
 if __name__ == '__main__':

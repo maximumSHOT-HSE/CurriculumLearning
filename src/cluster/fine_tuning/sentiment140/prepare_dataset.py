@@ -10,7 +10,7 @@ def parse_args():
     parser.add_argument('--csv-file', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
-    parser.add_argument('--test-ratio', type=float, default=0.005)
+    parser.add_argument('--test-ratio', type=float, default=0.05)
     return parser.parse_args()
 
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     texts = dataset[5]
 
     print(set(labels))
-    labels = [x // 4 for x in labels]
+    labels = [int(x) // 4 for x in labels]
     print(set(labels))
 
     print(len(labels), len(texts))
@@ -38,7 +38,7 @@ if __name__ == '__main__':
         if i >= 5:
             break
 
-    dataset = datasets.Dataset.from_dict({'text': texts, 'label': labels}).train_test_split(test_size=args.test_ratio)
+    dataset = datasets.Dataset.from_dict({'text': texts, 'labels': labels}).train_test_split(test_size=args.test_ratio)
 
     print(dataset)
 

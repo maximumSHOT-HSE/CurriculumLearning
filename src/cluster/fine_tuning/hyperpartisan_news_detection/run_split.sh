@@ -5,6 +5,9 @@
 #SBATCH --gpus=0
 #SBATCH --cpus-per-task=4
 
+DATASET=$1
+SAVE=$2
+
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 split.py --dataset hyperpartisan_news_detection_init --save hyperpartisan_news_detection_splitted
+singularity exec --nv ~/containers/container.sif python3 split.py --dataset $DATASET --save $SAVE
 

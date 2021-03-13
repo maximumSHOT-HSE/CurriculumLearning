@@ -73,7 +73,10 @@ def excess_entropy_fast(text: str, H_single, H_pair):
     n = len(text)
     EE = 0
     for i in range(n - 1):
-        EE += H_single(i + 1, text[i + 1]) - H_pair(i + 1, text[i], text[i + 1])
+        tmp = H_single(i + 1, text[i + 1]) - H_pair(i + 1, text[i], text[i + 1])
+        if tmp < 0:
+            print(i, text[i], text[i + 1])
+        EE += tmp
     return EE
 
 
@@ -162,5 +165,4 @@ def TSE_fast(text: str, H_single, H_pair):
     if len(text) == 0:
         return 0
     subset_mean_H = calculate_subset_mean_H_fast(text, H_single, H_pair)
-    print(f'subset_mean_H = {subset_mean_H}')
     return subset_mean_H[:-1].sum() - subset_mean_H[-1] * (len(text) - 1) / 2

@@ -78,7 +78,7 @@ class CurriculumSamplerHyperbole(Sampler):
 
 class CurriculumTrainerHyperbole(Trainer):
 
-    def __init__(self, n_bins=10, window_width=3, n_see=1, ro=0.5, drop=False, drop_ratio=0.1, *args, **kwargs):
+    def __init__(self, n_bins=10, window_width=3, n_see=3, ro=0.5, drop=False, drop_ratio=0.1, *args, **kwargs):
         super(CurriculumTrainerHyperbole, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.window_width = window_width
@@ -158,7 +158,7 @@ class CurriculumSamplerDifficultyBiased(Sampler):
 
 class CurriculumTrainerDifficultyBiased(Trainer):
 
-    def __init__(self, n_bins=10, n_see=1, *args, **kwargs):
+    def __init__(self, n_bins=10, n_see=3, *args, **kwargs):
         super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
         self.n_bins = n_bins
         self.n_see = n_see
@@ -237,7 +237,7 @@ class CurriculumSamplerCompetenceBased(Sampler):
 
 class CurriculumTrainerCompetenceBased(Trainer):
 
-    def __init__(self, n_see=1, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
+    def __init__(self, n_see=3, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
         super(CurriculumTrainerDifficultyBiased, self).__init__(*args, **kwargs)
         self.n_see = n_see,
         self.batch_size = batch_size,

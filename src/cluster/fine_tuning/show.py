@@ -28,14 +28,10 @@ if __name__ == '__main__':
     for part in ['train', 'test']:
         print('PART', part)
         for i, x in enumerate(dataset[part]):
-            print(sum(1 for c in x['text'] if c == ' '), len(x['text']), x)
-            # print(len(x['text']), len(x['input_ids']), x['label'], x['text'], tokenizer.convert_ids_to_tokens(x['input_ids']))
-            # ids = tokenizer(x['text'])
-            # print(ids)
-            # print(len(ids['input_ids']))
-            if i >= 500:
+            # print(x['labels'], sum(1 for c in x['input_ids'] if int(c) > int(0)))
+            # print(x['excess_entropy'], x['text'])
+            # print(f'{len(x["text"])}, {x["tse"]}')
+            print(x)
+            if i >= 50:
                 break
-
-    print()
-    print(tokenizer.vocab)
 
