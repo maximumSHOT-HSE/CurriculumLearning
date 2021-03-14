@@ -178,11 +178,62 @@
 
 \begin{frame}
 	\frametitle{Обучение с расписанием в обработке языка}		\let\thefootnote\relax\footnotetext{Benfeng Xu et al., Curriculum Learning for Natural Language Understanding, ACL'20}
+	\begin{itemize}
+		\item Задача: классификация
+		\item BERT
+		\item Датасеты: SQuAD 2.0, NewsQA, GLUE
+		\item Алгоритм: в течение $T$ шагов
+			\begin{center}
+				\includegraphics[scale=0.45]{acl20_algo_difficulty}
+			\end{center}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Обучение с расписанием в обработке языка}
+	\begin{center}
+		\includegraphics[scale=0.6]{acl20_algo_sampler}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Обучение с расписанием в обработке языка}
+	\begin{center}
+		\includegraphics[scale=0.3]{acl20_results}
+	\end{center}
+
+	\begin{center}
+		\includegraphics[scale=0.3]{acl20_results2}
+	\end{center}
+
 \end{frame}
 
 \begin{frame}
 	\frametitle{Обучение с расписанием в обработке языка. Направления для исследований}
+	\begin{itemize}
+		\item Много важных задач обработки естественного языка с {\bf большими корпусами тренировочных данных}
+		\item Решаются с помощью {\bf тяжелых} моделей, которые {\bf долго} учатся
+		\item Не иcследованы метрики оценки сложности текста (длина - текущий предел)
+		\item Эксперименты проведены только на определенных задачах
+			\begin{itemize}
+				\item ACL'19 - только задача машинного перевода
+				\item ACL'20 - только задача классификации\footnote[1]{Не совсем честное обучение с расписанием; Не ускоряет; Требует еще больших ресурсов}
+			\end{itemize}
+		\item Не исследовано влияние обучения с расписанием на этапе предобучения
+	\end{itemize}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Цели и задачи}
+	{\bf Цель:} ускорить обучение языковой модели BERT с помощью обучения с расписанием за счет метрики оценки сложности текстовых данных на задачах предобучения, классификации и машинного перевода
+
+	{\bf Задачи:}
+	\begin{enumerate}
+		\item Найти эффективные\footnote[1]{с точки зрения сокрости обучения модели} метрики оценки сложности текста
+		\item Реализовать механизм подсчета найденных метрик на больших датасетах
+		\item Исследовать влияние найденных метрик на скорость обучения языковой модели BERT
+		\item Сравнить найденные метрики с существующими метриками оценки сложности текста
+	\end{enumerate}
+\end{frame}
 
 \end{document}
