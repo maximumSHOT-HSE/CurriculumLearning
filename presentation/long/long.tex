@@ -211,7 +211,7 @@
 \begin{frame}
 	\frametitle{Обучение с расписанием в обработке языка. Направления для исследований}
 	\begin{itemize}
-		\item Много важных задач обработки естественного языка с {\bf большими корпусами тренировочных данных}
+		\item Много важных задач обработки естественного языка с {\bf большими} корпусами тренировочных данных
 		\item Решаются с помощью {\bf тяжелых} моделей, которые {\bf долго} учатся
 		\item Не иcследованы метрики оценки сложности текста (длина - текущий предел)
 		\item Эксперименты проведены только на определенных задачах
@@ -231,9 +231,156 @@
 	\begin{enumerate}
 		\item Найти эффективные\footnote[1]{с точки зрения сокрости обучения модели} метрики оценки сложности текста
 		\item Реализовать механизм подсчета найденных метрик на больших датасетах
-		\item Исследовать влияние найденных метрик на скорость обучения языковой модели BERT
 		\item Сравнить найденные метрики с существующими метриками оценки сложности текста
+		\item Исследовать влияние найденных метрик на скорость обучения языковой модели BERT
 	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Поиск метрик}
+	\begin{enumerate}
+		\item {\bf длина}, вероятность правдоподобия\footnote[1]{E. A. Platanios et al., Competence-based Curriculum Learning for Neural Machine Translation, ACL'19}
+		\item информационный поиск
+			\begin{itemize}
+				\item {\bf tf-idf}
+				\item энтропия, семантическая сложность\footnote[2]{Frans van der Sluis et al., Using Complexity Measures in Information Retrieval, 2010}
+			\end{itemize}
+		\item средняя частота слова, самое редкое слово в предложении\footnote[3]{Xuan Zhang et al., An Empirical Exploration of Curriculum Learning for Neural Machine Translation, 2018}
+		\item число определенных частей речи\footnote[4]{Tom Kocmi, Ondrej Bojar, Curriculum Learning and Minibatch Bucketing in Neural Machine Translation, 2017}
+		\item {\bf теория информации}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Поиск метрик}
+	\let\thefootnote\relax\footnotetext{Nihat Ay et al., A {\bf Unifying }Framework for Complexity Measures of Finite Systems, 2006}
+		
+	\begin{table}
+		\begin{tabular}{c|c}
+			\hline
+			метрика & формула \\
+			\hline
+			Multi-information & $\sum\limits_{v\in V}H_p(X_v) - H_p(X_V)$ \\
+			\hline
+			{\bf Excess Entropy (EE)} & $\left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (N - 1)H(X_V)$ \\
+			\hline
+			{\bf TSE} & $\sum\limits_{k=1}^{N-1}\frac{k}{N}C^{(k)}(X_V)$, где \\\\
+			& $C^{(k)}(X_V) = \frac{N}{k\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V)$ \\
+			\hline
+			Transient information & :( \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	\[
+		V=\{1,\ldots,N\}
+	\]
+	\[
+		X_V = (X_1,\ldots,X_N)
+	\]
+\end{frame}
+
+\begin{frame}
+	\frametitle{Адаптация EE и TSE под задачи обработки языка}
+	
+	\begin{enumerate}
+		\item Образование совместной случайной величины
+		\[
+			T=(t_1, t_2, \ldots, t_{i-1},t_i,\ldots, t_n)
+		\]
+		\[
+			t_i\rightarrow \xi^i_{t_i} =: \mu_i - \text{бинарная случайная величина}
+		\]
+		\[
+			\downarrow
+		\]
+		\[
+			\xi=(\xi^1_{t_1},\xi^2_{t_2},\ldots,\xi^{i-1}_{t_{i-1}},\xi^i_{t_i},\ldots,\xi^n_{t_n})
+		\]
+		\item Вычисление энтропии
+		\[
+			H(\mu) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_1,\mu_2,\ldots,\mu_{i-1}) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_{i-k},\ldots,\mu_{i-1})
+		\]
+		\item $k=1$
+		\[
+		H(\mu) = H(\mu_1) + H(\mu_2|\mu_1) + \ldots + H(\mu_i|\mu_{i-1}) + \ldots + H(\mu_n|\mu_{n-1})
+		\]
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Вычисление метрик}
+	\begin{enumerate}
+		\item длина
+		\item tf-idf
+			\[\sum\limits_{i=1}^{n}f(X_i)\log\frac{|D|}{\{j:X_i\in X^{(j)}\}}\]
+			\begin{itemize}
+				\item $x_i \rightarrow$ число текстов, в которых есть $x_i$
+			\end{itemize}
+		\item энтропия для вычисления EE, TSE
+			\begin{itemize}
+				\item длина $\rightarrow$ число текстов с такой длиной
+				\item $(i, x_i) \rightarrow$ число текстов, где $t_i = x_i$ 
+				\item $(x_i)\rightarrow$ число текстов, где $x_i$ является последним токеном
+				\item $(i, x_{i-1}, x_i) \rightarrow$ число текстов, где на $(i-1)$-й позиции стоит $x_{i-1}$, а на $i$-й позиции стоит $x_i$
+			\end{itemize}
+		\item EE,TSE - ?
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Вычисление EE}
+	\[
+		EE(X) = \left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (N - 1)H(X_V) = 
+	\]
+	\[
+		\left[\sum\limits_{i=1}^{n}H(\mu_1,\ldots,\mu_{i-1},\mu_{i+1},\ldots,\mu_n)\right] - (n - 1)H(\mu)
+	\]
+	\begin{itemize}
+		\item $\mathcal{O}(n^2)$
+		\item $\mathcal{O}(n)$
+			\[
+				\sum\limits_{i=1}^{n}H(\mu_1,\ldots,\mu_{i-1},\mu_{i+1},\ldots,\mu_n) =\]
+			\[ = \sum\limits_{i=1}^{n}H(\mu) - H(\mu_i|\mu_{i-1}) - H(\mu_{i+1}|\mu_i) + H(\mu_{i+1})\]
+			\[
+				EE(X) = \sum\limits_{i=2}^{n}H(\mu_i) - H(\mu_i|\mu_{i-1})= \sum\limits_{i=2}^{n}I(\mu_{i-1}\colon\mu_i)
+			\]
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Вычисление TSE}
+	\[
+		\sum\limits_{k=1}^{N-1}\frac{k}{N}C^{(k)}(X_V)
+	\]
+	\[
+	 	C^{(k)}(X_V) = \frac{N}{k\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V) =
+ 	\]
+ 	\[
+ 		= \frac{N}{k}\left[\frac{1}{\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A)\right] - \frac{N}{k}H(X_V)
+	\]
+\end{frame}
+
+\begin{frame}
+	\frametitle{Вычисление TSE}
+		\[
+			C^{(k)}(X_V) = \frac{1}{\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) =
+			\frac{1}{\binom{n}{k}}\sum\limits_{1 \le i_1 < i_2 < \ldots < i_k \le n}H(\mu_{i_1}, \mu_{i_2}, \ldots, \mu_{i_k})
+		\]
+		\begin{enumerate}
+			\item $\mathcal{O^*}(2^n)$
+			\item $\mathcal{O}(n^2)$ - динамическое программирование
+			\item $\mathcal{O}(n)$
+				\[
+					C^{(k)}(X_V) = \sum\limits_{i=1}^{n}A_iH(\mu_i) + \sum\limits_{i=2}^{n}B_iH(\mu_i|\mu_{i-1})
+				\]
+				\[
+					A_i = \frac{\binom{n-1}{k-1}}{\binom{n}{k}} = \frac{k}{n}
+				\]
+				\[
+					B_i = \frac{\binom{n-2}{k-2}}{\binom{n}{k}} = \frac{k(k-1)}{n(n-1)}
+				\]
+		\end{enumerate}
 \end{frame}
 
 \end{document}
