@@ -357,14 +357,14 @@
 	 	C^{(k)}(X_V) = \frac{N}{k\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V) =
  	\]
  	\[
- 		= \frac{N}{k}\left[\frac{1}{\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A)\right] - \frac{N}{k}H(X_V)
+ 		= \frac{N}{k}\left[\frac{1}{\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A)\right] - H(X_V)
 	\]
 \end{frame}
 
 \begin{frame}
 	\frametitle{Вычисление TSE}
 		\[
-			C^{(k)}(X_V) = \frac{1}{\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) =
+			\frac{1}{\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) =
 			\frac{1}{\binom{n}{k}}\sum\limits_{1 \le i_1 < i_2 < \ldots < i_k \le n}H(\mu_{i_1}, \mu_{i_2}, \ldots, \mu_{i_k})
 		\]
 		\begin{enumerate}
@@ -372,7 +372,7 @@
 			\item $\mathcal{O}(n^2)$ - динамическое программирование
 			\item $\mathcal{O}(n)$
 				\[
-					C^{(k)}(X_V) = \sum\limits_{i=1}^{n}A_iH(\mu_i) + \sum\limits_{i=2}^{n}B_iH(\mu_i|\mu_{i-1})
+					\sum\limits_{i=1}^{n}A_iH(\mu_i) + \sum\limits_{i=2}^{n}B_iH(\mu_i|\mu_{i-1})
 				\]
 				\[
 					A_i = \frac{\binom{n-1}{k-1}}{\binom{n}{k}} = \frac{k}{n}
@@ -381,6 +381,119 @@
 					B_i = \frac{\binom{n-2}{k-2}}{\binom{n}{k}} = \frac{k(k-1)}{n(n-1)}
 				\]
 		\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Конфигурация экспериментов}
+	\begin{itemize}
+		\item датасеты
+		\begin{table}
+			\begin{tabular}{l|c}
+				Датасет & Размер \\
+				\hline\hline
+				Hyperpartisan News Detection\footnote[1]{SemEval-2019 Task 4} & 600k-2M \\
+				sentiment140 & 1.6M \\
+			\end{tabular}
+		\end{table}
+		\item метрика качества модели -- точность
+		\item модель BERT-base
+		\item метод сравнения метрик сложности текста
+			\begin{enumerate}
+				\item фиксируем модель
+				\item фиксируем датасет
+				\item фиксируем семплер
+				\item учим модели, используя сравниваемые метрики
+				\item анализируем график обучения модели
+			\end{enumerate}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Сравнение метрик}
+	Без семплера
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_sequential}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Сравнение метрик}
+	семплер из ACL'19
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_competence_based}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Сравнение метрик}
+	семплер DB
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_difficulty_based}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Сравнение метрик}
+	гиперболический семплер
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_hyperbole}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Влияние метрик на скорость обучения}
+	TSE
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_tse_final}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Влияние метрик на скорость обучения}
+	EE
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_ee_final}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Влияние метрик на скорость обучения}
+	TF-IDF
+	\begin{center}
+		\includegraphics[scale=0.18]{s140_tf_idf_final}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Результаты}
+	\begin{enumerate}
+		\item Найдены метрики оценки сложности текста
+			\begin{itemize}
+				\item метрики TSE и EE адаптированы под задачу обработки языка
+				\item $(\text{TSE} \approx \text{EE}) > \text{TF-IDF} > \text{длина}$
+			\end{itemize}
+		\item Реализован механизм подсчета метрик на больших объемах данных
+			\begin{itemize}
+				\item Реализован механизм подсчета статистик для вычисления метрик
+				\item Реализованы алгоритмы вычисления метрик
+			\end{itemize}
+		\item Проведено сравнительное исследование метрик
+			\begin{itemize}
+				\item задача классификации (sentiment140, HND)
+				\item несколько семплеров
+				\item Показано ускорение обучения относительно существующих результатов\footnote[1]{ACL'19}
+			\end{itemize}
+		\item Пока не удалось добиться существенного ускорения на задаче классификации относительно базового подхода
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Дальнейший план работы}
+	\begin{itemize}
+		\item исследовать отношения метрик на задаче машинного перевода
+		\item попытаться обобщить подход вычисления TSE и EE на большие $k$
+		\item попытаться добиться ускорения на задаче классификации
+	\end{itemize}
 \end{frame}
 
 \end{document}
