@@ -84,7 +84,7 @@
 \begin{frame}
 	\frametitle{BERT. Обучение}
 	\begin{center}
-		\includegraphics[scale=0.35]{bert_train.png}
+		\includegraphics[scale=0.45]{bert_train.png}
 	\end{center}
 \end{frame}
 
@@ -100,7 +100,7 @@
 		\item размеры данных:
 			\begin{table}
 				\begin{tabular}{l|c}
-					Датасет & Размер \\
+					Набор данных & Размер \\
 					\hline\hline
 					Wikipedia & 3-600M \\
 					HND & 600k-2M \\
@@ -126,7 +126,7 @@
 	\frametitle{Обучение с расписанием. Начало}
 	
 	\begin{center}
-		\includegraphics[scale=0.4]{bengio_exp1}
+		\includegraphics[scale=0.5]{cl_geom_shapes}
 	\end{center}
 	
 	\let\thefootnote\relax\footnotetext{Y. Bengio et al., Curriculum learning, 2009}
@@ -164,7 +164,7 @@
 						\end{itemize}
 					\end{enumerate}
 				\column{0.5\textwidth}
-				\includegraphics[scale=0.6]{acl19_algo.png}
+				\includegraphics[scale=0.75]{acl19_algo.png}
 			\end{columns}
 	\end{itemize}
 \end{frame}
@@ -203,7 +203,7 @@
 	\end{center}
 
 	\begin{center}
-		\includegraphics[scale=0.3]{acl20_results2}
+		\includegraphics[scale=0.45]{acl20_results2}
 	\end{center}
 
 \end{frame}
@@ -260,23 +260,24 @@
 			\hline
 			метрика & формула \\
 			\hline
-			Multi-information & $\sum\limits_{v\in V}H_p(X_v) - H_p(X_V)$ \\
+			Мультиинформация & $\sum\limits_{v\in V}H_p(X_v) - H_p(X_V)$ \\
 			\hline
-			{\bf Excess Entropy (EE)} & $\left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (N - 1)H(X_V)$ \\
+			{\bf Избыточная энтропия (EE)} & $\left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (n - 1)H(X_V)$ \\
 			\hline
-			{\bf TSE} & $\sum\limits_{k=1}^{N-1}\frac{k}{N}C^{(k)}(X_V)$, где \\\\
-			& $C^{(k)}(X_V) = \frac{N}{k\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V)$ \\
+			{\bf TSE} & $\sum\limits_{k=1}^{n-1}\frac{k}{n}C^{(k)}(X_V)$, где \\\\
+			& $C^{(k)}(X_V) =$ \\\\
+			& $\frac{n}{k\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V)$ \\
 			\hline
-			Transient information & :( \\
+			Переходная информация & :( \\
 			\hline
 		\end{tabular}
 	\end{table}
 
 	\[
-		V=\{1,\ldots,N\}
+		V=\{1,\ldots,n\}
 	\]
 	\[
-		X_V = (X_1,\ldots,X_N)
+		X_V = (X_1,\ldots,X_n)
 	\]
 \end{frame}
 
@@ -299,9 +300,9 @@
 		\]
 		\item Вычисление энтропии
 		\[
-			H(\mu) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_1,\mu_2,\ldots,\mu_{i-1}) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_{i-k},\ldots,\mu_{i-1})
+			H(\mu) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_1,\mu_2,\ldots,\mu_{i-1}) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_{i-L},\ldots,\mu_{i-1})
 		\]
-		\item $k=1$
+		\item $L=1$
 		\[
 		H(\mu) = H(\mu_1) + H(\mu_2|\mu_1) + \ldots + H(\mu_i|\mu_{i-1}) + \ldots + H(\mu_n|\mu_{n-1})
 		\]
@@ -331,7 +332,7 @@
 \begin{frame}
 	\frametitle{Вычисление EE}
 	\[
-		EE(X) = \left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (N - 1)H(X_V) = 
+		EE(X) = \left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (n - 1)H(X_V) = 
 	\]
 	\[
 		\left[\sum\limits_{i=1}^{n}H(\mu_1,\ldots,\mu_{i-1},\mu_{i+1},\ldots,\mu_n)\right] - (n - 1)H(\mu)
@@ -351,13 +352,13 @@
 \begin{frame}
 	\frametitle{Вычисление TSE}
 	\[
-		\sum\limits_{k=1}^{N-1}\frac{k}{N}C^{(k)}(X_V)
+		\sum\limits_{k=1}^{n-1}\frac{k}{n}C^{(k)}(X_V)
 	\]
 	\[
-	 	C^{(k)}(X_V) = \frac{N}{k\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V) =
+	 	C^{(k)}(X_V) = \frac{n}{k\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V) =
  	\]
  	\[
- 		= \frac{N}{k}\left[\frac{1}{\binom{N}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A)\right] - H(X_V)
+ 		= \frac{n}{k}\left[\frac{1}{\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A)\right] - H(X_V)
 	\]
 \end{frame}
 
@@ -375,7 +376,11 @@
 					\sum\limits_{i=1}^{n}A_iH(\mu_i) + \sum\limits_{i=2}^{n}B_iH(\mu_i|\mu_{i-1})
 				\]
 				\[
-					A_i = \frac{\binom{n-1}{k-1}}{\binom{n}{k}} = \frac{k}{n}
+					A_i = 
+					\begin{cases}
+						\binom{n-2}{k-1}/\binom{n}{k}=\frac{k(n-k)}{n(n-1)},& i > 1 \\
+						\binom{n-1}{k-1}/\binom{n}{k}=\frac k n,& i = 1
+					\end{cases}
 				\]
 				\[
 					B_i = \frac{\binom{n-2}{k-2}}{\binom{n}{k}} = \frac{k(k-1)}{n(n-1)}
@@ -386,10 +391,10 @@
 \begin{frame}
 	\frametitle{Конфигурация экспериментов}
 	\begin{itemize}
-		\item датасеты
+		\item наборы данных
 		\begin{table}
 			\begin{tabular}{l|c}
-				Датасет & Размер \\
+				Набор данных & Размер \\
 				\hline\hline
 				Hyperpartisan News Detection\footnote[1]{SemEval-2019 Task 4} & 600k-2M \\
 				sentiment140 & 1.6M \\
@@ -474,14 +479,14 @@
 			\end{itemize}
 		\item Реализован механизм подсчета метрик на больших объемах данных
 			\begin{itemize}
-				\item Реализован механизм подсчета статистик для вычисления метрик
-				\item Реализованы алгоритмы вычисления метрик
+				\item реализован механизм подсчета статистик для вычисления метрик
+				\item реализованы алгоритмы вычисления метрик
 			\end{itemize}
 		\item Проведено сравнительное исследование метрик
 			\begin{itemize}
 				\item задача классификации (sentiment140, HND)
-				\item несколько семплеров
-				\item Показано ускорение обучения относительно существующих результатов\footnote[1]{ACL'19}
+				\item показано, что влияние метрики зависит от семплера
+				\item показано ускорение обучения относительно существующих результатов\footnote[1]{ACL'19}
 			\end{itemize}
 		\item Пока не удалось добиться существенного ускорения на задаче классификации относительно базового подхода
 	\end{enumerate}
@@ -490,9 +495,9 @@
 \begin{frame}
 	\frametitle{Дальнейший план работы}
 	\begin{itemize}
-		\item исследовать отношения метрик на задаче машинного перевода
+		\item исследовать отношения метрик и их влияние на скорость обучения на задаче машинного перевода
 		\item попытаться обобщить подход вычисления TSE и EE на большие $k$
-		\item попытаться добиться ускорения на задаче классификации
+		\item попытаться добиться ускорения обучения на задаче классификации
 	\end{itemize}
 \end{frame}
 
