@@ -19,4 +19,4 @@ mkdir $SAVE_DIR
 #SBATCH --cpus-per-task=4
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 collect_stat.py --dataset $DATASET --config config.json --save $SAVE_DIR --start $START --end $END --part $PART
+singularity exec --nv ~/containers/container.sif python3 collect_stat.py --dataset $DATASET --config config.json --save $SAVE_DIR --start $START --end $END --part $PART --tokenizer ~/tokenizers/BertTokenizerBaseCased/

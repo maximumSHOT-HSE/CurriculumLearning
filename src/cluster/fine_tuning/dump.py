@@ -12,6 +12,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
+    parser.add_argument('--column', type=str, required=True)
     return parser.parse_args()
 
 
@@ -24,5 +25,5 @@ if __name__ == '__main__':
         with open(filename, 'w') as fout:
             for i, x in enumerate(dataset[part]):
                 l = sum(1 for c in x['input_ids'] if int(c) > int(0))
-                fout.write(f'{i} {x["tse"]} {l}\n')
+                fout.write(f'{i} {x[args.column]} {l}\n')
 

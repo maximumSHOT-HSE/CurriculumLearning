@@ -74,7 +74,11 @@ if __name__ == '__main__':
         return calculate_entropy([p, 1 - p])
 
     def H_pair(i, x_prv, x_cur):
+        if i < 0 or i >= len(F_pos):
+            return 0
         T = F_pos[i]
+        if T <= 0:
+            return 0
         c11 = F_pair[(i - 1) + x_prv * BASE + x_cur * BASE_SQR]
         c01 = F_single[i + x_cur * BASE] - c11
         c10 = F_single[(i - 1) + x_prv * BASE] - c11 - F_last[(i - 1) + x_prv * BASE]
@@ -83,4 +87,4 @@ if __name__ == '__main__':
         p = (c10 + c11) / T
         return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - calculate_entropy(np.array([p, 1 - p], dtype=float))
 
-    dataset.map(lambda x: {'excess_entropy': excess_entropy_fast(x['input_ids'], H_single, H_pair)}, num_proc=args.num_proc).save_to_disk(args.save)
+    dataset.map(lambda x: {'excess_entropy': excess_entropy_fast(x['input_ids'], H_single, H_pair)}).save_to_disk(args.save)
