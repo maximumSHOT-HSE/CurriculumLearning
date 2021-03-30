@@ -87,4 +87,4 @@ if __name__ == '__main__':
         p = (c10 + c11) / T
         return calculate_entropy(np.array([c00, c01, c10, c11], dtype=float) / T) - calculate_entropy(np.array([p, 1 - p], dtype=float))
 
-    dataset.map(lambda x: {'tse': TSE_fast(x['input_ids'], H_single, H_pair)}, num_proc=args.num_proc).save_to_disk(args.save)
+    dataset.map(lambda x: {'tse': TSE_fast(x['input_ids'], H_single, H_pair)}).save_to_disk(args.save)

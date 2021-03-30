@@ -17,7 +17,7 @@ if __name__ == '__main__':
     tokenizer = BertTokenizer.from_pretrained(args.tokenizer)
     dataset = datasets \
         .load_from_disk(args.dataset) \
-        .map(lambda x: tokenizer(x['text'], truncation=True, padding='max_length'))
+        .map(lambda x: tokenizer(x['text'], truncation=True))
 
     for i, x in enumerate(dataset['train']):
         print(x)

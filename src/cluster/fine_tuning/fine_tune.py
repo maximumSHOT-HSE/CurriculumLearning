@@ -68,7 +68,7 @@ if __name__ == '__main__':
         num_train_epochs=5,
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
-        warmup_steps=50,
+        warmup_steps=0,
         weight_decay=0.01,
         logging_dir=args.logging_dir,
         save_total_limit=2,

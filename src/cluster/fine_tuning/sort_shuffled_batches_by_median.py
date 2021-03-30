@@ -45,7 +45,7 @@ if __name__ == '__main__':
         for line in fin:
             dataset.append(line.strip('\x00').strip().split(' '))
 
-    # i, tse, len
+    # i, metrics, len
 
     dataset = np.array(dataset)
 

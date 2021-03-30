@@ -6,9 +6,8 @@
 #SBATCH --cpus-per-task=4
 
 DATASET=$1
-SAVE=$2
-COLUMN=$3
+FILE=$2
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 dump.py --dataset $DATASET --save $SAVE --column $COLUMN
+singularity exec --nv ~/containers/container.sif python3 show_from_file.py --dataset $DATASET --file $FILE
 

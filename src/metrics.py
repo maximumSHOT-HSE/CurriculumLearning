@@ -2,6 +2,7 @@ from typing import Union
 
 import nltk
 import numpy as np
+from collections import Counter
 
 
 def calculate_entropy(distribution: Union[list, np.ndarray]) -> float:
@@ -32,7 +33,7 @@ def get_H_pair(F_pos: nltk.FreqDist, F_single: nltk.FreqDist, F_pair: nltk.FreqD
     return H_pair
 
 
-def excess_entropy_slow(text: str, H_single, H_pair):
+def excess_entropy_slow(text: np.ndarray, H_single, H_pair):
     """
     Calculates excess entropy of given string in O(n^2) time complexity in a straightforward way
 
@@ -61,7 +62,7 @@ def excess_entropy_slow(text: str, H_single, H_pair):
     return EE - (n - 1) * calculate_excess_entropy_on_range(0, n)
 
 
-def excess_entropy_fast(text: str, H_single, H_pair):
+def excess_entropy_fast(text: np.ndarray, H_single, H_pair):
     """
     Calculates excess entropy of given string in O(n) time complexity
 
@@ -77,7 +78,7 @@ def excess_entropy_fast(text: str, H_single, H_pair):
     return EE
 
 
-def calculate_subset_mean_H_slow(text: str, H_single, H_pair) -> np.ndarray:
+def calculate_subset_mean_H_slow(text: np.ndarray, H_single, H_pair) -> np.ndarray:
     """
     Calculates subset mean entropy for each 1 <= k <= n of given string in O*(2^n) time complexity
 
@@ -107,7 +108,7 @@ def calculate_subset_mean_H_slow(text: str, H_single, H_pair) -> np.ndarray:
     return sumH / cnt
 
 
-def calculate_subset_mean_H_fast(text: str, H_single, H_pair) -> np.ndarray:
+def calculate_subset_mean_H_fast(text: np.ndarray, H_single, H_pair) -> np.ndarray:
     """
     Calculates subset mean entropy for each 1 <= k <= n of given string in O(n^2) time complexity
 
@@ -130,7 +131,7 @@ def calculate_subset_mean_H_fast(text: str, H_single, H_pair) -> np.ndarray:
            H_single(0, text[0]) * ks / n
 
 
-def TSE_slow(text: str, H_single, H_pair):
+def TSE_slow(text: np.ndarray, H_single, H_pair):
     """
     Calculates TSE of given string in O*(2^n) time complexity
 
@@ -150,9 +151,9 @@ def TSE_slow(text: str, H_single, H_pair):
     return TSE
 
 
-def TSE_fast(text: str, H_single, H_pair):
+def TSE_fast(text: np.ndarray, H_single, H_pair):
     """
-    Calculates TSE of given string in O(n^2) time complexity
+    Calculates TSE of given sequence in O(n) time complexity
 
     :param text: an input tokenized string
     :param H_single: a function that calculates H(i, x_i)
@@ -163,3 +164,18 @@ def TSE_fast(text: str, H_single, H_pair):
         return 0
     subset_mean_H = calculate_subset_mean_H_fast(text, H_single, H_pair)
     return subset_mean_H[:-1].sum() - subset_mean_H[-1] * (len(text) - 1) / 2
+
+
+def TF_IDF(text: np.ndarray, calc_idf):
+    """
+    Calculates sum of tf-idf of given sequence in O(n) time complexity
+    """
+    n = len(text)
+    text_counter = Counter(text)
+    sum_tf_idf = 0
+    for i in range(n):
+        tf = text_counter[text[i]] / n
+        idf = calc_idf(text[i])
+        sum_tf_idf += tf * idf
+    return sum_tf_idf
+
