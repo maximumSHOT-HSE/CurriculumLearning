@@ -267,7 +267,7 @@
 		\item fix a sufficiently large accuracy value
 			\begin{itemize}
 				\item train BERT model without curriculum learning until convergence
-				\item take the best accuracy value
+				\item take the best accuracy value $\pm \varepsilon$
 			\end{itemize}
 		\item compare average number of steps required to reach this threshold
 	\end{enumerate}
@@ -275,7 +275,22 @@
 
 \begin{frame}
 	\frametitle{Results}
-	
+	\begin{table}
+		\begin{tabular}{l|ccc|ccc}
+			dataset & \multicolumn{3}{c}{HND (92.9\%)} & \multicolumn{3}{c}{s140 (85.5\%)}\\
+			\hline
+			sampler & CB & DB & Hyp & CB & DB & Hyp\\
+			\hline
+			length & 55k & 23k & 22.5k & 112.5k & 20k & 19k \\
+			TF-IDF & $\infty$ & 19.5k & 24k & 115.5k & 21.5k & 19.5k \\
+			TSE & 56.5k & 21k & 23k & 95.5k & 16.5k & 20.5k \\
+			EE & 71.5k & 25.5k & 22.5k & 59k & 16.5k & 23k \\
+			max wf rank & $\infty$ & 22k & 20.5k & 70k & 18.5k & 19.5k \\
+			log-likelihood & $\infty$ & 20k & 24k & 112k & 17.5k & 21.5k\\
+			\hline
+			&&22k&&&18k&\\
+		\end{tabular}
+	\end{table}
 \end{frame}
 
 \begin{frame}
