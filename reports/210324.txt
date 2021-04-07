@@ -1,0 +1,42 @@
+какие есть метрики
+    длина
+    tf-idf
+    tse
+    ee
+
+    энтропия
+    модельная (mlm loss)
+    частота слов
+    вероятность правдоподобия
+
+попробовать на маленьких моделях
+    BERT-small, BERT-tiny, LSTM
+
+датасеты:
+    wikipedia
+    
+    hnd
+        competence-based: tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        difficulty-based: tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        hyperbole:        tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        SM:               tse,ee,tf-idf                 [entropy,avg_wf,mlm,max_wf,prob]
+        SS:               tse,ee,tf-idf                 [entropy,avg_wf,mlm,max_wf,prob]
+    s140
+        competence-based: tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        difficulty-based: tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        hyperbole:        tse,ee,tf-idf,len,max_wf,prob [entropy,avg_wf,mlm]
+        SM:               tse,ee,tf-idf                 [entropy,avg_wf,mlm,max_wf,prob]
+        SS:               tse,ee,tf-idf                 [entropy,avg_wf,mlm,max_wf,prob]
+
+    iwslt
+    wmt
+
+семплеры
+    default: только для базы
+    competence-based
+    difficulty-based
+    hyperbole
+    SM
+    SS
+
+построить табличку, где для каждой метрики и для каждого датасета будет записано число шагов
