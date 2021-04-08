@@ -25,10 +25,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
-    parser.add_argument('--out', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, required=True)
     parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--seed', type=int, default=100)
     return parser.parse_args()
 
 
@@ -38,10 +36,7 @@ if __name__ == '__main__':
 
     tokenizer = BertTokenizer.from_pretrained(args.tokenizer)
     model = BertForMaskedLM.from_pretrained(args.model)
-    dataset.set_format('torch', columns=['input_ids', 'attention_mask'])
-
-    print(dataset)
-    print()
+    dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'token_type_ids'])
 
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer,
@@ -49,34 +44,23 @@ if __name__ == '__main__':
         mlm_probability=0.15
     )
 
-    training_args = TrainingArguments(
-        output_dir=args.out,
-        num_train_epochs=5,
-        per_device_train_batch_size=16,
-        per_device_eval_batch_size=16,
-        logging_dir=None,
-        save_total_limit=1,
-        seed=args.seed,
-        logging_first_step=False,
-        evaluation_strategy=EvaluationStrategy.STEPS,
-        eval_steps=500000000000000000000000,
-        logging_steps=50000000000000000,
-        save_steps=500000000000000,
-    )
+    print(dataset)
+    print()
 
     def calc_mlm_loss(x):
-        for k in x:
-            x[k] = [x[k]]
-        ds = Dataset.from_dict(x)
-        trainer = Trainer(
-            tokenizer=tokenizer,
-            model=model,
-            args=training_args,
-            train_dataset=ds,
-            eval_dataset=ds,
-            data_collator=data_collator
-        )
-        return trainer.evaluate()['eval_loss']
+        collated = data_collator([x])
+        loss = model(
+            input_ids=collated['input_ids'],
+            attention_mask=collated['attention_mask'],
+            token_type_ids=collated['token_type_ids'],
+            labels=collated['labels']
+        ).loss.item()
+        return loss
+
+    for x in dataset['train']:
+        calc_mlm_loss(x)
+        break
 
     dataset = dataset.map(lambda x: {'mlm_loss': calc_mlm_loss(x)})
     dataset.save_to_disk(args.save)
+

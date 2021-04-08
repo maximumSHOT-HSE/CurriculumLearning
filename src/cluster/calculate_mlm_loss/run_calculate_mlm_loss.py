@@ -6,12 +6,10 @@
 #SBATCH --cpus-per-task=4
 
 DATASET=$1
-SEED=$2
-TOKENIZER=$3
-MODEL=$4
-SAVE=$5
-OUT=$6
+TOKENIZER=$2
+MODEL=$3
+SAVE=$4
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 calculate_mlm_loss.py --dataset $DATASET --tokenizer $TOKENIZER --model $MODEL --seed $SEED --save $SAVE --out $OUT
+singularity exec --nv ~/containers/container.sif python3 calculate_mlm_loss.py --dataset $DATASET --tokenizer $TOKENIZER --model $MODEL --save $SAVE
 
