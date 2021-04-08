@@ -25,6 +25,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
+    parser.add_argument('--out', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, required=True)
     parser.add_argument('--model', type=str, required=True)
     parser.add_argument('--seed', type=int, default=100)
@@ -49,18 +50,18 @@ if __name__ == '__main__':
     )
 
     training_args = TrainingArguments(
-        output_dir='out',
+        output_dir=args.out,
         num_train_epochs=5,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
-        logging_dir='log',
+        logging_dir=None,
         save_total_limit=1,
         seed=args.seed,
-        logging_first_step=True,
+        logging_first_step=False,
         evaluation_strategy=EvaluationStrategy.STEPS,
-        eval_steps=500,
-        logging_steps=500,
-        save_steps=500,
+        eval_steps=500000000000000000000000,
+        logging_steps=50000000000000000,
+        save_steps=500000000000000,
     )
 
     def calc_mlm_loss(x):
