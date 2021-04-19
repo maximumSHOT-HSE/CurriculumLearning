@@ -156,8 +156,6 @@
 			частота слов & & $\checkmark$ & & \\
 			правдоподобие & & $\checkmark$ & & \\
 			\hline
-			? & & & & \\
-			\hline
 		\end{tabular}
 	\end{table}
 	\begin{itemize}
@@ -221,7 +219,7 @@
 		\item EE, TSE
 			\begin{itemize}
 				\item сложные математическая формулы
-				\item $\mathcal{O^*}(2^n), \mathcal{O}(n^2)$ -- несравнимо долго $\rightarrow$ алгоритм за $\mathcal{O}(n)$
+				\item $\mathcal{O^*}(2^n), \mathcal{O}(n^2)$ -- долго $\rightarrow$ алгоритм за $\mathcal{O}(n)$
 			\end{itemize}
 		\item максимальный частотный ранг
 			\begin{enumerate}
@@ -307,7 +305,7 @@
 	\end{table}
 	\begin{itemize}
 		\item нет статистически значимой разницы в метриках (искл.: длина, MLM-loss)
-		\item длина ухудшает качество модели
+		\item длина и MLM-loss ухудшают качество модели
 		\item влияние семплера много больше влияния метрики на скорость обучения
 	\end{itemize}
 \end{frame}
@@ -316,14 +314,19 @@
 	\frametitle{Влияние метрик на скорость обучения}
 	\begin{itemize}
 		\item любая конфигурация обучения по плану проигрывает стандартному алгоритму обучения
-		\item влияние токенизатора: нет
-		\item влияние гиперпараметров обучения: нет
-		\item влияние опыта предобученной модели на обучение по плану: нет
+		\item Гипотетические причины:
 		\begin{itemize}
-			\item замена предобученного BERT-base на случайно инициализированный не приводит к выигрышу обучения по плану
+			\item влияние токенизатора: нет
+			\item влияние гиперпараметров обучения: нет
+			\item влияние опыта предобученной модели на обучение по плану: нет
+			\begin{itemize}
+				\item замена предобученного BERT-base на случайно инициализированный не приводит к выигрышу обучения по плану
+			\end{itemize}
+			\item BERT переобучается на длину: нет (семплеры SS, SM)
+			\item итоговое распределение датасета неравномерное: нет (DB, Hyp)
+			\item модель недостаточно выразительна: нет
+			\item мало данных: нет
 		\end{itemize}
-		\item BERT переобучается на длину: нет (семплеры SS, SM)
-		\item итоговое распределение датасета неравномерное: нет (DB, Hyp)
 	\end{itemize}
 \end{frame}
 
@@ -346,10 +349,146 @@
 		\end{itemize}
 		\item поведение метрик зависит от задачи $\Rightarrow$ не удалось найти универсального решения
 		\item Не удалось добиться существенного ускорения относительно базового подхода на задачах предобучения и классификации
+			\begin{itemize}
+				\item было отклонено большое количество гипотез
+			\end{itemize}
 	\end{enumerate}
 \end{frame}
 
 \appendix
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: ссылки}
+	\begin{itemize}
+		\item Ay, N., Olbrich, E., Bertschinger, N., \& Jost, J. (2006, August). A\\\hspace{1cm}unifying framework for
+		complexity measures of finite systems. In\\\hspace{1cm}Proceedings of ECCS (Vol. 6).
+		\item Bengio, Y., Louradour, J., Collobert, R., \& Weston, J. (2009, June).\\\hspace{1cm}Curriculum learning. In
+		Proceedings of the 26th annual \\\hspace{1cm}international conference on machine learning (pp.
+		41-48).
+		\item Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., \\\hspace{1cm}Dhariwal, P., ... \& Amodei, D.
+		(2020). Language models are\\\hspace{1cm}few-shot learners. arXiv preprint arXiv:2005.14165.
+		\item Devlin, J., Chang, M. W., Lee, K., \& Toutanova, K. (2018). Bert: \\\hspace{1cm}Pre-training of deep
+		bidirectional transformers for language\\\hspace{1cm} understanding. arXiv preprint
+		arXiv:1810.04805.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: ссылки}
+	\begin{itemize}
+		\item Hacohen, G., \& Weinshall, D. (2019, May). On the power of \\\hspace{1cm}curriculum learning in training
+		deep networks. In International\\\hspace{1cm}Conference on Machine Learning (pp. 2535-2544).
+		PMLR.
+		\item Kocmi, T., \& Bojar, O. (2017). Curriculum learning and minibatch \\\hspace{1cm}bucketing in neural
+		machine translation. arXiv preprint \\\hspace{1cm}arXiv:1707.09533.
+		\item Kurdi, M. Z. (2020). Text Complexity Classification Based on \\\hspace{1cm}Linguistic Information:
+		Application to Intelligent Tutoring of \\\hspace{1cm}ESL. arXiv preprint arXiv:2001.01863.
+		\item Mermer, M. N., \& Amasyali, M. F. (2017). Scalable Curriculum \\\hspace{1cm}Learning for Artificial
+		Neural Networks. IPSI BGD \\\hspace{1cm}TRANSACTIONS ON INTERNET RESEARCH, 13(2).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: ссылки}
+	\begin{itemize}
+		\item Narasimhan, S., Narasimhan, V. A. P. B. S., Karch, G., Rao, R., \\\hspace{1cm}Huang, J., Zhang, Y.,
+		Ginsburg, B., Chitale, P., Sreenivas, S., \\\hspace{1cm}Mandava, S., Ginsburg, B., Forster, C., Mani,
+		R., \& Kersten, K. \\\hspace{1cm}(2020, October 13). NVIDIA Clocks World’s Fastest BERT \\\hspace{1cm}Training
+		Time and Largest Transformer Based Model, Paving \\\hspace{1cm}Path For Advanced
+		Conversational AI. NVIDIA Developer Blog.
+		\\\hspace{1cm}https://developer.nvidia.com/blog/training-bert-with-gpus/
+		\item Platanios, E. A., Stretcu, O., Neubig, G., Poczos, B., \& Mitchell, T. \\\hspace{1cm}M. (2019).
+		Competence-based curriculum learning for neural \\\hspace{1cm}machine translation. arXiv preprint
+		arXiv:1903.09848.
+		\item Sajjad, H., Dalvi, F., Durrani, N., \& Nakov, P. (2020). Poor Man's \\\hspace{1cm}BERT: Smaller and Faster
+		Transformer Models. \\\hspace{1cm}arXiv preprint arXiv:2004.03844.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: ссылки}
+	\begin{itemize}
+		\item Shen, S., Dong, Z., Ye, J., Ma, L., Yao, Z., Gholami, A., Mahoney, M. \\\hspace{1cm}W., \& Keutzer, K.
+		(2020). Q-BERT: Hessian Based Ultra Low \\\hspace{1cm}Precision Quantization of BERT.
+		Proceedings of the AAAI \\\hspace{1cm}Conference on Artificial Intelligence, 34(05), 8815–8821.
+		\\\hspace{1cm}https://doi.org/10.1609/aaai.v34i05.6409
+		\item van der Sluis, F., \& van den Broek, E. L. (2010, August). Using \\\hspace{1cm}complexity measures in
+		information retrieval. In Proceedings of \\\hspace{1cm}the third symposium on information
+		interaction in context (pp. \\\hspace{1cm}383-388).
+		\item Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, \\\hspace{1cm}A. N., ... \&
+		Polosukhin, I. (2017). Attention is all you need. \\\hspace{1cm}arXiv preprint arXiv:1706.03762.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: ссылки}
+	\begin{itemize}
+		\item Xu, B., Zhang, L., Mao, Z., Wang, Q., Xie, H., \& Zhang, Y. (2020). \\\hspace{1cm}Curriculum Learning for
+		Natural Language Understanding. \\\hspace{1cm}Proceedings of the 58th Annual Meeting of the
+		Association for \\\hspace{1cm}Computational Linguistics, 6095–6104.
+		\\\hspace{1cm}https://doi.org/10.18653/v1/2020.acl-main.542
+		\item Zhang, X., Kumar, G., Khayrallah, H., Murray, K., Gwinnup, J., \\\hspace{1cm}Martindale, M. J., ... \&
+		Carpuat, M. (2018). An empirical \\\hspace{1cm}exploration of curriculum learning for neural
+		machine \\\hspace{1cm}translation. arXiv preprint arXiv:1811.00739.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: Поиск метрик}
+	\let\thefootnote\relax\footnotetext{Nihat Ay et al., A {\bf Unifying }Framework for Complexity Measures of Finite Systems, 2006}
+	
+	\begin{table}
+		\begin{tabular}{c|c}
+			\hline
+			метрика & формула \\
+			\hline
+			Мультиинформация & $\sum\limits_{v\in V}H_p(X_v) - H_p(X_V)$ \\
+			\hline
+			{\bf Избыточная энтропия (EE)} & $\left[\sum\limits_{v\in V}H(X_{V\backslash\{v\}})\right] - (n - 1)H(X_V)$ \\
+			\hline
+			{\bf TSE} & $\sum\limits_{k=1}^{n-1}\frac{k}{n}C^{(k)}(X_V)$, где \\\\
+			& $C^{(k)}(X_V) =$ \\\\
+			& $\frac{n}{k\binom{n}{k}}\sum\limits_{A\subseteq V,|A|=k}H(X_A) - H(X_V)$ \\
+			\hline
+			Переходная информация & :( \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\[
+	V=\{1,\ldots,n\},
+	X_V = (X_1,\ldots,X_n)
+	\]
+\end{frame}
+
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Дополнительно: Адаптация EE и TSE под задачи обработки языка}
+	
+	\begin{enumerate}
+		\item Образование совместной случайной величины
+		\[
+		T=(t_1, t_2, \ldots, t_{i-1},t_i,\ldots, t_n)
+		\]
+		\[
+		t_i\rightarrow \xi^i_{t_i} =: \mu_i - \text{бинарная случайная величина}
+		\]
+		\[
+		\downarrow
+		\]
+		\[
+		\xi=(\xi^1_{t_1},\xi^2_{t_2},\ldots,\xi^{i-1}_{t_{i-1}},\xi^i_{t_i},\ldots,\xi^n_{t_n})
+		\]
+		\item Вычисление энтропии
+		\[
+		H(\mu) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_1,\mu_2,\ldots,\mu_{i-1}) = \sum\limits_{i=1}^{n}H(\mu_i|\mu_{i-L},\ldots,\mu_{i-1})
+		\]
+		\item $L=1$
+		\[
+		H(\mu) = H(\mu_1) + H(\mu_2|\mu_1) + \ldots + H(\mu_i|\mu_{i-1}) + \ldots + H(\mu_n|\mu_{n-1})
+		\]
+	\end{enumerate}
+\end{frame}
 
 \begin{frame}[label=supplemental,noframenumbering]
 	\frametitle{Дополнительно: Вычисление EE}
@@ -410,8 +549,8 @@
 	\end{enumerate}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Результаты. классификация. HND}
+\begin{frame}[label=supplemental,noframenumbering]
+	\frametitle{Результаты. Классификация. HND}
 	
 	Корпус данных: Hyperpartisan News Detection
 	
