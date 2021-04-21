@@ -9,4 +9,4 @@ INPUT=$1
 OUTPUT=$2
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 sort_by_len.py --input $INPUT --output $OUTPUT --num-proc 4
+singularity exec --nv ~/containers/container.sif python3 sort_by_len.py --input $INPUT --output $OUTPUT
