@@ -24,12 +24,14 @@ if __name__ == '__main__':
     with open(args.config, 'r') as f:
         for line in f:
             path = line.strip()
-            df = pd.read_csv(path)
+            df = pd.read_csv(path).sort_values(by=['hash'])
             if merged_df is None:
-                mergd_df = df
+                merged_df = df
                 continue
-            print(df)
-            print(merged_df)
-            merged_df = merged_df.merge(df, how='inner', on=['hash', 'length'])
-            print(merged_df)
-            exit(0)
+            current_columns = list(merged_df.columns)
+            new_columns = [c for c in df.columns if c not in current_columns]
+            for c in new_columns:
+                merged_df[c] = df[c]
+
+    print(merged_df)
+    merged_df.to_csv(args.save, index=False)
