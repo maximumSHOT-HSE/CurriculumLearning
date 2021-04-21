@@ -49,6 +49,8 @@ def parse_args():
     parser.add_argument('--seed', type=int, default=100)
     parser.add_argument('--trainer', type=str, default='default', choices=list(TRAINERS.keys()))
     parser.add_argument('--from-file', type=str, default=None)
+    parser.add_argument('--warmup-steps', type=int, default=0)
+    parser.add_argument('--max-steps', type=int, default=-1)
     return parser.parse_args()
 
 
@@ -68,7 +70,7 @@ if __name__ == '__main__':
         num_train_epochs=5,
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
-        warmup_steps=0,
+        warmup_steps=args.warmup_steps,
         weight_decay=0.01,
         logging_dir=args.logging_dir,
         save_total_limit=2,
@@ -79,6 +81,7 @@ if __name__ == '__main__':
         eval_steps=500,
         logging_steps=500,
         save_steps=500,
+        max_steps=args.max_steps,
     )
 
     trainer = TRAINERS[args.trainer](

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 
-#SBATCH --time=2-00:00:00
-#SBATCH --gpus=0
+#SBATCH --time=30-00:00:00
+#SBATCH --gpus=1
 #SBATCH --cpus-per-task=4
 
 DATASET=$1
