@@ -9,7 +9,8 @@ INPUT=$1
 COLUMN=$2
 OUTPUT=$3
 THRESHOLD=$4
+REGIME=$5
 
 module add singularity hpcx/hpcx-ompi
-singularity exec --nv ~/containers/container.sif python3 filter.py --input $INPUT --column $COLUMN --output $OUTPUT --threshold $THRESHOLD
+singularity exec --nv ~/containers/container.sif python3 filter.py --input $INPUT --column $COLUMN --output $OUTPUT --threshold $THRESHOLD --regime $REGIME
 

@@ -9,13 +9,16 @@ def parse_args():
     parser.add_argument('--column', type=str, required=True, help='Column name to sort by')
     parser.add_argument('--threshold', type=float, required=True, help='Threshold value. Only rows, s.t. x[column] < threshold will remain')
     parser.add_argument('--output', type=str, required=True, help='Path to the directory where sorted dataset will be saved')
+    parser.add_argument('--regime', type=str, default='lt', choices=['lt', 'gt'])
     return parser.parse_args()
 
 
-def filter_indices(ds, column, threshold):
+def filter_indices(ds, column, threshold, regime):
     indices = []
     for i, x in tqdm(enumerate(ds)):
-        if x[column] < threshold:
+        if regime == 'lt' and x[column] < threshold:
+            indices.append(i)
+        if regime == 'gt' and x[column] > threshold:
             indices.append(i)
     return indices
 
@@ -23,5 +26,5 @@ def filter_indices(ds, column, threshold):
 if __name__ == '__main__':
     args = parse_args()
     dataset = datasets.load_from_disk(args.input)
-    dataset['train'] = dataset['train'].select(indices=filter_indices(dataset['train'], args.column, args.threshold))
+    dataset['train'] = dataset['train'].select(indices=filter_indices(dataset['train'], args.column, args.threshold, args.regime))
     dataset.save_to_disk(args.output)
