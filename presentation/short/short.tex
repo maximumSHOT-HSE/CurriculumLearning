@@ -302,7 +302,7 @@
 			\hline
 			семплер & CB & DB & Hyp & SS & SM & min loss\\
 			\hline
-			max wf rk & $\infty$ & 17.5k & 16.5k & 16.5k & 27k & 1.58 \\
+			max wf rk & $\infty$ & 17.5k & {\bf 16.5k} & {\bf 16.5k} & 27k & {\bf 1.58} \\
 			TF-IDF & $\infty$ & 34k & 35k & 37.5k & $\infty$ & 1.84 \\
 			\hline
 			база & \multicolumn{5}{c}{9.5k} & 1.58 \\
@@ -371,19 +371,8 @@
 		метрика "уровень шума" ускоряет обучение на старте до 2.5 раз
 		\column{0.5\textwidth}
 		\includegraphics[scale=0.5]{keyboard_noise_TPW_win}
-		метрика TPW ускоряет обучение на старте до 2 раз
+		{\bf\color{green}$(+)$} метрика TPW ускоряет обучение до 2 раз на первых 10\% всего обучения
 	\end{columns}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Влияние метрик на скорость обучения. Шум}
-	\begin{itemize}
-		\item Корреляция Спирмена
-			
-		\item Свойство метрики TPW: сортирует корпус данных по уровню шума
-		\item Модель сначала учит чистые примеры, плавно переходя к шумным
-		\item {\bf\color{green}$(+)$} получили ускорение обучения в {\bf 2 раза} на первых 10\% всего обучения на шумном корпусе данных
-	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -406,7 +395,6 @@
 				\item {\bf\color{red}$(-)$} длина и MLM-loss уменьшают точность модели на 0.6\%
 				\item 
 				{\bf\color{green}$(+)$} метрика TPW ускоряет обучение до {\bf 2 раз} на первых 10\% всего обучения на шумном корпусе данных
-				\item {\bf\color{green}$(+)$} Выявлено фильтрующее свойство TPW
 			\end{itemize}
 	\end{enumerate}
 \end{frame}
