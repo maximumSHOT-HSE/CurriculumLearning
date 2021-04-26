@@ -6,6 +6,7 @@ from transformers import EvaluationStrategy
 from transformers import BertForMaskedLM, BertForPreTraining, BertForSequenceClassification, BertTokenizerFast, Trainer, TrainingArguments
 from bs4 import BeautifulSoup
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+import torch
 
 
 def compute_metrics(pred):
@@ -38,6 +39,11 @@ if __name__ == '__main__':
     model = BertForMaskedLM.from_pretrained(args.model)
     dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'token_type_ids'])
 
+    model.eval()
+
+    DEVICE = 'cuda'  if torch.cuda.is_available() else 'cpu'
+    model = model.to(DEVICE)
+
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer,
         mlm=True,
@@ -50,17 +56,18 @@ if __name__ == '__main__':
     def calc_mlm_loss(x):
         collated = data_collator([x])
         loss = model(
-            input_ids=collated['input_ids'],
-            attention_mask=collated['attention_mask'],
-            token_type_ids=collated['token_type_ids'],
-            labels=collated['labels']
-        ).loss.item()
+            input_ids=collated['input_ids'].to(DEVICE),
+            attention_mask=collated['attention_mask'].to(DEVICE),
+            token_type_ids=collated['token_type_ids'].to(DEVICE),
+            labels=collated['labels'].to(DEVICE)
+        ).loss.detach().cpu().item()
         return loss
 
     for x in dataset['train']:
         calc_mlm_loss(x)
         break
 
-    dataset = dataset.map(lambda x: {'mlm_loss': calc_mlm_loss(x)})
-    dataset.save_to_disk(args.save)
+    with torch.set_grad_enabled(False):
+        dataset = dataset.map(lambda x: {'mlm_loss': calc_mlm_loss(x)})
+        dataset.save_to_disk(args.save)
 

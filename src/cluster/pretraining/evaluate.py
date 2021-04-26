@@ -1,8 +1,8 @@
 import argparse
 import datasets
-from transformers import BertTokenizer
+from transformers import BertTokenizer, DataCollatorForLanguageModeling
 from transformers import EvaluationStrategy
-from transformers import BertForSequenceClassification, BertTokenizerFast, Trainer, TrainingArguments
+from transformers import BertForMaskedLM, BertForPreTraining, BertForSequenceClassification, BertTokenizerFast, Trainer, TrainingArguments
 from bs4 import BeautifulSoup
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from custom_trainers import (
@@ -28,29 +28,12 @@ def compute_metrics(pred):
     }
 
 
-TRAINERS = {
-    'default': Trainer,
-    'sequential': SequentialTrainer,
-    'hyperbole': CurriculumTrainerHyperbole,
-    'difficulty-based': CurriculumTrainerDifficultyBiased,
-    'competence-based': CurriculumTrainerCompetenceBased,
-    'reverse-sequential': ReverseSequentialTrainer,
-    'from-file': FromFileTrainer
-}
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, required=True)
     parser.add_argument('--tokenizer', type=str, required=True)
     parser.add_argument('--model', type=str, required=True)
-    parser.add_argument('--output-dir', type=str, required=True)
-    parser.add_argument('--logging-dir', type=str, required=True)
     parser.add_argument('--seed', type=int, default=100)
-    parser.add_argument('--trainer', type=str, default='default', choices=list(TRAINERS.keys()))
-    parser.add_argument('--from-file', type=str, default=None)
-    parser.add_argument('--warmup-steps', type=int, default=0)
-    parser.add_argument('--max-steps', type=int, default=-1)
     return parser.parse_args()
 
 
@@ -59,43 +42,41 @@ if __name__ == '__main__':
     dataset = datasets.load_from_disk(args.dataset)
 
     tokenizer = BertTokenizer.from_pretrained(args.tokenizer)
-    model = BertForSequenceClassification.from_pretrained(args.model)
-    dataset.set_format('torch', columns=['input_ids', 'attention_mask', 'labels'])
+    model = BertForMaskedLM.from_pretrained(args.model)
+    dataset.set_format('torch', columns=['input_ids', 'attention_mask'])
 
     print(dataset)
     print()
 
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer,
+        mlm=True,
+        mlm_probability=0.15
+    )
+
     training_args = TrainingArguments(
-        output_dir=args.output_dir,
+        output_dir='out',
         num_train_epochs=5,
-        per_device_train_batch_size=32,
-        per_device_eval_batch_size=32,
-        warmup_steps=args.warmup_steps,
-        weight_decay=0.01,
-        logging_dir=args.logging_dir,
-        save_total_limit=2,
+        per_device_train_batch_size=16,
+        per_device_eval_batch_size=16,
+        logging_dir='log',
+        save_total_limit=1,
         seed=args.seed,
-        learning_rate=3e-5,
         logging_first_step=True,
         evaluation_strategy=EvaluationStrategy.STEPS,
         eval_steps=500,
         logging_steps=500,
         save_steps=500,
-        max_steps=args.max_steps,
     )
 
-    trainer = TRAINERS[args.trainer](
+    trainer = Trainer(
         tokenizer=tokenizer,
         model=model,
         args=training_args,
-        compute_metrics=compute_metrics,
         train_dataset=dataset['train'],
         eval_dataset=dataset['test'],
+        data_collator=data_collator
     )
 
-    if args.trainer == 'from-file':
-        trainer.file = args.from_file
-
-    trainer.train()
     print(trainer.evaluate())
 
