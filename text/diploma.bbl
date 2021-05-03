@@ -67,6 +67,13 @@ Curriculum learning for reinforcement learning domains: A framework and
 \newblock 2019. \BibDash
 \newblock P.~2535--2544.
 
+\bibitem{kocmi2017curriculum}
+\selectlanguageifdefined{english}
+\BibEmph{Kocmi~Tom, Bojar~Ondrej}. Curriculum learning and minibatch bucketing
+  in neural machine translation~// \BibEmph{arXiv preprint arXiv:1707.09533}.
+  \BibDash
+\newblock 2017.
+
 \bibitem{brown2020language}
 \selectlanguageifdefined{english}
 Language models are few-shot learners~/ Tom~B~Brown, Benjamin~Mann, Nick~Ryder
@@ -95,5 +102,12 @@ MITRE at SemEval-2019 task 5: Transfer learning for multilingual hate speech
 \BibEmph{Wu~Xiaoxia, Dyer~Ethan, Neyshabur~Behnam}. When Do Curricula Work?~//
   \BibEmph{arXiv preprint arXiv:2012.03107}. \BibDash
 \newblock 2020.
+
+\bibitem{zhang2018empirical}
+\selectlanguageifdefined{english}
+An empirical exploration of curriculum learning for neural machine
+  translation~/ Xuan~Zhang, Gaurav~Kumar, Huda~Khayrallah et~al.~//
+  \BibEmph{arXiv preprint arXiv:1811.00739}. \BibDash
+\newblock 2018.
 
 \end{thebibliography}
