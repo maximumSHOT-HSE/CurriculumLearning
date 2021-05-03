@@ -1,0 +1,67 @@
+\begin{thebibliography}{1}
+\def\selectlanguageifdefined#1{
+\expandafter\ifx\csname date#1\endcsname\relax
+\else\selectlanguage{#1}\fi}
+\providecommand*{\href}[2]{{\small #2}}
+\providecommand*{\url}[1]{{\small #1}}
+\providecommand*{\BibUrl}[1]{\url{#1}}
+\providecommand{\BibAnnote}[1]{}
+\providecommand*{\BibEmph}[1]{#1}
+\ProvideTextCommandDefault{\cyrdash}{\iflanguage{russian}{\hbox
+  to.8em{--\hss--}}{\textemdash}}
+\providecommand*{\BibDash}{\ifdim\lastskip>0pt\unskip\nobreak\hskip.2em plus
+  0.1em\fi
+\cyrdash\hskip.2em plus 0.1em\ignorespaces}
+\renewcommand{\newblock}{\ignorespaces}
+
+\bibitem{vaswani2017attention}
+\selectlanguageifdefined{english}
+Attention is all you need~/ Ashish~Vaswani, Noam~Shazeer, Niki~Parmar et~al.~//
+  \BibEmph{arXiv preprint arXiv:1706.03762}. \BibDash
+\newblock 2017.
+
+\bibitem{devlin2018bert}
+\selectlanguageifdefined{english}
+Bert: Pre-training of deep bidirectional transformers for language
+  understanding~/ Jacob~Devlin, Ming-Wei~Chang, Kenton~Lee,
+  Kristina~Toutanova~// \BibEmph{arXiv preprint arXiv:1810.04805}. \BibDash
+\newblock 2018.
+
+\bibitem{narvekar2020curriculum}
+\selectlanguageifdefined{english}
+Curriculum learning for reinforcement learning domains: A framework and
+  survey~/ Sanmit~Narvekar, Bei~Peng, Matteo~Leonetti et~al.~//
+  \BibEmph{Journal of Machine Learning Research}. \BibDash
+\newblock 2020. \BibDash
+\newblock Vol.~21, no. 181. \BibDash
+\newblock P.~1--50.
+
+\bibitem{hacohen2019power}
+\selectlanguageifdefined{english}
+\BibEmph{Hacohen~Guy, Weinshall~Daphna}. On the power of curriculum learning in
+  training deep networks~// International Conference on Machine Learning~/
+  PMLR. \BibDash
+\newblock 2019. \BibDash
+\newblock P.~2535--2544.
+
+\bibitem{brown2020language}
+\selectlanguageifdefined{english}
+Language models are few-shot learners~/ Tom~B~Brown, Benjamin~Mann, Nick~Ryder
+  et~al.~// \BibEmph{arXiv preprint arXiv:2005.14165}. \BibDash
+\newblock 2020.
+
+\bibitem{mermer2017scalable}
+\selectlanguageifdefined{english}
+\BibEmph{Mermer~Melike~Nur, Amasyali~Mehmet~Fatih}. Scalable Curriculum
+  Learning for Artificial Neural Networks~// \BibEmph{IPSI BGD TRANSACTIONS ON
+  INTERNET RESEARCH}. \BibDash
+\newblock 2017. \BibDash
+\newblock Vol.~13, no.~2.
+
+\bibitem{wu2020curricula}
+\selectlanguageifdefined{english}
+\BibEmph{Wu~Xiaoxia, Dyer~Ethan, Neyshabur~Behnam}. When Do Curricula Work?~//
+  \BibEmph{arXiv preprint arXiv:2012.03107}. \BibDash
+\newblock 2020.
+
+\end{thebibliography}
