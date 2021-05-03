@@ -74,6 +74,13 @@ Curriculum learning for reinforcement learning domains: A framework and
   \BibDash
 \newblock 2017.
 
+\bibitem{kurdi2020text}
+\selectlanguageifdefined{english}
+\BibEmph{Kurdi~M~Zakaria}. Text Complexity Classification Based on Linguistic
+  Information: Application to Intelligent Tutoring of ESL~// \BibEmph{arXiv
+  preprint arXiv:2001.01863}. \BibDash
+\newblock 2020.
+
 \bibitem{brown2020language}
 \selectlanguageifdefined{english}
 Language models are few-shot learners~/ Tom~B~Brown, Benjamin~Mann, Nick~Ryder
@@ -109,5 +116,21 @@ An empirical exploration of curriculum learning for neural machine
   translation~/ Xuan~Zhang, Gaurav~Kumar, Huda~Khayrallah et~al.~//
   \BibEmph{arXiv preprint arXiv:1811.00739}. \BibDash
 \newblock 2018.
+
+\bibitem{ay2006unifying}
+\selectlanguageifdefined{english}
+A unifying framework for complexity measures of finite systems~/ Nihat~Ay,
+  Eckehard~Olbrich, Nils~Bertschinger, J{\"u}rgen~Jost~// Proceedings of ECCS~/
+  Citeseer. \BibDash
+\newblock Vol.~6. \BibDash
+\newblock 2006.
+
+\bibitem{van2010using}
+\selectlanguageifdefined{english}
+\BibEmph{van~der Sluis~Frans, van~den Broek~Egon~L}. Using complexity measures
+  in information retrieval~// Proceedings of the third symposium on information
+  interaction in context. \BibDash
+\newblock 2010. \BibDash
+\newblock P.~383--388.
 
 \end{thebibliography}
