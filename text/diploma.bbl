@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \def\selectlanguageifdefined#1{
 \expandafter\ifx\csname date#1\endcsname\relax
 \else\selectlanguage{#1}\fi}
@@ -27,6 +27,29 @@ Bert: Pre-training of deep bidirectional transformers for language
   Kristina~Toutanova~// \BibEmph{arXiv preprint arXiv:1810.04805}. \BibDash
 \newblock 2018.
 
+\bibitem{platanios2019competence}
+\selectlanguageifdefined{english}
+Competence-based curriculum learning for neural machine translation~/
+  Emmanouil~Antonios~Platanios, Otilia~Stretcu, Graham~Neubig et~al.~//
+  \BibEmph{arXiv preprint arXiv:1903.09848}. \BibDash
+\newblock 2019.
+
+\bibitem{bengio2009curriculum}
+\selectlanguageifdefined{english}
+Curriculum learning~/ Yoshua~Bengio, J{\'e}r{\^o}me~Louradour, Ronan~Collobert,
+  Jason~Weston~// Proceedings of the 26th annual international conference on
+  machine learning. \BibDash
+\newblock 2009. \BibDash
+\newblock P.~41--48.
+
+\bibitem{xu2020curriculum}
+\selectlanguageifdefined{english}
+Curriculum learning for natural language understanding~/ Benfeng~Xu,
+  Licheng~Zhang, Zhendong~Mao et~al.~// Proceedings of the 58th Annual Meeting
+  of the Association for Computational Linguistics. \BibDash
+\newblock 2020. \BibDash
+\newblock P.~6095--6104.
+
 \bibitem{narvekar2020curriculum}
 \selectlanguageifdefined{english}
 Curriculum learning for reinforcement learning domains: A framework and
@@ -49,6 +72,15 @@ Curriculum learning for reinforcement learning domains: A framework and
 Language models are few-shot learners~/ Tom~B~Brown, Benjamin~Mann, Nick~Ryder
   et~al.~// \BibEmph{arXiv preprint arXiv:2005.14165}. \BibDash
 \newblock 2020.
+
+\bibitem{gertner2019mitre}
+\selectlanguageifdefined{english}
+MITRE at SemEval-2019 task 5: Transfer learning for multilingual hate speech
+  detection~/ Abigail~S~Gertner, John~Henderson, Elizabeth~Merkhofer et~al.~//
+  Proceedings of the 13th International Workshop on Semantic Evaluation.
+  \BibDash
+\newblock 2019. \BibDash
+\newblock P.~453--459.
 
 \bibitem{mermer2017scalable}
 \selectlanguageifdefined{english}

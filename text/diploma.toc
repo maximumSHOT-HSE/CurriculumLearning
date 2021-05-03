@@ -5,11 +5,11 @@
 \contentsline {subsection}{\numberline {1.1}Возникновение обучения по плану}{7}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Применение обучения по плану в смежных сферах машинного обучения}{7}{subsection.1.2}%
 \contentsline {subsection}{\numberline {1.3}Применение обучения по плану в обработке естественного языка}{8}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Существующие метрики оценки сложности текстов}{9}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Выводы}{9}{subsection.1.5}%
-\contentsline {section}{\numberline {2}Глава1}{10}{section.2}%
-\contentsline {section}{\numberline {3}Глава2}{11}{section.3}%
-\contentsline {section}{\numberline {4}Глава3}{12}{section.4}%
-\contentsline {section}{\numberline {5}Глава4}{13}{section.5}%
-\contentsline {section}{\numberline {6}Заключение}{14}{section.6}%
-\contentsline {section}{Список литературы}{15}{section*.7}%
+\contentsline {subsection}{\numberline {1.4}Существующие метрики оценки сложности текстов}{10}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Выводы}{10}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Глава1}{11}{section.2}%
+\contentsline {section}{\numberline {3}Глава2}{12}{section.3}%
+\contentsline {section}{\numberline {4}Глава3}{13}{section.4}%
+\contentsline {section}{\numberline {5}Глава4}{14}{section.5}%
+\contentsline {section}{\numberline {6}Заключение}{15}{section.6}%
+\contentsline {section}{Список литературы}{16}{section*.7}%
