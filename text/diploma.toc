@@ -12,15 +12,12 @@
 \contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{15}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Сбор статистик}{18}{subsection.2.3}%
 \contentsline {subsection}{\numberline {2.4}Выводы}{19}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Конфигруация экспериментов}{20}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Алгоритмы семплирования}{20}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Данные}{20}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Метод сравнения метрик}{20}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Выводы}{20}{subsection.3.4}%
-\contentsline {section}{\numberline {4}Эксперименты}{21}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Влияние обучения по плану на задаче предобучения}{21}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Влияние обучения по плану на задаче классификации}{21}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Влияние обучения по плану на шумном корпусе данных}{21}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Выводы}{21}{subsection.4.4}%
-\contentsline {section}{Заключение}{22}{section*.7}%
-\contentsline {section}{Список литературы}{23}{section*.8}%
+\contentsline {section}{\numberline {3}Эксперименты}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{20}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{20}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Влияние обучения по плану на задаче предобучения}{20}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче классификации}{20}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на шумном корпусе данных}{20}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Выводы}{20}{subsection.3.6}%
+\contentsline {section}{Заключение}{21}{section*.7}%
+\contentsline {section}{Список литературы}{22}{section*.8}%
