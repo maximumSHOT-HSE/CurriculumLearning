@@ -104,6 +104,14 @@ MITRE at SemEval-2019 task 5: Transfer learning for multilingual hate speech
 \newblock 2017. \BibDash
 \newblock Vol.~13, no.~2.
 
+\bibitem{srivastava2020noisy}
+\selectlanguageifdefined{english}
+\BibEmph{Srivastava~Ankit, Makhija~Piyush, Gupta~Anuj}. Noisy Text Data:
+  Achilles’ Heel of BERT~// Proceedings of the Sixth Workshop on Noisy
+  User-generated Text (W-NUT 2020). \BibDash
+\newblock 2020. \BibDash
+\newblock P.~16--21.
+
 \bibitem{wu2020curricula}
 \selectlanguageifdefined{english}
 \BibEmph{Wu~Xiaoxia, Dyer~Ethan, Neyshabur~Behnam}. When Do Curricula Work?~//

@@ -17,8 +17,8 @@
 \contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{20}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Семплеры}{21}{subsection.3.3}%
 \contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{22}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{23}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{24}{subsection.3.6}%
-\contentsline {subsection}{\numberline {3.7}Выводы}{24}{subsection.3.7}%
-\contentsline {section}{Заключение}{25}{section*.18}%
-\contentsline {section}{Список литературы}{26}{section*.19}%
+\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{24}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{26}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Выводы}{27}{subsection.3.7}%
+\contentsline {section}{Заключение}{28}{section*.18}%
+\contentsline {section}{Список литературы}{29}{section*.19}%
