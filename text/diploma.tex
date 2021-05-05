@@ -3,6 +3,7 @@
 \documentclass{spbau-diploma}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{subcaption}
 \begin{document}
 % Год, город, название университета и факультета предопределены,
 % но можно и поменять.
@@ -413,15 +414,147 @@ E = A_1H(\mu_1) + A_2(S_1 - H(\mu_1)) + B_2S_2
 \subsection{Влияние обучения по плану на задаче предобучения}
 графики для всех семплеров, описать графики и сделать выводы по ним
 таблица,описать таблицу и сделать выводы по ней
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{BooksCorpus_CB}
+		\caption{CB}
+		\label{fig:BooksCorpus_graphs_CB}
+	\end{subfigure}
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{BooksCorpus_DB}
+		\caption{DB}
+		\label{fig:BooksCorpus_graphs_DB}
+	\end{subfigure}
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{BooksCorpus_Hyp}
+		\caption{Hyp}
+		\label{fig:BooksCorpus_graphs_Hyp}
+	\end{subfigure}\\
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{BooksCorpus_SS}
+		\caption{SS}
+		\label{fig:BooksCorpus_graphs_SS}
+	\end{subfigure}
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.2]{BooksCorpus_SM}
+		\caption{SM}
+		\label{fig:BooksCorpus_graphs_SM}
+	\end{subfigure}
+	\begin{subfigure}{.3\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{BooksCorpus_legend}
+%		\caption{legend}
+		\label{fig:BooksCorpus_graphs_legend}
+	\end{subfigure}
+	\caption{Графики зависимости функции потерь от числа шагов обучения на задаче предобучения на датасете BooksCorpus на первых 15\% обучения}
+	\label{fig:BooksCorpus_graphs}
+\end{figure}
+
+\begin{table}[h]
+	\label{table:BooksCorpus_pretraining}
+	\caption{Среднее число шагов всех конфигураций метрика-семплер на задаче предобучения на датасете BooksCorpus, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$}.
+	\centering
+	\begin{tabular}{l|c|ccccc|c}
+		Корпус данных & Порог & \multicolumn{5}{c}{BooksCorpus} &\\
+		\hline
+		семплер & & CB & DB & Hyp & SS & SM & min loss\\
+		\hline
+		max wf rk & 2.00 & $\infty$ & 17.5k & {\bf 16.5k} & {\bf 16.5k} & 27k & {\bf 1.58} \\
+		TF-IDF & 2.00 & $\infty$ & 34k & 35k & 37.5k & $\infty$ & 1.84 \\
+		\hline
+		база & 2.00 & \multicolumn{5}{c}{9.5k} & 1.58 \\
+		\hline
+		\hline
+		& & \multicolumn{5}{c}{BooksCorpus} & \\
+		\hline
+		EE & 3.50 & $\infty$ & 4k & 3.5k & 4.5k & 9.5k & 2.25 \\
+		TSE & 3.50 & $\infty$ & 9k & 9k & 8.5k & 18k & 2.60 \\
+		правдоподобие & 3.50 & $\infty$ & 13.5k & 13.5k & 15.5k & 50k & 2.83 \\
+		длина & 3.50 & $\infty$ & 50.5k & $\infty$ & - & - & 3.45 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\pagebreak
 \subsection{Влияние обучения по плану на задаче классификации}
 графики для всех семплеров, описать графики и сделать выводы по ним
 таблица,описать таблицу и сделать выводы по ней
+
+\begin{table}[h]
+	\label{table:s140_fine_tuning}
+	\caption{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете sentiment140, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$}.
+	\centering
+	\begin{tabular}{l|c|ccccc|c}
+		Корпус данных & Порог & \multicolumn{5}{c}{sentiment140}&\\
+		\hline
+		семплер & & CB & DB & Hyp & SS & SM & Точность\\
+		\hline
+		длина & 85.5\% & 112.5k & 20k & 19k & - & - & {\bf 86.2\%} \\
+		TF-IDF & 85.5\% & 115.5k & 21.5k & 19.5k & {\bf 16.5k} & 22k & 86.7\% \\
+		TSE & 85.5\% & 95.5k & {\bf 16.5k} & 20.5k & 21.5k & 18k & 86.8\% \\
+		EE & 85.5\% & 59k & 19.3k & 23k & 20k & 19k & 86.7\% \\
+		max wf rk & 85.5\% & 70k & 18.5k & 19.5k & {\bf 17k} & 19k & 86.7\% \\
+		правдоподобие & 85.5\% & 112k & {\bf 17.5k} & 21.5k & {\bf 17.5k} & 21.5k & 86.7\% \\
+		MLM-loss & 85.5\% & 59.5k & 21k & 23.5k & ? & ? & {\bf 86.1\%} \\
+		\hline
+		база & 85.5\% & \multicolumn{5}{c}{17.5k} & 87\%
+	\end{tabular}
+\end{table}
+
+\begin{table}[h]
+	\label{table:hnd_fine_tuning}
+	\caption{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете Hyperpartisan News Detection, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$}.
+	\centering
+	\begin{tabular}{l|c|ccccc|c}
+		Корпус данных & Порог & \multicolumn{5}{c}{HND (92.9\%)}&\\
+		\hline
+		семплер & & CB & DB & Hyp & SS & SM & Точность\\
+		\hline
+		длина & 92.9\% & 55k & 23k & 22.5k & - & - & 93.7\% \\
+		TF-IDF & 92.9\%  & $\infty$ & 19.5k & 24k & 23.5k & 33k & 93.5\% \\
+		TSE & 92.9\%  & 56.5k & 21k & 23k & 22k & 31k & 93.8\% \\
+		EE & 92.9\%  & 71.5k & 25.5k & 22.5k & 19.5k & 32.5k & 93.8\% \\
+		max wf rk & 92.9\%  & $\infty$ & 22k & 20.5k & 22.5k & 39k & 93.6\% \\
+		правдоподобие & 92.9\%  & $\infty$ & 20k & 24k & 20k & 30k & 93.8\% \\
+		\hline
+		база & 92.9\%  & \multicolumn{5}{c}{22k} & 93.8\%
+	\end{tabular}
+\end{table}
+
+\pagebreak
 \subsection{Влияние обучения по плану на шумном корпусе данных}
 описать мотивацию,описать какие виды шумов были использованы,расказать,что можно использовать искусственную метрику,показать график и описать его,сделать выводы
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{.45\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{keyboard_noise_level_short_prefix}
+%		\caption{Метрика "уровень шума" ускоряет обучение до 2.5 раз}
+		\label{fig:s140_noise_lvl}
+	\end{subfigure}
+	\begin{subfigure}{.45\textwidth}
+		\centering
+		\includegraphics[scale=0.5]{keyboard_noise_TPW_win}
+%		\caption{\\ }
+		\label{fig:s140_noise_tpw}
+	\end{subfigure}
+	\caption{Графики зависимости точности от числа шагов обучения на задаче классификации на датасете sentiment140 на первых 10\% обучения при добавлении клавиатурного шума}
+	\label{fig:s140_noise}
+\end{figure}
+
 \subsection{Выводы}
 сделать выводы по главе
 \section*{Заключение}
 сделать выводы по всей работе,достигнута ли цель?выполнены ли задачи?объяснить возможные причины отрицательного результата и описать реальные направления для дальнейших исследований
+
 
 % размещенный с предпочтением "вверху страницы"
 % \begin{figure}[t]
