@@ -1,0 +1,24 @@
+\selectlanguage *{russian}
+\contentsline {section}{Аннотация}{3}{section*.2}%
+\contentsline {section}{Введение}{5}{section*.3}%
+\contentsline {section}{\numberline {1}Обзор литературы}{7}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Возникновение обучения по плану}{7}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Применение обучения по плану в смежных сферах машинного обучения}{7}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Применение обучения по плану в обработке естественного языка}{8}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Существующие метрики оценки сложности текстов}{11}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Выводы}{12}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{13}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Описание метрик}{13}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{16}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Сбор статистик}{18}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Выводы}{19}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Эксперименты}{20}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{20}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{20}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Семплеры}{21}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{22}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{24}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{26}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Выводы}{27}{subsection.3.7}%
+\contentsline {section}{Заключение}{28}{section*.18}%
+\contentsline {section}{Список литературы}{29}{section*.19}%
