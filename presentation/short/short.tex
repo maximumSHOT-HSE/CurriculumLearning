@@ -149,15 +149,16 @@
 \begin{frame}
 	\frametitle{Поле исследований}
 	\begin{table}
-		\begin{tabular}{l|cccc}
-			метрика & классификация & перевод & предобучение & NLU \\
+		\begin{tabular}{l|cc}
+			метрика & перевод & NLU \\
 			\hline
-			длина & & $\checkmark$ & & \\
-			{\it языковая}\footnote[1]{Sluis et al. (2010) показали слабую корреляцию с реальной сложностью текста} & & & & \\
-			энтропия & & & & \\
-			модельная & & & & $\checkmark$ \\
-			частота слов & & $\checkmark$ & & \\
-			правдоподобие & & $\checkmark$ & & \\
+			длина & Platanios et al. (2019) & \\
+			{\it языковая}\footnote[1]{Sluis et al. (2010) показали слабую корреляцию с реальной сложностью текста} & &\\
+			энтропия & &\\
+			модельная & & Xu et al. (2020) \\
+			частота слов & Kocmi et al. (2017) & \\
+%			& Zhang et al. (2018) & \\
+			правдоподобие & Platanios et al. (2019) &\\
 			\hline
 		\end{tabular}
 	\end{table}
@@ -166,8 +167,7 @@
 		\item покрыто {\bf узкое} множество метрик (длина - лучшая метрика на данный момент)
 		\item большинство работ улучшают {\bf качество} модели, но {\bf не скорость} обучения
 		\item не рассмотрен случай с {\bf шумными} тренировочными данными
-	\end{itemize}
-\end{frame}
+	\end{itemize}\end{frame}
 
 \begin{frame}
 	\frametitle{Цель и задачи}
@@ -255,7 +255,8 @@
 					\hline
 					1 CPU & $\approx$ 2 недели \\
 					5 CPU & $\approx$ 1-2 дня \\
-					20 CPU & < 6 ч. \\
+					20 CPU & < 14 ч. \\
+					40 CPU & < 6 ч. \\
 					\hline
 				\end{tabular}
 			\end{table}
