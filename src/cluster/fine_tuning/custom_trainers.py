@@ -192,62 +192,56 @@ class CurriculumSamplerCompetenceBased(Sampler):
     def __init__(
         self,
         data_source: Optional[Sized],
-        state: TrainerState,
-        n_see: int,
+        curriculum_ratio: float,
+        max_steps: int,
         batch_size: int,
-        c0: float = 0.01,
+        c0: float = 0.2,
         type: str = 'sqrt'
     ):
         super().__init__(data_source)
         self.data_source = data_source
-        self.size = len(data_source)
-        self.state = state
-        self.n_see = n_see
+        self.curriculum_ratio = curriculum_ratio
+        self.max_steps = max_steps
         self.batch_size = batch_size
         assert type in ['sqrt', 'linear']
         self.type = type
-        self.T = math.ceil(self.n_see * self.size / self.batch_size)
         self.c0 = c0
+        self.T = int(curriculum_ratio * max_steps)
         self.competence = {
             'sqrt': self.get_sqrt_competence(),
             'linear': self.get_linear_comptence()
         }[self.type]
-
+        self.size = len(self.data_source)
         self.ps = []
-        self.indices = self.build_indices()
 
-    def build_indices(self):
-        indices = []
-        for t in range(0, self.T):
+    def __iter__(self):
+        for t in range(self.max_steps):
             prefix_size = math.ceil(self.competence(t) * self.size)
             prefix_size = max(1, min(prefix_size, self.size))
             ids = np.random.choice(a=prefix_size, size=self.batch_size, replace=True)
-            indices.append(ids)
             self.ps.append(prefix_size)
-        return np.concatenate(indices).tolist()
-
-    def __iter__(self):
-        yield from self.indices
+            for id in ids:
+                yield int(id)
 
     def __len__(self):
-        return len(self.indices)
+        return self.max_steps * self.batch_size
 
 
 class CurriculumTrainerCompetenceBased(Trainer):
 
-    def __init__(self, n_see=3, batch_size=128, c0=0.01, type='sqrt', *args, **kwargs):
+    def __init__(self, curriculum_ratio=0.2, c0=0.2, type='sqrt', *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.n_see = n_see
-        self.batch_size = batch_size
+        assert self.args.max_steps > 0
+        self.curriculum_ratio = curriculum_ratio
         self.c0 = c0
         self.type = type
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         return CurriculumSamplerCompetenceBased(
             data_source=self.train_dataset,
-            state=self.state,
-            n_see=self.n_see,
-            batch_size=self.batch_size,
+            curriculum_ratio=self.curriculum_ratio,
+            max_steps=self.args.max_steps,
+            batch_size=self.args.train_batch_size,
             c0=self.c0,
             type=self.type
         )
@@ -282,4 +276,68 @@ class FromFileTrainer(Trainer):
         ):
             return None
         return FromFileSampler(self.train_dataset, self.file)
+
+
+class LadderSampler(Sampler):
+
+    def __init__(
+        self,
+        data_source,
+        curriculum_ratio: float,
+        max_steps: int,
+        n_stairs: int,
+        batch_size: int,
+    ):
+        super().__init__(data_source)
+        self.data_source = data_source
+        self.curriculum_ratio = curriculum_ratio
+        self.max_steps = max_steps
+        self.n_stairs = n_stairs
+        self.batch_size = batch_size
+
+
+        self.ps = []
+
+    def __iter__(self):
+        curriculum_length = int(self.curriculum_ratio * self.max_steps)
+        stair_length = int(curriculum_length / self.n_stairs)
+        for t in range(self.max_steps):
+            stair_height = (t // stair_length + 1) / self.n_stairs
+            stair_height = np.clip(stair_height, 0, 1)
+
+            prefix_size = int(stair_height * len(self.data_source))
+            prefix_size = np.clip(prefix_size, 1, len(self.data_source))
+
+            self.ps.append(prefix_size)
+
+            ids = np.random.choice(a=prefix_size, size=self.batch_size, replace=True).reshape(-1)
+            for id in ids:
+                yield int(id)
+
+    def __len__(self):
+        return self.max_steps * self.batch_size
+
+
+class LadderTrainer(Trainer):
+
+    def __init__(
+        self,
+        curriculum_ratio: float = 0.7,
+        n_stairs: int = 3,
+        *args,
+        **kwargs
+    ):
+        super().__init__(*args, **kwargs)
+        assert self.args.max_steps > 0
+        self.curriculum_ratio = curriculum_ratio
+        self.n_stairs = n_stairs
+
+    def _get_train_sampler(self):
+        return LadderSampler(
+            data_source=self.train_dataset,
+            curriculum_ratio=self.curriculum_ratio,
+            max_steps=self.args.max_steps,
+            n_stairs=self.n_stairs,
+            batch_size=self.args.train_batch_size
+        )
 
