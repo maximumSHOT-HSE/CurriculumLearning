@@ -24,7 +24,7 @@
  	{\footnotesize Научный руководитель: Ямщиков Иван Павлович}
 }
 \institute[НИУ ВШЭ СПБ]{Санкт-Петербургская школа физико-математических и компьютерных наук \\ НИУ ВШЭ СПБ}
-\date{20 апреля 2021 г.}
+\date{11 мая 2021 г.}
 
 \begin{document}
 
@@ -32,115 +32,96 @@
 
 \begin{frame}
 	\frametitle{Мотивация. Применения}
-	\begin{columns}
-		\column{0.5\textwidth}
-		\begin{itemize}
-			\item социальные сети
-			\item голосовые помощники
-			\item переводчики
-			\item чат-боты
-		\end{itemize}
-		\column{0.5\textwidth}
-		\includegraphics[scale=0.2]{nlp_real_life.png}
-	\end{columns}
-	\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
-	\begin{columns}
-		\column{0.5\textwidth}
-		\begin{itemize}
-			\item классификация
-			\item машинный перевод
-			\item вопросно-ответные системы
-		\end{itemize}
-		\column{0.5\textwidth}
-		\begin{itemize}
-			\item небольшие языковые модели
-			\item GPT-3
-			\begin{itemize}
-				\item очень большая модель
-			\end{itemize}
-			\item {\bf BERT}
-			\begin{itemize}
-				\item высокое качество
-			\end{itemize}
-		\end{itemize}
-	\end{columns}
+	\begin{itemize}
+		\item Основные задачи NLP и их приложения
+			\begin{enumerate}
+				\item классификация текстов (грубая речь в соч. сетях)
+				\item машинный перевод (яндекс.переводчик)
+				\item построение вопросно-ответных систем (чат-боты)
+			\end{enumerate}
+		\item Как решаются задачи в NLP
+			\begin{enumerate}
+				\item Раньше: небольшие языковые модели
+				\item Сейчас: трансформеры (большие нейронные сети со сложной архитектурой)
+			\end{enumerate}
+		\item В данной работе используется трансформер BERT
+			\begin{enumerate}
+				\item наиболее популярный
+				\item имеет высокое качество
+				\item имеет сравнительно небольшой размер $\Rightarrow$ удобно ставить эксперименты
+			\end{enumerate}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Мотивация. Обучение языковой модели}
+	
 	\begin{itemize}
-		\item текст $\rightarrow$ токены $\rightarrow$ BERT $\rightarrow$ предсказание
-	\end{itemize}
-	\includegraphics[scale=0.4]{pre_training_fine_tuning.png}
-	\begin{columns}
-		\column{0.5\textwidth}
+		\item Для применения модели ее нужно обучить
+		\item Обучение состоит из двух этапов:
+			\begin{table}
+				\begin{tabular}{|c|c|c|c|}
+					\hline
+					Этап & Время обучения & Корпус данных & Размер \\
+					\hline
+					Предобучение & 1-2 недели & Wikipedia & 3-600M \\
+					&& BooksCorpus & 74M \\
+					\hline
+					Дообучение & 1-2 дня & HND & 600k-2M \\
+					&& s140 & 1.6M\\
+					&& ISWL & 200-230k \\
+					&& QQP & 364k \\
+					&& MNLI & 393k \\
+					\hline
+				\end{tabular}
+			\end{table}
+		\item Проблемы:
 			\begin{itemize}
-				\item требуемое время: от 1-2 дней до {\bf 1-2 недель}
-				\item мировой рекорд: 47 минут с использованием {\bf 1472} GPU
-
-				\begin{table}
-					\begin{tabular}{l|c}
-						Корпус данных & Размер \\
-						\hline\hline
-						Wikipedia & 3-600M \\
-						BookCorpus & 74M\\
-					\end{tabular}
-				\end{table}
+				\item {\bf долго} обучать
+				\item нужно обрабатывать {\bf большие} объемы данных
 			\end{itemize}
-		\column{0.5\textwidth}
-			\begin{itemize}
-				\item требуемое время: 1-2 дня
-
-				\begin{table}
-					\begin{tabular}{l|c}
-						Корпус данных & Размер \\
-						\hline\hline
-						HND & 600k-2M \\
-						s140 & 1.6M \\
-						IWSLT & 200-230k \\
-						QQP & 364k \\
-						MNLI & 393k \\
-					\end{tabular}
-				\end{table}
-			\end{itemize}
-	\end{columns}
-	\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
-	\begin{itemize}
-		\item {\bf долго} обучать
-		\item нужно обрабатывать {\bf большие} объемы данных
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Обучение по плану. Определение}
+	
+	Обучение по плану состоит из:
+		\begin{enumerate}
+			\item сортировки данных по {\bf метрике} сложности
+			\item семплирования данных\footnote{Выбирать примеры из датасета}
+		\end{enumerate}
+
+	Пример\footnote{Platanios et al., Competence-based Curriculum Learning for Neural Machine Translation, 2019}
 	\begin{columns}
 		\column{0.5\textwidth}
 		\begin{enumerate}
-			\item сортируем данные по сложности (длина)
-			\item в течение $T$ шагов (рассмотрим $t$-й шаг)
-			\begin{itemize}
-				\item вычисляем $c(t) \in [0, 1]$
-				\item формируем пакет данных маленького размера из множества $c(t)$ {\bf легких} примеров
-				\item шаг обучения
-			\end{itemize}
+			\item сортируем тексты по длине (метрика=длина)
+			\item семплируем данные из синей зоны
+			\item синяя зона {\bf растет} вправо в течение обучения
+			\item модель учится на все более сложных примерах
 		\end{enumerate}
 		\column{0.5\textwidth}
 		\includegraphics[scale=0.8]{acl19_algo.png}
 	\end{columns}
-	\let\thefootnote\relax\footnotetext{Platanios et al., Competence-based Curriculum Learning for
-		Neural Machine Translation, 2019}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Метод сравнения алгоритмов обучения}
 	\begin{columns}
 		\column{0.5\textwidth}
-		\begin{enumerate}
-			\item фиксируем: корпус данных, модель, семплер
-			\item обучаем модель
-			\item фиксируем достаточно большой порог (точность, функция потерь)
-			\item сравниваем среднее число шагов, необходимое для достижения данного порога
-		\end{enumerate}
+		
+		\begin{itemize}
+			\item Метрика -- объект изучения
+			\item Хочется понять, как разные метрики влияют на скорость обучения
+			\item Для этого нужно научиться сравнивать две метрики
+			\item Для этого:
+				\begin{enumerate}
+					\item фиксируем все (кроме метрик)
+					\item сравниваем среднее число шагов, необходимое для достижения порога
+				\end{enumerate}
+		\end{itemize}
+		
 		\column{0.5\textwidth}
 		\includegraphics[scale=0.25]{compare}
 	\end{columns}
@@ -148,30 +129,26 @@
 
 \begin{frame}
 	\frametitle{Поле исследований}
-	\begin{table}
-		\begin{tabular}{l|cc}
-			метрика & перевод & NLU \\
-			\hline
-			длина & Platanios et al. (2019) & \\
-			{\it языковая}\footnote[1]{Sluis et al. (2010) показали слабую корреляцию с реальной сложностью текста} & &\\
-			энтропия & &\\
-			модельная & & Xu et al. (2020) \\
-			частота слов & Kocmi et al. (2017) & \\
-%			& Zhang et al. (2018) & \\
-			правдоподобие & Platanios et al. (2019) &\\
-			\hline
-		\end{tabular}
-	\end{table}
-	\begin{itemize}
-		\item не изучено влияние обучения по плану на задачах {\bf классификации и предобучения}
-		\item покрыто {\bf узкое} множество метрик (длина - лучшая метрика на данный момент)
-		\item большинство работ улучшают {\bf качество} модели, но {\bf не скорость} обучения
-		\item не рассмотрен случай с {\bf шумными} тренировочными данными
-	\end{itemize}\end{frame}
+
+	\begin{enumerate}
+		\item Не изучено влияние обучения по плану на задачах {\bf классификации и предобучения}
+			\begin{itemize}
+				\item Машинный перевод (Platanios et al. (2019), Kocmi et al. (2017))
+				\item NLU (Xu et al. (2020))
+			\end{itemize}
+		\item Покрыто {\bf узкое} множество метрик (длина - лучшая метрика на данный момент)
+		\item Мало исследований влияния обучения по плану на скорость обучения
+		\item Не рассмотрен {\bf важный} случай с {\bf шумными} тренировочными данными
+		\begin{itemize}
+			\item Wu et al. (2020) показали {\bf ускорение} обучения на классификации картинок только при использовании {\bf шумных} датасетов
+			\item Большинство автоматически собираемых датасетов -- шумные
+			\item Шумные данные дорого очищать
+		\end{itemize}
+	\end{enumerate}\end{frame}
 
 \begin{frame}
 	\frametitle{Цель и задачи}
-	{\bf Цель:} ускорить обучение языковой модели BERT с помощью обучения по плану за счет применения улучшенной метрики сложности текстовых данных на задачах классификации и предобучения
+	{\bf Цель:} исследовать возможность ускорения обучения языковой модели BERT на задачах классификации и предобучения с помощью обучения по плану за счет применения улучшенной метрики сложности текстовых данных
 	
 	{\bf Задачи:}
 	\begin{enumerate}
@@ -271,31 +248,6 @@
 
 \begin{frame}
 	\frametitle{Сравнение метрик. Предобучение}
-	\begin{columns}
-		\column{0.5\textwidth}
-			\begin{itemize}
-				\item Данные: 
-				
-					Wikipedia, BookCorpus
-				\item Обучение по плану проигрывает базовому решению от 2 до 5 раз
-				\item Метрики имеют порядок вне зависимости от семплера
-				\begin{enumerate}
-					\item {\bf максимальный ранг слова}
-					\item TF-IDF
-					\item EE
-					\item TSE
-					\item правдоподобие
-					\item {\bf длина}
-				\end{enumerate}
-				\item Длина проигрывает остальным метрикам от 2 до 12 раз
-			\end{itemize}
-		\column{0.5\textwidth}
-			\includegraphics[scale=0.28]{BookCorpus_results}
-	\end{columns}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Сравнение метрик. Предобучение}
 	$\max\Delta \le 3k$
 	\begin{table}
 		\begin{tabular}{l|c|ccccc|c}
@@ -354,26 +306,39 @@
 \begin{frame}
 	\frametitle{Влияние метрик на скорость обучения. Шум}
 	\begin{itemize}
-		\item $p \sim U[0, 0.4]$ -- уровень шума (доля слов с шумом)
-			\begin{itemize}
-				\item {\bf искусственная} метрика
-			\end{itemize}
-		\item виды шума:
+		\item Для рассмотрения данного частного случая нужно искусственно добавить шум в данные
 			\begin{enumerate}
-				\item вставки
-				\item удаления
-				\item {\bf клавиатурный}
+				\item выберем $p \sim U[0, 0.4]$ -- уровень шума
+				\item применим один из трех видов шумов к $p$ буквам в тексте
+				\item виды шума:
+					\begin{enumerate}
+						\item {\bf клавиатурный} -- замена на случайного соседа по клавиатуре (Kumar et al. (2020)))
+						\item ошибки произношения
+						\item случайная перестановка двух символов в слове
+					\end{enumerate}
 			\end{enumerate}
-	\end{itemize}
-%	\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
-	\begin{columns}
-		\column{0.5\textwidth}
+		\item Оказалось, что метрика "уровень шума" ускоряет обучение до 2.5 раз на старте
 		\includegraphics[scale=0.48]{keyboard_noise_level_short_prefix}
-		метрика "уровень шума" ускоряет обучение на старте до 2.5 раз
-		\column{0.5\textwidth}
-		\includegraphics[scale=0.5]{keyboard_noise_TPW_win}
-		{\bf\color{green}$(+)$} метрика TPW ускоряет обучение до 2 раз для достижения 95\% итоговой точности
-	\end{columns}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Влияние метрик на скорость обучения. Шум}
+	\begin{itemize}
+		\item В реальности мы не обладаем информацией о количестве шума в конкретном примере $\Rightarrow$ нужно придумать метрику такую, что:
+		\begin{enumerate}
+			\item сильно коррелирует с уровнем шума
+			\item не опирается на информацию о шуме
+		\end{enumerate}
+		\item Выяснилось, что подходит метрика TPW (среднее число токенов на слово)
+			\begin{itemize}
+				\item у шумных данных TPW больше $\Rightarrow$ модель сначала учится на чистых примерах, плавно переходя к более шумным
+			\end{itemize}
+		\item TPW ускореят обучение в 2 раза для достижения 95\% итоговой точности
+		\centering
+		
+		\includegraphics[scale=0.4]{keyboard_noise_TPW_win}		
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -386,7 +351,6 @@
 		\item Реализованы алгоритмы подсчета метрик на больших объемах данных ($\le 8\%$ от времени обучения)
 		\item Предобучение
 			\begin{itemize}
-				\item есть строгий порядок метрик
 				\item длина -- худшая метрика на предобучении (замедляет обучения до 12 раз, уменьшает качество модели)
 				\item максимальный ранг слова -- лучшая метрика на предобучении (замедляет в $2$ раза {\bf без потери качества})
 			\end{itemize}
@@ -394,6 +358,9 @@
 			\begin{itemize}
 				\item лучшая конфигурация (TF-IDF+SS) ускоряет обучение до 3\% в среднем на классификации
 				\item длина и MLM-loss уменьшают точность модели на 0.6\%
+			\end{itemize}
+		\item Шумные тренировочные данные
+			\begin{itemize}
 				\item 
 				метрика TPW ускоряет обучение до {\bf 2 раз} для достижения 95\% итоговой точности на шумном корпусе данных
 			\end{itemize}
