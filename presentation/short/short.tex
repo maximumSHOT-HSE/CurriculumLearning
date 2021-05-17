@@ -35,7 +35,7 @@
 	\begin{itemize}
 		\item Основные задачи NLP и их приложения
 			\begin{enumerate}
-				\item классификация текстов (грубая речь в соч. сетях)
+				\item классификация текстов (спам, грубая речь в соц. сетях)
 				\item машинный перевод (яндекс.переводчик)
 				\item построение вопросно-ответных систем (чат-боты)
 			\end{enumerate}
@@ -89,9 +89,9 @@
 	Обучение по плану состоит из:
 		\begin{enumerate}
 			\item сортировки данных по {\bf метрике} сложности
-			\item семплирования данных\footnote{Выбирать примеры из датасета}
+			\item семплирования данных (алгоритм выборки данных из датасета)
 		\end{enumerate}
-
+	\vspace*{20pt}
 	Пример\footnote{Platanios et al., Competence-based Curriculum Learning for Neural Machine Translation, 2019}
 	\begin{columns}
 		\column{0.5\textwidth}
@@ -107,110 +107,78 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Метод сравнения алгоритмов обучения}
-	\begin{columns}
-		\column{0.5\textwidth}
-		
+	\frametitle{Обзор существующих решений}
+
+	\begin{enumerate}
+		\item 
+		В большинстве работ изучается влияние обучения по плану на задачах
 		\begin{itemize}
-			\item Метрика -- объект изучения
-			\item Хочется понять, как разные метрики влияют на скорость обучения
-			\item Для этого нужно научиться сравнивать две метрики
-			\item Для этого:
-				\begin{enumerate}
-					\item фиксируем все (кроме метрик)
-					\item сравниваем среднее число шагов, необходимое для достижения порога
-				\end{enumerate}
+			\item Машинного перевода (Platanios et al. (2019), Kocmi et al. (2017))
+			\item NLU\footnote[1]{Построение вопросно-ответных систем} (Xu et al. (2020))
 		\end{itemize}
-		
-		\column{0.5\textwidth}
-		\includegraphics[scale=0.25]{compare}
-	\end{columns}
+	
+		но не на
+		\begin{itemize}
+			\item {\bf Предобучении} языковых моделей
+			\item {\bf Классификации} текстов
+		\end{itemize}
+	
+		\item Обычно берутся очевидные метрики (например, длина)
+		\begin{itemize}
+			\item нет работ, которые расширяют множество метрик
+		\end{itemize}		
+	
+		\item Подавляющее большинство статей использует обучение по плану для улучшения {\bf качества} модели, но {\bf не скорости} ее обучения
+	\end{enumerate}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Поле исследований}
-
-	\begin{enumerate}
-		\item Не изучено влияние обучения по плану на задачах {\bf классификации и предобучения}
-			\begin{itemize}
-				\item Машинный перевод (Platanios et al. (2019), Kocmi et al. (2017))
-				\item NLU (Xu et al. (2020))
-			\end{itemize}
-		\item Покрыто {\bf узкое} множество метрик (длина - лучшая метрика на данный момент)
-		\item Мало исследований влияния обучения по плану на скорость обучения
-		\item Не рассмотрен {\bf важный} случай с {\bf шумными} тренировочными данными
-		\begin{itemize}
-			\item Wu et al. (2020) показали {\bf ускорение} обучения на классификации картинок только при использовании {\bf шумных} датасетов
-			\item Большинство автоматически собираемых датасетов -- шумные
-			\item Шумные данные дорого очищать
-		\end{itemize}
-	\end{enumerate}\end{frame}
-
-\begin{frame}
 	\frametitle{Цель и задачи}
-	{\bf Цель:} исследовать возможность ускорения обучения языковой модели BERT на задачах классификации и предобучения с помощью обучения по плану за счет применения улучшенной метрики сложности текстовых данных
+	{\bf Цель:} исследовать возможность ускорения обучения языковой модели BERT на задачах предобучения модели и классификации текстов с помощью обучения по плану за счет применения улучшенной метрики сложности текстовых данных.
 	
 	{\bf Задачи:}
 	\begin{enumerate}
 		\item Предложить метрики оценки сложности текста
 		\item Реализовать производительные алгоритмы вычисления предложенных метрик на больших корпусах данных
-		\item Сравнить найденные метрики
-		\item Исследовать влияние найденных метрик на скорость обучения языковой модели BERT на чистых и шумных тренировочных данных
+		\item Сравнить эффективность найденных метрик
+		\item Исследовать влияние найденных метрик на скорость обучения языковой модели BERT на разных типах тренировочных данных
 	\end{enumerate}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Поиск метрик}
-	\begin{enumerate}
-		\item  база
-		\begin{itemize}
-			\item {\bf длина}, вероятность правдоподобия (Platanios et al., 2019)
-			\item самое редкое слово в предложении (Xuan Zhang et al., 2018)
-		\end{itemize}
-		\item информационный поиск
-		\begin{itemize}
-			\item {\bf tf-idf}
-		\end{itemize}
-		\item {\bf теория информации} (Nihat Ay et al., 2006)
-		\begin{itemize}
-			\item EE, TSE
-				\begin{columns}
-					\column{0.5\textwidth}
-					\[
-					T=(t_1, t_2, \ldots, t_{i-1},t_i,\ldots, t_n)
-					\]
-					\[
-					\downarrow
-					\]
-					\[
-					\xi=(\xi^1_{t_1},\xi^2_{t_2},\ldots,\xi^{i-1}_{t_{i-1}},\xi^i_{t_i},\ldots,\xi^n_{t_n})
-					\]
-					\[
-					t_i\rightarrow \xi^i_{t_i} =: \mu_i - \text{бинарная случайная величина}
-					\]
-					\column{0.5\textwidth}
-					\begin{table}
-					\begin{tabular}{|c|c|}
-					\hline
-					Асимптотика & Время \\
-					\hline
-					$\mathcal{O^*}(2^n), \mathcal{O}(n^2)$ & > 1 мес. \\
-					\hline
-					$\mathcal{O}(n)$ & < 4ч. \\
-					\hline
-					\end{tabular}
-					\end{table}
-				\end{columns}
-		\end{itemize}
-		\item модельная (MLM-loss)
-		\begin{itemize}
-			\item
-			учим BERT на задаче MLM (Пример: "Привет, как [МАСКА]?"), оптимизируя кросс-энтропию
-			\item сложность = значение кросс-энтропии на данном тексте
-			\item треубет GPU
-		\end{itemize}
-		\item среднее число токенов в слове (TPW)
-	\end{enumerate}
+	
+	\begin{table}
+		\begin{tabular}{|l|l|l|}
+			\hline
+			Метрика & Обозначение & Ссылка \\
+			\hline
+			Длина & длина & Platanios et al., 2019 \\
+			\hline
+			вероятность & правд. & Platanios et al., 2019 \\ 
+			правдоподобия & & \\
+			\hline
+			ранг самого редкого & max wf rk & Xuan Zhang et al., 2018 \\
+			слова в тексте & & \\
+			\hline
+			\hline
+			$L_1$ норма вектора & TF-IDF & Эта работа \\
+			TF-IDF & & \\
+			\hline
+			Excess Entropy & EE & адаптация \\
+			& & Nihat Ay et al., 2006 \\
+			\hline
+			TSE & TSE & адаптация \\
+			& & Nihat Ay et al., 2006 \\
+			\hline
+			модельная & MLM-loss & Эта работа \\
+			\hline
+			Среднее число токенов & TPW & Эта работа \\
+			в слове & & \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
 \end{frame}
 
 \begin{frame}
@@ -238,74 +206,95 @@
 				\end{tabular}
 			\end{table}
 	\end{itemize}
-	\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}
-	Итого:
-	\begin{itemize}
-		\item предложены подходы, покрывающие широкое множество метрик
-		\item предложены алгоритмы, вычисляющие метрики за пренебрежимо маленькое время ($<8\%$ от времени обучения)
-	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Сравнение метрик. Предобучение}
-	$\max\Delta \le 3k$
+	\frametitle{Метод сравнения алгоритмов обучения}
+	\begin{columns}
+		\column{0.5\textwidth}
+		
+		\begin{itemize}
+			\item Метрика -- объект изучения
+			\item Хочется понять, как разные метрики влияют на скорость обучения
+			\item Для этого нужно научиться сравнивать две метрики
+			\item Для этого:
+			\begin{enumerate}
+				\item фиксируем все (кроме метрик)
+				\item сравниваем среднее число шагов, необходимое для достижения порога
+			\end{enumerate}
+		\end{itemize}
+		
+		\column{0.5\textwidth}
+		\includegraphics[scale=0.25]{compare}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Сравнение метрик: предобучение}
+	\let\thefootnote\relax\footnotetext{стандартное отклонение $\delta \le 3k$ шагов}
+	
+	Датасет: BooksCorpus
+	
 	\begin{table}
-		\begin{tabular}{l|c|ccccc|c}
-			Датасет & & \multicolumn{5}{c}{BooksCorpus} &\\
+		\begin{tabular}{|l|c|ccccc|c|}
 			\hline
-			семплер & Порог & CB & DB & Hyp & SS & SM & min loss\\
+			Метрика & Порог & & & Семплеры & & & min loss \\
+			\hline
+			& & CB & DB & Hyp & SS & SM & \\
 			\hline
 			max wf rk & 2.00 & $\infty$ & 17.5k & {\bf 16.5k} & {\bf 16.5k} & 27k & {\bf 1.58} \\
 			TF-IDF & 2.00 & $\infty$ & 34k & 35k & 37.5k & $\infty$ & 1.84 \\
 			\hline
-			база & 2.00 & \multicolumn{5}{c}{9.5k} & 1.58 \\
-			\hline
-			\hline
-			& & \multicolumn{5}{c}{BooksCorpus} & \\
 			\hline
 			EE & 3.50 & $\infty$ & 4k & 3.5k & 4.5k & 9.5k & 2.25 \\
 			TSE & 3.50 & $\infty$ & 9k & 9k & 8.5k & 18k & 2.60 \\
 			правд. & 3.50 & $\infty$ & 13.5k & 13.5k & 15.5k & 50k & 2.83 \\
 			длина & 3.50 & $\infty$ & 50.5k & $\infty$ & - & - & 3.45 \\
 			\hline
+			база & 2.00 & & & 9.5k & & & 1.58 \\
+			\hline
 		\end{tabular}
 	\end{table}
 	\begin{itemize}
-		\item {\bf\color{orange}$(\pm)$} лучшая метрика -- максимальный ранг слова ({\bf\color{red}$(-)$}замедляет в $2$ раза {\bf\color{green}$(+)$} {\bf без потери качества})
-		\item {\bf\color{red}$(-)$} обучение по плану замедляет обучение от 2 до 5 раз и ухудшает качество модели
+		\item лучшая метрика -- максимальный ранг слова (замедляет в $2$ раза  {\bf без потери качества})
+		\item обучение по плану замедляет обучение от 2 до 5 раз и ухудшает качество модели
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Сравнение метрик. Классификация}
-	$\max\Delta \le 3k$
+	\frametitle{Сравнение метрик: классификация текстов}
+	
+	Датасеты: sentiment140 (результаты в таблице), HND
 	\begin{table}
-		\begin{tabular}{l|c|ccccc|c}
-			Датасет & & \multicolumn{5}{c}{sentiment140}&\\
+		\begin{tabular}{|l|c|ccccc|c|}
 			\hline
-			семплер & Порог & CB & DB & Hyp & SS & SM & Точность\\
+			Метрика & Порог & & \multicolumn{3}{c}{Семплеры} & & Точность\\
 			\hline
-			длина & 85.5\% & 112.5k & 20k & 19k & - & - & {\bf 86.2\%} \\
-			{\bf TF-IDF} & 85.5\% & 115.5k & 21.5k & 19.5k & {\bf 16.5k} & 22k & 86.7\% \\
-			{\bf TSE} & 85.5\% & 95.5k & {\bf 16.5k} & 20.5k & 21.5k & 18k & 86.8\% \\
-			EE & 85.5\% & 59k & 19.3k & 23k & 20k & 19k & 86.7\% \\
+			& & CB & DB & Hyp & SS & SM & \\
+			\hline
 			{\bf max wf rk} & 85.5\% & 70k & 18.5k & 19.5k & {\bf 17k} & 19k & 86.7\% \\
+			{\bf TF-IDF} & 85.5\% & 115.5k & 21.5k & 19.5k & {\bf 16.5k} & 22k & 86.7\% \\
+			EE & 85.5\% & 59k & 19.3k & 23k & 20k & 19k & 86.7\% \\
+			{\bf TSE} & 85.5\% & 95.5k & {\bf 16.5k} & 20.5k & 21.5k & 18k & 86.8\% \\
 			правд. & 85.5\% & 112k & 17.5k & 21.5k & 17.5k & 21.5k & 86.7\% \\
+			длина & 85.5\% & 112.5k & 20k & 19k & - & - & {\bf 86.2\%} \\
 			MLM-loss & 85.5\% & 59.5k & 21k & 23.5k & 19.5k & 20k & {\bf 86.1\%} \\
 			\hline
-			база & 85.5\% & \multicolumn{5}{c}{17.5k} & 87\%
+			база & 85.5\% & & & 17.5k & & & 87\% \\
+			\hline
 		\end{tabular}
 	\end{table}
 	\begin{itemize}
-		\item {\bf\color{green}$(+)$} лучшая конфигурация (TF-IDF+SS) ускоряет обучение до 3\% в среднем
-		\item {\bf\color{red}$(-)$} длина и MLM-loss уменьшают точность модели на 0.6\%
-		\item {\bf\color{red}$(-)$} нет значительного ускорения обучения
+		\item лучшая конфигурация (TF-IDF+SS) ускоряет обучение до 3\% в среднем в сравнении с базой
+		\item длина и MLM-loss уменьшают точность модели на 0.6\%
+		\item в общем случае нет значительного ускорения обучения
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Влияние метрик на скорость обучения. Шум}
 	\begin{itemize}
+		\item Wu et al., When Do Curricula Work?, 2020
 		\item Для рассмотрения данного частного случая нужно искусственно добавить шум в данные
 			\begin{enumerate}
 				\item выберем $p \sim U[0, 0.4]$ -- уровень шума
@@ -318,7 +307,9 @@
 					\end{enumerate}
 			\end{enumerate}
 		\item Оказалось, что метрика "уровень шума" ускоряет обучение до 2.5 раз на старте
-		\includegraphics[scale=0.48]{keyboard_noise_level_short_prefix}
+		
+		\centering
+		\includegraphics[scale=0.38]{keyboard_noise_level_short_prefix}
 	\end{itemize}
 \end{frame}
 
@@ -334,10 +325,10 @@
 			\begin{itemize}
 				\item у шумных данных TPW больше $\Rightarrow$ модель сначала учится на чистых примерах, плавно переходя к более шумным
 			\end{itemize}
-		\item TPW ускореят обучение в 2 раза для достижения 95\% итоговой точности
+		\item TPW ускоряет обучение в 2 раза для достижения 95\% (83.5\% из 87\%) итоговой точности
+
 		\centering
-		
-		\includegraphics[scale=0.4]{keyboard_noise_TPW_win}		
+		\includegraphics[scale=0.45]{keyboard_noise_TPW_win}		
 	\end{itemize}
 \end{frame}
 
@@ -354,7 +345,7 @@
 				\item длина -- худшая метрика на предобучении (замедляет обучения до 12 раз, уменьшает качество модели)
 				\item максимальный ранг слова -- лучшая метрика на предобучении (замедляет в $2$ раза {\bf без потери качества})
 			\end{itemize}
-		\item Классификация
+		\item Дообучение на задаче классификации текстов
 			\begin{itemize}
 				\item лучшая конфигурация (TF-IDF+SS) ускоряет обучение до 3\% в среднем на классификации
 				\item длина и MLM-loss уменьшают точность модели на 0.6\%
@@ -563,24 +554,27 @@
 
 \begin{frame}[label=supplemental,noframenumbering]
 	\frametitle{Результаты. Классификация. HND}
+	\let\thefootnote\relax\footnotetext{стандартное отклонение $\delta \le 3k$ шагов}
 	
-	Корпус данных: Hyperpartisan News Detection
+	Датасет: Hyperpartisan News Detection
 	
-	$\max\Delta \le 3k$
 	\begin{table}
-		\begin{tabular}{l|c|ccccc|c}
-			Датасет & & \multicolumn{5}{c}{HND}&\\
+		\begin{tabular}{|l|c|ccccc|c|}
 			\hline
-			семплер & Порог & CB & DB & Hyp & SS & SM & Точность\\
+			Метрика & Порог & & \multicolumn{3}{c}{Семплеры} & & Точность \\
 			\hline
-			длина & 92.9\% & 55k & 23k & 22.5k & - & - & 93.7\% \\
-			TF-IDF & 92.9\%  & $\infty$ & {\bf 19.5k} & 24k & 23.5k & 33k & 93.5\% \\
-			TSE & 92.9\% & 56.5k & {\bf 21k} & 23k & 22k & 31k & 93.8\% \\
-			EE & 92.9\%  & 71.5k & 25.5k & 22.5k & {\bf 19.5k} & 32.5k & 93.8\% \\
+			 & & CB & DB & Hyp & SS & SM &\\
+			\hline
 			max wf rk & 92.9\%  & $\infty$ & 22k & {\bf 20.5k} & 22.5k & 39k & 93.6\% \\
+			TF-IDF & 92.9\%  & $\infty$ & {\bf 19.5k} & 24k & 23.5k & 33k & 93.5\% \\
+			EE & 92.9\%  & 71.5k & 25.5k & 22.5k & {\bf 19.5k} & 32.5k & 93.8\% \\
+			TSE & 92.9\% & 56.5k & {\bf 21k} & 23k & 22k & 31k & 93.8\% \\
 			правд. & 92.9\%  & $\infty$ & {\bf 20k} & 24k & {\bf 20k} & 30k & 93.8\% \\
+			длина & 92.9\% & 55k & 23k & 22.5k & - & - & 93.7\% \\
+			MLM-loss & 92.9\% & 23.5k & {\bf 18k} & 23k & 24k & 20k & {\bf 93.9\%} \\
 			\hline
-			база & 92.9\%  & \multicolumn{5}{c}{22k} & 93.8\%
+			база & 92.9\%  & & \multicolumn{3}{c}{22k} & & 93.8\% \\
+			\hline
 		\end{tabular}
 	\end{table}
 \end{frame}
