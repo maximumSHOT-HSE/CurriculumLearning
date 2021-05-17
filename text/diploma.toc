@@ -2,23 +2,25 @@
 \contentsline {section}{Аннотация}{3}{section*.2}%
 \contentsline {section}{Введение}{5}{section*.3}%
 \contentsline {section}{\numberline {1}Обзор литературы}{8}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Возникновение обучения по плану}{8}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Применение обучения по плану в смежных сферах машинного обучения}{8}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}Применение обучения по плану в обработке естественного языка}{9}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Существующие метрики оценки сложности текстов}{12}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Выводы}{13}{subsection.1.5}%
-\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{14}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Описание метрик}{14}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{17}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Сбор статистик}{19}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Выводы}{20}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Эксперименты}{21}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{21}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{22}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Семплеры}{22}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{23}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{25}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{27}{subsection.3.6}%
-\contentsline {subsection}{\numberline {3.7}Выводы}{29}{subsection.3.7}%
-\contentsline {section}{Заключение}{30}{section*.19}%
-\contentsline {section}{Список литературы}{31}{section*.20}%
+\contentsline {subsection}{\numberline {1.1}Современные подходы к решению задач обработки естественного языка}{8}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Альтернативные способы ускорения обучения языковых моделей}{9}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Возникновение обучения по плану}{9}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Применение обучения по плану в смежных сферах машинного обучения}{9}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Применение обучения по плану в обработке естественного языка}{11}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Существующие метрики оценки сложности текстов}{13}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Выводы}{14}{subsection.1.7}%
+\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{15}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Описание метрик}{15}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{18}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Сбор статистик}{20}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Выводы}{21}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Эксперименты}{22}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{22}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{23}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Семплеры}{23}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{24}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{26}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{28}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Выводы}{30}{subsection.3.7}%
+\contentsline {section}{Заключение}{31}{section*.19}%
+\contentsline {section}{Список литературы}{32}{section*.20}%

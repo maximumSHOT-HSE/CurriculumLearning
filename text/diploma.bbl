@@ -14,11 +14,25 @@
 \cyrdash\hskip.2em plus 0.1em\ignorespaces}
 \renewcommand{\newblock}{\ignorespaces}
 
+\bibitem{lan2019albert}
+\selectlanguageifdefined{english}
+Albert: A lite bert for self-supervised learning of language representations~/
+  Zhenzhong~Lan, Mingda~Chen, Sebastian~Goodman et~al.~// \BibEmph{arXiv
+  preprint arXiv:1909.11942}. \BibDash
+\newblock 2019.
+
 \bibitem{vaswani2017attention}
 \selectlanguageifdefined{english}
 Attention is all you need~/ Ashish~Vaswani, Noam~Shazeer, Niki~Parmar et~al.~//
   \BibEmph{arXiv preprint arXiv:1706.03762}. \BibDash
 \newblock 2017.
+
+\bibitem{lewis2019bart}
+\selectlanguageifdefined{english}
+Bart: Denoising sequence-to-sequence pre-training for natural language
+  generation, translation, and comprehension~/ Mike~Lewis, Yinhan~Liu,
+  Naman~Goyal et~al.~// \BibEmph{arXiv preprint arXiv:1910.13461}. \BibDash
+\newblock 2019.
 
 \bibitem{devlin2018bert}
 \selectlanguageifdefined{english}
@@ -58,6 +72,27 @@ Curriculum learning for reinforcement learning domains: A framework and
 \newblock 2020. \BibDash
 \newblock Vol.~21, no. 181. \BibDash
 \newblock P.~1--50.
+
+\bibitem{he2020deberta}
+\selectlanguageifdefined{english}
+Deberta: Decoding-enhanced bert with disentangled attention~/ Pengcheng~He,
+  Xiaodong~Liu, Jianfeng~Gao, Weizhu~Chen~// \BibEmph{arXiv preprint
+  arXiv:2006.03654}. \BibDash
+\newblock 2020.
+
+\bibitem{sanh2019distilbert}
+\selectlanguageifdefined{english}
+DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter~/
+  Victor~Sanh, Lysandre~Debut, Julien~Chaumond, Thomas~Wolf~// \BibEmph{arXiv
+  preprint arXiv:1910.01108}. \BibDash
+\newblock 2019.
+
+\bibitem{le2019flaubert}
+\selectlanguageifdefined{english}
+Flaubert: Unsupervised language model pre-training for french~/ Hang~Le,
+  Lo{\"\i}c~Vial, Jibril~Frej et~al.~// \BibEmph{arXiv preprint
+  arXiv:1912.05372}. \BibDash
+\newblock 2019.
 
 \bibitem{hacohen2019power}
 \selectlanguageifdefined{english}
@@ -103,6 +138,25 @@ MITRE at SemEval-2019 task 5: Transfer learning for multilingual hate speech
   INTERNET RESEARCH}. \BibDash
 \newblock 2017. \BibDash
 \newblock Vol.~13, no.~2.
+
+\bibitem{nguyen2020phobert}
+\selectlanguageifdefined{english}
+\BibEmph{Nguyen~Dat~Quoc, Nguyen~Anh~Tuan}. PhoBERT: Pre-trained language
+  models for Vietnamese~// \BibEmph{arXiv preprint arXiv:2003.00744}. \BibDash
+\newblock 2020.
+
+\bibitem{liu2019roberta}
+\selectlanguageifdefined{english}
+Roberta: A robustly optimized bert pretraining approach~/ Yinhan~Liu, Myle~Ott,
+  Naman~Goyal et~al.~// \BibEmph{arXiv preprint arXiv:1907.11692}. \BibDash
+\newblock 2019.
+
+\bibitem{iandola2020squeezebert}
+\selectlanguageifdefined{english}
+SqueezeBERT: What can computer vision teach NLP about efficient neural
+  networks?~/ Forrest~N~Iandola, Albert~E~Shaw, Ravi~Krishna, Kurt~W~Keutzer~//
+  \BibEmph{arXiv preprint arXiv:2006.11316}. \BibDash
+\newblock 2020.
 
 \bibitem{srivastava2020noisy}
 \selectlanguageifdefined{english}
