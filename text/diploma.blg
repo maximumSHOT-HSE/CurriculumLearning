@@ -7,45 +7,45 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: diploma.bib
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Warning--can't use both volume and number fields in shen2020q
-You've used 26 entries,
+You've used 29 entries,
             4870 wiz_defined-function locations,
-            1498 strings with 16956 characters,
-and the built_in function-call counts, 10751 in all, are:
-= -- 1167
-> -- 424
-< -- 56
-+ -- 136
-- -- 106
-* -- 642
-:= -- 1440
-add.period$ -- 72
-call.type$ -- 26
+            1511 strings with 17575 characters,
+and the built_in function-call counts, 11933 in all, are:
+= -- 1293
+> -- 481
+< -- 63
++ -- 155
+- -- 122
+* -- 719
+:= -- 1601
+add.period$ -- 82
+call.type$ -- 29
 change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 27
-duplicate$ -- 524
-empty$ -- 1139
-format.name$ -- 106
-if$ -- 2716
+cite$ -- 30
+duplicate$ -- 582
+empty$ -- 1256
+format.name$ -- 122
+if$ -- 3009
 int.to.chr$ -- 0
-int.to.str$ -- 26
+int.to.str$ -- 29
 missing$ -- 0
-newline$ -- 157
-num.names$ -- 112
-pop$ -- 201
+newline$ -- 174
+num.names$ -- 126
+pop$ -- 228
 preamble$ -- 1
-purify$ -- 87
+purify$ -- 100
 quote$ -- 0
-skip$ -- 449
+skip$ -- 494
 stack$ -- 0
-substring$ -- 457
-swap$ -- 275
-text.length$ -- 4
+substring$ -- 480
+swap$ -- 306
+text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 58
-width$ -- 28
-write$ -- 314
+while$ -- 64
+width$ -- 31
+write$ -- 350
 (There was 1 warning)

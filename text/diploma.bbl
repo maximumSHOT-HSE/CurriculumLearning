@@ -94,6 +94,13 @@ Flaubert: Unsupervised language model pre-training for french~/ Hang~Le,
   arXiv:1912.05372}. \BibDash
 \newblock 2019.
 
+\bibitem{gordon2020compressing}
+\selectlanguageifdefined{english}
+\BibEmph{Gordon~Mitchell~A, Duh~Kevin, Andrews~Nicholas}. Compressing bert:
+  Studying the effects of weight pruning on transfer learning~// \BibEmph{arXiv
+  preprint arXiv:2002.08307}. \BibDash
+\newblock 2020.
+
 \bibitem{hacohen2019power}
 \selectlanguageifdefined{english}
 \BibEmph{Hacohen~Guy, Weinshall~Daphna}. On the power of curriculum learning in
@@ -121,6 +128,13 @@ Flaubert: Unsupervised language model pre-training for french~/ Hang~Le,
 Language models are few-shot learners~/ Tom~B~Brown, Benjamin~Mann, Nick~Ryder
   et~al.~// \BibEmph{arXiv preprint arXiv:2005.14165}. \BibDash
 \newblock 2020.
+
+\bibitem{you2019large}
+\selectlanguageifdefined{english}
+Large batch optimization for deep learning: Training bert in 76 minutes~/
+  Yang~You, Jing~Li, Sashank~Reddi et~al.~// \BibEmph{arXiv preprint
+  arXiv:1904.00962}. \BibDash
+\newblock 2019.
 
 \bibitem{gertner2019mitre}
 \selectlanguageifdefined{english}
@@ -180,6 +194,14 @@ SqueezeBERT: What can computer vision teach NLP about efficient neural
 \BibEmph{Wu~Xiaoxia, Dyer~Ethan, Neyshabur~Behnam}. When Do Curricula Work?~//
   \BibEmph{arXiv preprint arXiv:2012.03107}. \BibDash
 \newblock 2020.
+
+\bibitem{you2017scaling}
+\selectlanguageifdefined{english}
+\BibEmph{You~Yang, Gitman~Igor, Ginsburg~Boris}. Scaling sgd batch size to 32k
+  for imagenet training~// \BibEmph{arXiv preprint arXiv:1708.03888}. \BibDash
+\newblock 2017. \BibDash
+\newblock Vol.~6. \BibDash
+\newblock P.~12.
 
 \bibitem{zhang2018empirical}
 \selectlanguageifdefined{english}
