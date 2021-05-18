@@ -9,18 +9,18 @@
 \contentsline {subsection}{\numberline {1.5}Применение обучения по плану в обработке естественного языка}{13}{subsection.1.5}%
 \contentsline {subsection}{\numberline {1.6}Существующие метрики оценки сложности текстов}{15}{subsection.1.6}%
 \contentsline {subsection}{\numberline {1.7}Выводы}{16}{subsection.1.7}%
-\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{17}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Описание метрик}{17}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{20}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Сбор статистик}{22}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Выводы}{23}{subsection.2.4}%
-\contentsline {section}{\numberline {3}Эксперименты}{24}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{24}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{25}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Семплеры}{25}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{26}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{28}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{30}{subsection.3.6}%
-\contentsline {subsection}{\numberline {3.7}Выводы}{32}{subsection.3.7}%
-\contentsline {section}{Заключение}{33}{section*.19}%
-\contentsline {section}{Список литературы}{34}{section*.20}%
+\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{18}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Описание метрик}{18}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{21}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Сбор статистик}{23}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Выводы}{24}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Эксперименты}{25}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{25}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{26}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Семплеры}{26}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{27}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{29}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{31}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Выводы}{33}{subsection.3.7}%
+\contentsline {section}{Заключение}{34}{section*.19}%
+\contentsline {section}{Список литературы}{35}{section*.20}%

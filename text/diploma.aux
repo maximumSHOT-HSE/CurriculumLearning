@@ -56,21 +56,23 @@
 \citation{gordon2020compressing}
 \citation{you2017scaling}
 \citation{you2019large}
+\citation{frankle2018lottery}
+\citation{chen2020lottery}
 \citation{bengio2009curriculum}
 \citation{hacohen2019power}
-\citation{mermer2017scalable}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Возникновение обучения по плану}{11}{subsection.1.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Применение обучения по плану в смежных сферах машинного обучения}{11}{subsection.1.4}\protected@file@percent }
+\citation{mermer2017scalable}
 \citation{wu2020curricula}
 \newlabel{eq:learned_epoch}{{1}{12}{Применение обучения по плану в смежных сферах машинного обучения}{equation.1.1}{}}
 \citation{platanios2019competence}
-\citation{xu2020curriculum}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Семейство функций для семплирования данных\relax }}{13}{figure.caption.8}\protected@file@percent }
 \newlabel{fig:cv_pacing_functions}{{1}{13}{Семейство функций для семплирования данных\relax }{figure.caption.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Применение обучения по плану в обработке естественного языка}{13}{subsection.1.5}\protected@file@percent }
 \newlabel{eq:log_likelihood}{{2}{13}{Применение обучения по плану в обработке естественного языка}{equation.1.2}{}}
-\newlabel{eq:competence_based_sampler}{{3}{13}{Применение обучения по плану в обработке естественного языка}{equation.1.3}{}}
+\citation{xu2020curriculum}
 \citation{kocmi2017curriculum}
+\newlabel{eq:competence_based_sampler}{{3}{14}{Применение обучения по плану в обработке естественного языка}{equation.1.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Алгоритм вычисления модельной метрики сложности текста. На данной схеме датасет делится на $4$ части, на каждой из которых учится независимая модель BERT с началными весами текущей глобальной модели. Сложность примеров в блоке под номером $3$ вычисляется как сумма уверенностей моделей $W_1,W_2,W_4$.\relax }}{14}{figure.caption.9}\protected@file@percent }
 \newlabel{fig:acl20_algo_difficulty}{{2}{14}{Алгоритм вычисления модельной метрики сложности текста. На данной схеме датасет делится на $4$ части, на каждой из которых учится независимая модель BERT с началными весами текущей глобальной модели. Сложность примеров в блоке под номером $3$ вычисляется как сумма уверенностей моделей $W_1,W_2,W_4$.\relax }{figure.caption.9}{}}
 \citation{zhang2018empirical}
@@ -88,77 +90,77 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Существующие метрики оценки сложности текстов}{15}{subsection.1.6}\protected@file@percent }
 \citation{ay2006unifying}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.7}Выводы}{16}{subsection.1.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{17}{section.2}\protected@file@percent }
-\newlabel{sec:metrics}{{2}{17}{Метрики оценки сложности текстов}{section.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Описание метрик}{17}{subsection.2.1}\protected@file@percent }
-\newlabel{eq:tf_idf}{{4}{17}{Описание метрик}{equation.2.4}{}}
-\newlabel{eq:tf}{{5}{17}{Описание метрик}{equation.2.5}{}}
-\newlabel{eq:idf}{{6}{17}{Описание метрик}{equation.2.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Метрики оценки сложности текстов}{18}{section.2}\protected@file@percent }
+\newlabel{sec:metrics}{{2}{18}{Метрики оценки сложности текстов}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Описание метрик}{18}{subsection.2.1}\protected@file@percent }
+\newlabel{eq:tf_idf}{{4}{18}{Описание метрик}{equation.2.4}{}}
+\newlabel{eq:tf}{{5}{18}{Описание метрик}{equation.2.5}{}}
+\newlabel{eq:idf}{{6}{18}{Описание метрик}{equation.2.6}{}}
 \citation{ay2006unifying}
-\newlabel{eq:tse}{{7}{18}{Описание метрик}{equation.2.7}{}}
-\newlabel{eq:ee}{{8}{18}{Описание метрик}{equation.2.8}{}}
-\newlabel{eq:mlm_loss}{{9}{19}{Описание метрик}{equation.2.9}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces таблица\relax }}{20}{table.caption.10}\protected@file@percent }
-\newlabel{table:tokenize_noisy_text}{{2}{20}{таблица\relax }{table.caption.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{20}{subsection.2.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Время работы алгоритмов вычисления метрик по определнию на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }}{20}{table.caption.11}\protected@file@percent }
-\newlabel{table:def_metrics_asymptotics}{{3}{20}{Время работы алгоритмов вычисления метрик по определнию на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }{table.caption.11}{}}
-\newlabel{eq:h_mu_sum_cond_h}{{10}{20}{Алгоритмы вычисления метрик}{equation.2.10}{}}
-\newlabel{eq:entropy}{{11}{20}{Алгоритмы вычисления метрик}{equation.2.11}{}}
-\newlabel{eq:ee_simplify}{{12}{21}{Алгоритмы вычисления метрик}{equation.2.12}{}}
-\newlabel{eq:E_lin}{{13}{21}{Алгоритмы вычисления метрик}{equation.2.13}{}}
-\newlabel{eq:TSE_A_i}{{14}{21}{Алгоритмы вычисления метрик}{equation.2.14}{}}
-\newlabel{eq:TSE_B_i}{{15}{21}{Алгоритмы вычисления метрик}{equation.2.15}{}}
-\newlabel{eq:TSE_E_final}{{16}{22}{Алгоритмы вычисления метрик}{equation.2.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Сбор статистик}{22}{subsection.2.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Время работы алгоритмов сбора статистик на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }}{23}{table.caption.12}\protected@file@percent }
-\newlabel{table:collect_stats_time}{{4}{23}{Время работы алгоритмов сбора статистик на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }{table.caption.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Выводы}{23}{subsection.2.4}\protected@file@percent }
+\newlabel{eq:tse}{{7}{19}{Описание метрик}{equation.2.7}{}}
+\newlabel{eq:ee}{{8}{19}{Описание метрик}{equation.2.8}{}}
+\newlabel{eq:mlm_loss}{{9}{20}{Описание метрик}{equation.2.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces таблица\relax }}{21}{table.caption.10}\protected@file@percent }
+\newlabel{table:tokenize_noisy_text}{{2}{21}{таблица\relax }{table.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Алгоритмы вычисления метрик}{21}{subsection.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Время работы алгоритмов вычисления метрик по определнию на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }}{21}{table.caption.11}\protected@file@percent }
+\newlabel{table:def_metrics_asymptotics}{{3}{21}{Время работы алгоритмов вычисления метрик по определнию на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }{table.caption.11}{}}
+\newlabel{eq:h_mu_sum_cond_h}{{10}{21}{Алгоритмы вычисления метрик}{equation.2.10}{}}
+\newlabel{eq:entropy}{{11}{21}{Алгоритмы вычисления метрик}{equation.2.11}{}}
+\newlabel{eq:ee_simplify}{{12}{22}{Алгоритмы вычисления метрик}{equation.2.12}{}}
+\newlabel{eq:E_lin}{{13}{22}{Алгоритмы вычисления метрик}{equation.2.13}{}}
+\newlabel{eq:TSE_A_i}{{14}{22}{Алгоритмы вычисления метрик}{equation.2.14}{}}
+\newlabel{eq:TSE_B_i}{{15}{22}{Алгоритмы вычисления метрик}{equation.2.15}{}}
+\newlabel{eq:TSE_E_final}{{16}{23}{Алгоритмы вычисления метрик}{equation.2.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Сбор статистик}{23}{subsection.2.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Время работы алгоритмов сбора статистик на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }}{24}{table.caption.12}\protected@file@percent }
+\newlabel{table:collect_stats_time}{{4}{24}{Время работы алгоритмов сбора статистик на датасете Hyperpartisan News Detection из 2M примеров длины от 50 до 200 символов\relax }{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Выводы}{24}{subsection.2.4}\protected@file@percent }
 \citation{devlin2018bert}
 \citation{devlin2018bert}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Эксперименты}{24}{section.3}\protected@file@percent }
-\newlabel{sec:experiments}{{3}{24}{Эксперименты}{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{24}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{25}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Семплеры}{25}{subsection.3.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Среднее число шагов, необходимое для достижения порога $\alpha = 0.85$, $a_1 = 10k$, $a_2 = 20k$. Метод, соответствующий оранжевому графику, является лучшим.\relax }}{26}{figure.caption.13}\protected@file@percent }
-\newlabel{fig:metrics_compare}{{3}{26}{Среднее число шагов, необходимое для достижения порога $\alpha = 0.85$, $a_1 = 10k$, $a_2 = 20k$. Метод, соответствующий оранжевому графику, является лучшим.\relax }{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{26}{subsection.3.4}\protected@file@percent }
-\newlabel{fig:BooksCorpus_graphs_CB}{{4a}{27}{CB\relax }{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_CB}{{a}{27}{CB\relax }{figure.caption.14}{}}
-\newlabel{fig:BooksCorpus_graphs_DB}{{4b}{27}{DB\relax }{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_DB}{{b}{27}{DB\relax }{figure.caption.14}{}}
-\newlabel{fig:BooksCorpus_graphs_Hyp}{{4c}{27}{Hyp\relax }{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_Hyp}{{c}{27}{Hyp\relax }{figure.caption.14}{}}
-\newlabel{fig:BooksCorpus_graphs_SS}{{4d}{27}{SS\relax }{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_SS}{{d}{27}{SS\relax }{figure.caption.14}{}}
-\newlabel{fig:BooksCorpus_graphs_SM}{{4e}{27}{SM\relax }{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_SM}{{e}{27}{SM\relax }{figure.caption.14}{}}
-\newlabel{fig:BooksCorpus_graphs_legend}{{\caption@xref {fig:BooksCorpus_graphs_legend}{ on input line 524}}{27}{Влияние обучения по плану на задаче предобучения}{figure.caption.14}{}}
-\newlabel{sub@fig:BooksCorpus_graphs_legend}{{e}{27}{Влияние обучения по плану на задаче предобучения}{figure.caption.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Графики зависимости функции потерь от числа шагов обучения на задаче предобучения на датасете BooksCorpus на первых 15\% обучения\relax }}{27}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:BooksCorpus_graphs}{{4}{27}{Графики зависимости функции потерь от числа шагов обучения на задаче предобучения на датасете BooksCorpus на первых 15\% обучения\relax }{figure.caption.14}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче предобучения на датасете BooksCorpus, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{28}{table.caption.15}\protected@file@percent }
-\newlabel{table:BooksCorpus_pretraining}{{5}{28}{Среднее число шагов всех конфигураций метрика-семплер на задаче предобучения на датасете BooksCorpus, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{28}{subsection.3.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете sentiment140, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{28}{table.caption.16}\protected@file@percent }
-\newlabel{table:s140_fine_tuning}{{6}{28}{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете sentiment140, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.16}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете Hyperpartisan News Detection, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{29}{table.caption.17}\protected@file@percent }
-\newlabel{table:hnd_fine_tuning}{{7}{29}{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете Hyperpartisan News Detection, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.17}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Эксперименты}{25}{section.3}\protected@file@percent }
+\newlabel{sec:experiments}{{3}{25}{Эксперименты}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Конфигруация экспериментов}{25}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Метод сравнения метрик}{26}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Семплеры}{26}{subsection.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Среднее число шагов, необходимое для достижения порога $\alpha = 0.85$, $a_1 = 10k$, $a_2 = 20k$. Метод, соответствующий оранжевому графику, является лучшим.\relax }}{27}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:metrics_compare}{{3}{27}{Среднее число шагов, необходимое для достижения порога $\alpha = 0.85$, $a_1 = 10k$, $a_2 = 20k$. Метод, соответствующий оранжевому графику, является лучшим.\relax }{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Влияние обучения по плану на задаче предобучения}{27}{subsection.3.4}\protected@file@percent }
+\newlabel{fig:BooksCorpus_graphs_CB}{{4a}{28}{CB\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_CB}{{a}{28}{CB\relax }{figure.caption.14}{}}
+\newlabel{fig:BooksCorpus_graphs_DB}{{4b}{28}{DB\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_DB}{{b}{28}{DB\relax }{figure.caption.14}{}}
+\newlabel{fig:BooksCorpus_graphs_Hyp}{{4c}{28}{Hyp\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_Hyp}{{c}{28}{Hyp\relax }{figure.caption.14}{}}
+\newlabel{fig:BooksCorpus_graphs_SS}{{4d}{28}{SS\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_SS}{{d}{28}{SS\relax }{figure.caption.14}{}}
+\newlabel{fig:BooksCorpus_graphs_SM}{{4e}{28}{SM\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_SM}{{e}{28}{SM\relax }{figure.caption.14}{}}
+\newlabel{fig:BooksCorpus_graphs_legend}{{\caption@xref {fig:BooksCorpus_graphs_legend}{ on input line 524}}{28}{Влияние обучения по плану на задаче предобучения}{figure.caption.14}{}}
+\newlabel{sub@fig:BooksCorpus_graphs_legend}{{e}{28}{Влияние обучения по плану на задаче предобучения}{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Графики зависимости функции потерь от числа шагов обучения на задаче предобучения на датасете BooksCorpus на первых 15\% обучения\relax }}{28}{figure.caption.14}\protected@file@percent }
+\newlabel{fig:BooksCorpus_graphs}{{4}{28}{Графики зависимости функции потерь от числа шагов обучения на задаче предобучения на датасете BooksCorpus на первых 15\% обучения\relax }{figure.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче предобучения на датасете BooksCorpus, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{29}{table.caption.15}\protected@file@percent }
+\newlabel{table:BooksCorpus_pretraining}{{5}{29}{Среднее число шагов всех конфигураций метрика-семплер на задаче предобучения на датасете BooksCorpus, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Влияние обучения по плану на задаче классификации}{29}{subsection.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете sentiment140, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{29}{table.caption.16}\protected@file@percent }
+\newlabel{table:s140_fine_tuning}{{6}{29}{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете sentiment140, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете Hyperpartisan News Detection, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }}{30}{table.caption.17}\protected@file@percent }
+\newlabel{table:hnd_fine_tuning}{{7}{30}{Среднее число шагов всех конфигураций метрика-семплер на задаче классификации на датасете Hyperpartisan News Detection, необходимое для достижения порога. Максимальное стандартное отклонение $\Delta \le 3k$\relax }{table.caption.17}{}}
 \citation{wu2020curricula}
 \citation{srivastava2020noisy}
 \citation{srivastava2020noisy}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{30}{subsection.3.6}\protected@file@percent }
-\newlabel{fig:s140_noise_lvl}{{5a}{31}{Метрика "уровень шума"\relax }{figure.caption.18}{}}
-\newlabel{sub@fig:s140_noise_lvl}{{a}{31}{Метрика "уровень шума"\relax }{figure.caption.18}{}}
-\newlabel{fig:s140_noise_tpw}{{5b}{31}{Метрика TPW\relax }{figure.caption.18}{}}
-\newlabel{sub@fig:s140_noise_tpw}{{b}{31}{Метрика TPW\relax }{figure.caption.18}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Графики зависимости точности от числа шагов обучения на задаче классификации на датасете sentiment140 для достижения 95\% итоговой точности при добавлении клавиатурного шума\relax }}{31}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:s140_noise}{{5}{31}{Графики зависимости точности от числа шагов обучения на задаче классификации на датасете sentiment140 для достижения 95\% итоговой точности при добавлении клавиатурного шума\relax }{figure.caption.18}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Выводы}{32}{subsection.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Влияние обучения по плану на шумном корпусе данных}{31}{subsection.3.6}\protected@file@percent }
+\newlabel{fig:s140_noise_lvl}{{5a}{32}{Метрика "уровень шума"\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:s140_noise_lvl}{{a}{32}{Метрика "уровень шума"\relax }{figure.caption.18}{}}
+\newlabel{fig:s140_noise_tpw}{{5b}{32}{Метрика TPW\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:s140_noise_tpw}{{b}{32}{Метрика TPW\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Графики зависимости точности от числа шагов обучения на задаче классификации на датасете sentiment140 для достижения 95\% итоговой точности при добавлении клавиатурного шума\relax }}{32}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:s140_noise}{{5}{32}{Графики зависимости точности от числа шагов обучения на задаче классификации на датасете sentiment140 для достижения 95\% итоговой точности при добавлении клавиатурного шума\relax }{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Выводы}{33}{subsection.3.7}\protected@file@percent }
 \bibstyle{ugost2008ls}
 \bibdata{diploma.bib}
-\@writefile{toc}{\contentsline {section}{Заключение}{33}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Заключение}{34}{section*.19}\protected@file@percent }
 \bibcite{lan2019albert}{1}
 \bibcite{vaswani2017attention}{2}
 \bibcite{lewis2019bart}{3}
@@ -170,22 +172,24 @@
 \bibcite{he2020deberta}{9}
 \bibcite{sanh2019distilbert}{10}
 \bibcite{le2019flaubert}{11}
-\bibcite{gordon2020compressing}{12}
-\@writefile{toc}{\contentsline {section}{Список литературы}{34}{section*.20}\protected@file@percent }
-\bibcite{hacohen2019power}{13}
-\bibcite{kocmi2017curriculum}{14}
-\bibcite{kurdi2020text}{15}
-\bibcite{brown2020language}{16}
-\bibcite{you2019large}{17}
-\bibcite{gertner2019mitre}{18}
-\bibcite{mermer2017scalable}{19}
-\bibcite{nguyen2020phobert}{20}
-\bibcite{shen2020q}{21}
-\bibcite{liu2019roberta}{22}
-\bibcite{iandola2020squeezebert}{23}
-\bibcite{srivastava2020noisy}{24}
-\bibcite{wu2020curricula}{25}
-\bibcite{you2017scaling}{26}
-\bibcite{zhang2018empirical}{27}
-\bibcite{ay2006unifying}{28}
-\bibcite{van2010using}{29}
+\bibcite{frankle2018lottery}{12}
+\@writefile{toc}{\contentsline {section}{Список литературы}{35}{section*.20}\protected@file@percent }
+\bibcite{gordon2020compressing}{13}
+\bibcite{hacohen2019power}{14}
+\bibcite{kocmi2017curriculum}{15}
+\bibcite{kurdi2020text}{16}
+\bibcite{brown2020language}{17}
+\bibcite{you2019large}{18}
+\bibcite{gertner2019mitre}{19}
+\bibcite{mermer2017scalable}{20}
+\bibcite{nguyen2020phobert}{21}
+\bibcite{shen2020q}{22}
+\bibcite{liu2019roberta}{23}
+\bibcite{iandola2020squeezebert}{24}
+\bibcite{srivastava2020noisy}{25}
+\bibcite{wu2020curricula}{26}
+\bibcite{you2017scaling}{27}
+\bibcite{zhang2018empirical}{28}
+\bibcite{chen2020lottery}{29}
+\bibcite{ay2006unifying}{30}
+\bibcite{van2010using}{31}

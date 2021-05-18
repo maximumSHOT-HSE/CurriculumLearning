@@ -94,6 +94,13 @@ Flaubert: Unsupervised language model pre-training for french~/ Hang~Le,
   arXiv:1912.05372}. \BibDash
 \newblock 2019.
 
+\bibitem{frankle2018lottery}
+\selectlanguageifdefined{english}
+\BibEmph{Frankle~Jonathan, Carbin~Michael}. The lottery ticket hypothesis:
+  Finding sparse, trainable neural networks~// \BibEmph{arXiv preprint
+  arXiv:1803.03635}. \BibDash
+\newblock 2018.
+
 \bibitem{gordon2020compressing}
 \selectlanguageifdefined{english}
 \BibEmph{Gordon~Mitchell~A, Duh~Kevin, Andrews~Nicholas}. Compressing bert:
@@ -209,6 +216,13 @@ An empirical exploration of curriculum learning for neural machine
   translation~/ Xuan~Zhang, Gaurav~Kumar, Huda~Khayrallah et~al.~//
   \BibEmph{arXiv preprint arXiv:1811.00739}. \BibDash
 \newblock 2018.
+
+\bibitem{chen2020lottery}
+\selectlanguageifdefined{english}
+The lottery ticket hypothesis for pre-trained bert networks~/ Tianlong~Chen,
+  Jonathan~Frankle, Shiyu~Chang et~al.~// \BibEmph{arXiv preprint
+  arXiv:2007.12223}. \BibDash
+\newblock 2020.
 
 \bibitem{ay2006unifying}
 \selectlanguageifdefined{english}
