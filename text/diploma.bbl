@@ -145,6 +145,15 @@ MITRE at SemEval-2019 task 5: Transfer learning for multilingual hate speech
   models for Vietnamese~// \BibEmph{arXiv preprint arXiv:2003.00744}. \BibDash
 \newblock 2020.
 
+\bibitem{shen2020q}
+\selectlanguageifdefined{english}
+Q-bert: Hessian based ultra low precision quantization of bert~/ Sheng~Shen,
+  Zhen~Dong, Jiayu~Ye et~al.~// Proceedings of the AAAI Conference on
+  Artificial Intelligence. \BibDash
+\newblock Vol.~34. \BibDash
+\newblock 2020. \BibDash
+\newblock P.~8815--8821.
+
 \bibitem{liu2019roberta}
 \selectlanguageifdefined{english}
 Roberta: A robustly optimized bert pretraining approach~/ Yinhan~Liu, Myle~Ott,
