@@ -41,6 +41,14 @@ Bert: Pre-training of deep bidirectional transformers for language
   Kristina~Toutanova~// \BibEmph{arXiv preprint arXiv:1810.04805}. \BibDash
 \newblock 2018.
 
+\bibitem{branchaud2019spectral}
+\selectlanguageifdefined{english}
+\BibEmph{Branchaud-Charron~Frederic, Achkar~Andrew, Jodoin~Pierre-Marc}.
+  Spectral metric for dataset complexity assessment~// Proceedings of the
+  IEEE/CVF Conference on Computer Vision and Pattern Recognition. \BibDash
+\newblock 2019. \BibDash
+\newblock P.~3215--3224.
+
 \bibitem{platanios2019competence}
 \selectlanguageifdefined{english}
 Competence-based curriculum learning for neural machine translation~/
