@@ -1,4 +1,0 @@
-Пробуем наш метод на QA
-
-https://colab.research.google.com/github/huggingface/notebooks/blob/master/examples/question_answering.ipynb#scrollTo=DR1V_kOdeIa7
-https://colab.research.google.com/github/huggingface/notebooks/blob/master/examples/text_classification.ipynb

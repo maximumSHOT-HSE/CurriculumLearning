@@ -1,4 +1,0 @@
-Датасеты для машинного перевода
-https://huggingface.co/datasets/ted_talks_iwslt
-https://huggingface.co/datasets/iwslt2017
-https://huggingface.co/datasets?search=wmt
